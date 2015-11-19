@@ -5,12 +5,20 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.map cimport map
 
-cdef enum FrameType:
-    Color = 1
-    Ir = 2
-    Depth = 4
+
+cdef enum IntegerFrameType:
+    IColor = 1
+    IIr = 2
+    IDepth = 4
+
 
 cdef extern from "frame_listener.hpp" namespace "libfreenect2":
+    # ugly but works
+    cdef enum FrameType "libfreenect2::Frame::Type":
+        Color "libfreenect2::Frame::Type::Color"
+        Ir "libfreenect2::Frame::Type::Ir"
+        Depth "libfreenect2::Frame::Type::Depth"
+
     cdef cppclass Frame:
         uint32_t timestamp
         uint32_t sequence
@@ -29,8 +37,8 @@ cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
         SyncMultiFrameListener(unsigned int)
 
         bool hasNewFrame()
-        void waitForNewFrame(map[int, Frame*]&)
-        void release(map[int, Frame*]&)
+        void waitForNewFrame(map[FrameType, Frame*]&)
+        void release(map[FrameType, Frame*]&)
 
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":

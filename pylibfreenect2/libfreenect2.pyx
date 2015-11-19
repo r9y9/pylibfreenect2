@@ -32,18 +32,21 @@ cdef class pyFrameMap:
 cdef class pySyncMultiFrameListener(pyFrameListener):
     cdef SyncMultiFrameListener* ptr
 
-    def __cinit__(self, unsigned int frame_types=Color |Ir | Depth):
+    def __cinit__(self, unsigned int frame_types=IColor | IIr | IDepth):
         self.ptr = new SyncMultiFrameListener(frame_types)
+
+    def __dealloc__(self):
+        if self.ptr is not NULL:
+            del self.ptr
 
     def hasNewFrame(self):
         return self.ptr.hasNewFrame()
 
     def waitForNewFrame(self, pyFrameMap frame_map):
-        # TODO
-        pass
-        # cdef map[FrameType, Frame*] m = frame_map.internal_frame_map;
-        # cdef map[int, Frame*] internal_frame_map
-        # self.ptr.waitForNewFrame(internal_frame_map)
+        self.ptr.waitForNewFrame(frame_map.internal_frame_map)
+
+    def release(self, pyFrameMap frame_map):
+        self.ptr.release(frame_map.internal_frame_map)
 
 
 cdef class pyFreenect2Device:

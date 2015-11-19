@@ -6,7 +6,6 @@ from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
 
 
 import cv2
-import matplotlib.pylab as plt
 
 
 fn = pyFreenect2()

@@ -44,7 +44,8 @@ ext_modules = [
         include_dirs=[np.get_include(), "/usr/local/include/libfreenect2"],
         library_dirs=["/usr/local/lib"],
         libraries=["freenect2"],
-        extra_compile_args=[],
+        extra_compile_args=["-std=c++11", "-stdlib=libc++", "-mmacosx-version-min=10.8"],
+        extra_link_args=[],
         language="c++"),
 ]
 

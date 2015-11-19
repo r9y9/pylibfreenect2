@@ -3,6 +3,8 @@
 import numpy as np
 
 cimport numpy as np
+np.import_array()
+
 cimport cython
 cimport libfreenect2
 
@@ -12,6 +14,41 @@ cdef class pyFrame:
     @property
     def bytes_per_pixel(self):
         return self.ptr.bytes_per_pixel
+
+    @property
+    def timestamp(self):
+        return self.ptr.timestamp
+
+    @property
+    def sequence(self):
+        return self.ptr.sequence
+
+    @property
+    def width(self):
+        return self.ptr.width
+
+    @property
+    def height(self):
+        return self.ptr.height
+
+    # TODO: more safe interrface
+    def udata(self):
+        cdef np.npy_intp shape[1]
+        shape[0] = <np.npy_intp> self.ptr.width * self.ptr.height
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(1, shape, np.NPY_UINT8,
+         self.ptr.data)
+
+        return array.reshape(self.ptr.width, self.ptr.height)
+
+    def data(self):
+        cdef np.npy_intp shape[1]
+        shape[0] = <np.npy_intp> self.ptr.width * self.ptr.height
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(1, shape, np.NPY_FLOAT,
+         self.ptr.data)
+
+        return array.reshape(self.ptr.width, self.ptr.height)
+
+
 
 # TODO: utilize inheritance
 cdef class pyFrameListener:
@@ -27,6 +64,23 @@ cdef class pyFrameMap:
 
     def __dealloc__(self):
         pass
+
+
+    def __get(self, FrameType key=Color):
+        cdef Frame* frame_ptr = self.internal_frame_map[key]
+        frame = pyFrame()
+        frame.ptr = frame_ptr
+        return frame
+
+    def get(self, type="color"):
+        if type == "color":
+            return self.__get(Color)
+        elif type == "ir":
+            return self.__get(Ir)
+        elif type == "depth":
+            return self.__get(Depth)
+        else:
+            raise ValueError("invalid frame type")
 
 
 cdef class pySyncMultiFrameListener(pyFrameListener):

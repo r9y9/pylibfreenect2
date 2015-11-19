@@ -1,12 +1,8 @@
 # coding: utf-8
 
 import numpy as np
-
-from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
-
-
 import cv2
-
+from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
 
 fn = pyFreenect2()
 device = fn.openDefaultDevice()

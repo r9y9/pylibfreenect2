@@ -33,20 +33,23 @@ cdef class pyFrame:
 
     # TODO: more safe interrface
     def udata(self):
-        cdef np.npy_intp shape[1]
-        shape[0] = <np.npy_intp> self.ptr.width * self.ptr.height
-        cdef np.ndarray array = np.PyArray_SimpleNewFromData(1, shape, np.NPY_UINT8,
+        cdef np.npy_intp shape[3]
+        shape[0] = <np.npy_intp> self.ptr.height
+        shape[1] = <np.npy_intp> self.ptr.width
+        shape[2] = <np.npy_intp> 4
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(3, shape, np.NPY_UINT8,
          self.ptr.data)
 
-        return array.reshape(self.ptr.width, self.ptr.height)
+        return array
 
     def data(self):
-        cdef np.npy_intp shape[1]
-        shape[0] = <np.npy_intp> self.ptr.width * self.ptr.height
-        cdef np.ndarray array = np.PyArray_SimpleNewFromData(1, shape, np.NPY_FLOAT,
+        cdef np.npy_intp shape[2]
+        shape[0] = <np.npy_intp> self.ptr.height
+        shape[1] = <np.npy_intp> self.ptr.width
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(2, shape, np.NPY_FLOAT32,
          self.ptr.data)
 
-        return array.reshape(self.ptr.width, self.ptr.height)
+        return array
 
 
 

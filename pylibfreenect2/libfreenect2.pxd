@@ -44,10 +44,41 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         string getSerialNumber()
         string getFirmwareVersion()
 
-        #ColorCameraParams getColorCameraParams()
-        #IrCameraParams getIrCameraParams()
-        #void setColorCameraParams(ColorCameraParams &)
-        # virtual void setIrCameraParams(const Freenect2Device::IrCameraParams &params) = 0;
+        cppclass ColorCameraParams:
+            float fx, fy, cx, cy
+
+            float shift_d, shift_m
+
+            float mx_x3y0
+            float mx_x0y3
+            float mx_x2y1
+            float mx_x1y2
+            float mx_x2y0
+            float mx_x0y2
+            float mx_x1y1
+            float mx_x1y0
+            float mx_x0y1
+            float mx_x0y0
+
+            float my_x3y0
+            float my_x0y3
+            float my_x2y1
+            float my_x1y2
+            float my_x2y0
+            float my_x0y2
+            float my_x1y1
+            float my_x1y0
+            float my_x0y1
+            float my_x0y0
+
+        cppclass IrCameraParams:
+            float fx, fy, cx, cy, k1, k2, k3, p1, p2;
+
+        ColorCameraParams getColorCameraParams()
+        IrCameraParams getIrCameraParams()
+
+        # void setColorCameraParams(ColorCameraParams &)
+        # void setIrCameraParams(const Freenect2Device::IrCameraParams &)
 
         void setColorFrameListener(FrameListener*)
         void setIrAndDepthFrameListener(FrameListener*)

@@ -126,6 +126,48 @@ cdef class pySyncMultiFrameListener(pyFrameListener):
         self.ptr.release(frame_map.internal_frame_map)
 
 
+cdef class pyColorCameraParams:
+    cdef Freenect2Device.ColorCameraParams params
+
+    # TODO: non complete. すべて手で書くのは面倒なので、自動生成がいい？
+    # pythonでマクロ使えたら楽なんだが、、
+    @property
+    def fx(self):
+        return self.params.fx
+
+    @property
+    def fy(self):
+        return self.params.fy
+
+    @property
+    def cx(self):
+        return self.params.cx
+
+    @property
+    def cy(self):
+        return self.params.cy
+
+
+cdef class pyIrCameraParams:
+    cdef Freenect2Device.IrCameraParams params
+
+    @property
+    def fx(self):
+        return self.params.fx
+
+    @property
+    def fy(self):
+        return self.params.fy
+
+    @property
+    def cx(self):
+        return self.params.cx
+
+    @property
+    def cy(self):
+        return self.params.cy
+
+
 cdef class pyFreenect2Device:
     cdef Freenect2Device* ptr
 
@@ -134,6 +176,20 @@ cdef class pyFreenect2Device:
 
     def getFirmwareVersion(self):
         return self.ptr.getFirmwareVersion()
+
+    def getColorCameraParams(self):
+        cdef Freenect2Device.ColorCameraParams params
+        params = self.ptr.getColorCameraParams()
+        cdef pyColorCameraParams pyparams = pyColorCameraParams()
+        pyparams.params = params
+        return pyparams
+
+    def getIrCameraParams(self):
+        cdef Freenect2Device.IrCameraParams params
+        params = self.ptr.getIrCameraParams()
+        cdef pyIrCameraParams pyparams = pyIrCameraParams()
+        pyparams.params = params
+        return pyparams
 
     def setColorFrameListener(self, pySyncMultiFrameListener listener):
         cdef FrameListener* listener_ptr = <FrameListener*>(listener.ptr)

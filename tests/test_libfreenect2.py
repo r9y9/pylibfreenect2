@@ -8,7 +8,19 @@ from pylibfreenect2 import FrameType
 
 def test_sync_multi_frame():
     fn = pyFreenect2()
-    device = fn.openDefaultDevice()
+
+    num_devices = fn.enumerateDevices()
+    assert num_devices > 0
+
+    serial = fn.getDefaultDeviceSerialNumber()
+    assert serial == fn.getDeviceSerialNumber(0)
+
+    # TODO: 本当はどっちもテストしたい
+    # device = fn.openDefaultDevice()
+    device = fn.openDevice(serial)
+
+    assert fn.getDefaultDeviceSerialNumber() == device.getSerialNumber()
+    device.getFirmwareVersion()
 
     listener = pySyncMultiFrameListener(
         FrameType.Color | FrameType.Ir | FrameType.Depth)

@@ -170,14 +170,27 @@ cdef class pyFreenect2:
         return self.ptr.getDeviceSerialNumber(idx)
 
     def getDefaultDeviceSerialNumber(self):
-        cdef string s = self.ptr.getDefaultDeviceSerialNumber()
-        #TODO
+        return self.ptr.getDefaultDeviceSerialNumber()
 
-    def openDevice(self, int idx):
+    cdef __openDevice__intidx(self, int idx):
         cdef Freenect2Device* dev_ptr = self.ptr.openDevice(idx)
         cdef pyFreenect2Device device = pyFreenect2Device()
         device.ptr = dev_ptr
         return device
+
+    cdef __openDevice__stridx(self, string serial):
+        cdef Freenect2Device* dev_ptr = self.ptr.openDevice(serial)
+        cdef pyFreenect2Device device = pyFreenect2Device()
+        device.ptr = dev_ptr
+        return device
+
+    def openDevice(self, name):
+        if isinstance(name, int):
+            return self.__openDevice__intidx(name)
+        elif isinstance(name, str):
+            return self.__openDevice__stridx(name)
+        else:
+            ValueError("device name must be str or integer index")
 
     def openDefaultDevice(self):
         cdef Freenect2Device* dev_ptr = self.ptr.openDefaultDevice()

@@ -6,7 +6,7 @@
 
 - RGB image transfer
 - IR and depth image transfer
-- registration of RGB and depth images（まだ）
+- registration of RGB and depth images
 
 
 ## インストール

@@ -59,9 +59,9 @@ def test_sync_multi_frame():
     assert depth.height == 424
     assert depth.bytes_per_pixel == 4
 
-    assert color.udata().shape == (color.height, color.width, 4)
-    assert ir.data().shape == (ir.height, ir.width)
-    assert depth.data().shape == (depth.height, depth.width)
+    assert color.astype(np.uint8).shape == (color.height, color.width, 4)
+    assert ir.astype(np.float32).shape == (ir.height, ir.width)
+    assert depth.astype(np.float32).shape == (depth.height, depth.width)
 
     listener.release(frames)
 

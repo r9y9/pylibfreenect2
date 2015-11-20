@@ -50,8 +50,7 @@ cdef class pyFrame:
     def height(self):
         return self.ptr.height
 
-    # TODO: more safe interrface
-    def udata(self):
+    cdef __uint8_data(self):
         cdef np.npy_intp shape[3]
         shape[0] = <np.npy_intp> self.ptr.height
         shape[1] = <np.npy_intp> self.ptr.width
@@ -61,7 +60,7 @@ cdef class pyFrame:
 
         return array
 
-    def data(self):
+    cdef __float32_data(self):
         cdef np.npy_intp shape[2]
         shape[0] = <np.npy_intp> self.ptr.height
         shape[1] = <np.npy_intp> self.ptr.width
@@ -69,6 +68,14 @@ cdef class pyFrame:
          self.ptr.data)
 
         return array
+
+    def astype(self, data_type):
+        if data_type != np.uint8 and data_type != np.float32:
+            raise ValueError("np.uint8 or np.float32 is only supported")
+        if data_type == np.uint8:
+            return self.__uint8_data()
+        else:
+            return self.__float32_data()
 
 
 # TODO: utilize inheritance

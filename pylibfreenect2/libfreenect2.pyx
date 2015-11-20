@@ -8,6 +8,8 @@ np.import_array()
 cimport cython
 cimport libfreenect2
 
+from pylibfreenect2 import FrameType
+
 cdef class pyFrame:
     cdef Frame* ptr
 
@@ -52,15 +54,35 @@ cdef class pyFrame:
         return array
 
 
-
 # TODO: utilize inheritance
 cdef class pyFrameListener:
     def onNewFrame(self):
         pass
 
 
+cdef intenum_to_frame_type(n):
+    if n == FrameType.Color:
+        return Color
+    elif n == FrameType.Ir:
+        return Ir
+    elif n == FrameType.Depth:
+        return Depth
+    else:
+        raise ValueError("Not supported")
+
+cdef str_to_frame_type(s):
+    s = s.lower()
+    if s == "color":
+        return Color
+    elif s == "ir":
+        return Ir
+    elif s == "depth":
+        return Depth
+    else:
+        raise ValueError("Not supported")
+
 cdef class pyFrameMap:
-    cdef map[FrameType, Frame*] internal_frame_map
+    cdef map[LibFreenect2FrameType, Frame*] internal_frame_map
 
     def __cinit__(self):
         pass
@@ -68,28 +90,26 @@ cdef class pyFrameMap:
     def __dealloc__(self):
         pass
 
+    def __getitem__(self, key):
+        cdef LibFreenect2FrameType frame_type
+        if isinstance(key, int) or isinstance(key, FrameType):
+            frame_type = intenum_to_frame_type(key)
+        elif isinstance(key, str):
+            frame_type = str_to_frame_type(key)
+        else:
+            raise KeyError("")
 
-    def __get(self, FrameType key=Color):
-        cdef Frame* frame_ptr = self.internal_frame_map[key]
+        cdef Frame* frame_ptr = self.internal_frame_map[frame_type]
         frame = pyFrame()
         frame.ptr = frame_ptr
         return frame
-
-    def get(self, type="color"):
-        if type == "color":
-            return self.__get(Color)
-        elif type == "ir":
-            return self.__get(Ir)
-        elif type == "depth":
-            return self.__get(Depth)
-        else:
-            raise ValueError("invalid frame type")
 
 
 cdef class pySyncMultiFrameListener(pyFrameListener):
     cdef SyncMultiFrameListener* ptr
 
-    def __cinit__(self, unsigned int frame_types=IColor | IIr | IDepth):
+    def __cinit__(self, unsigned int frame_types=<unsigned int>(
+                        FrameType.Color | FrameType.Ir | FrameType.Depth)):
         self.ptr = new SyncMultiFrameListener(frame_types)
 
     def __dealloc__(self):
@@ -133,12 +153,6 @@ cdef class pyFreenect2Device:
         self.ptr.close()
 
 
-cdef pyFreenect2Device_Init(Freenect2Device* ptr):
-    device = pyFreenect2Device()
-    device.ptr = ptr
-    return device
-
-
 cdef class pyFreenect2:
     cdef Freenect2* ptr
 
@@ -161,9 +175,12 @@ cdef class pyFreenect2:
 
     def openDevice(self, int idx):
         cdef Freenect2Device* dev_ptr = self.ptr.openDevice(idx)
-        return pyFreenect2Device_Init(dev_ptr)
+        cdef pyFreenect2Device device = pyFreenect2Device()
+        device.ptr = dev_ptr
+        return device
 
     def openDefaultDevice(self):
         cdef Freenect2Device* dev_ptr = self.ptr.openDefaultDevice()
-        return pyFreenect2Device_Init(dev_ptr)
-        # return pyFreenect2Device(self.thisptr.openDefaultDevice())
+        cdef pyFreenect2Device device = pyFreenect2Device()
+        device.ptr = dev_ptr
+        return device

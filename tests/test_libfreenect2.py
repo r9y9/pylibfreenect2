@@ -3,16 +3,15 @@
 import numpy as np
 
 from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
-
-
-import cv2
+from pylibfreenect2 import FrameType
 
 
 def test_sync_multi_frame():
     fn = pyFreenect2()
     device = fn.openDefaultDevice()
 
-    listener = pySyncMultiFrameListener()
+    listener = pySyncMultiFrameListener(
+        FrameType.Color | FrameType.Ir | FrameType.Depth)
 
     # Register listeners
     device.setColorFrameListener(listener)
@@ -20,12 +19,12 @@ def test_sync_multi_frame():
 
     device.start()
 
-    m = pyFrameMap()
-    listener.waitForNewFrame(m)
+    frames = pyFrameMap()
+    listener.waitForNewFrame(frames)
 
-    color = m.get("color")
-    ir = m.get("ir")
-    depth = m.get("depth")
+    color = frames[FrameType.Color]
+    ir = frames[FrameType.Ir]
+    depth = frames[FrameType.Depth]
 
     ### Color ###
     assert color.width == 1920
@@ -44,7 +43,7 @@ def test_sync_multi_frame():
     assert ir.data().shape == (ir.height, ir.width)
     assert depth.data().shape == (depth.height, depth.width)
 
-    listener.release(m)
+    listener.release(frames)
 
     device.stop()
     device.close()

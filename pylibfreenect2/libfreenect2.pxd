@@ -6,15 +6,9 @@ from libcpp.string cimport string
 from libcpp.map cimport map
 
 
-cdef enum IntegerFrameType:
-    IColor = 1
-    IIr = 2
-    IDepth = 4
-
-
 cdef extern from "frame_listener.hpp" namespace "libfreenect2":
     # ugly but works
-    cdef enum FrameType "libfreenect2::Frame::Type":
+    cdef enum LibFreenect2FrameType "libfreenect2::Frame::Type":
         Color "libfreenect2::Frame::Type::Color"
         Ir "libfreenect2::Frame::Type::Ir"
         Depth "libfreenect2::Frame::Type::Depth"
@@ -37,8 +31,8 @@ cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
         SyncMultiFrameListener(unsigned int)
 
         bool hasNewFrame()
-        void waitForNewFrame(map[FrameType, Frame*]&)
-        void release(map[FrameType, Frame*]&)
+        void waitForNewFrame(map[LibFreenect2FrameType, Frame*]&)
+        void release(map[LibFreenect2FrameType, Frame*]&)
 
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":

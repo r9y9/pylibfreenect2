@@ -13,12 +13,15 @@ from pylibfreenect2 import FrameType
 cdef class pyFrame:
     cdef Frame* ptr
     cdef bool take_ownership
+    cdef int frame_type
 
-    def __cinit__(self, width=None, height=None, bytes_per_pixel=None):
+    def __cinit__(self, width=None, height=None, bytes_per_pixel=None, int frame_type=-1):
         w,h,b = width, height, bytes_per_pixel
         all_none = (w is None) and (h is None) and (b is None)
         all_not_none = (w is not None) and (h is not None) and (b is not None)
         assert all_none or all_not_none
+
+        self.frame_type = frame_type
 
         if all_not_none:
             self.take_ownership = True
@@ -69,6 +72,17 @@ cdef class pyFrame:
 
         return array
 
+    def asarray(self):
+        if self.frame_type < 0:
+            raise ValueError("Cannnot determine type of raw data. Use astype instead.")
+
+        if self.frame_type == FrameType.Color:
+            return self.astype(np.uint8)
+        elif self.frame_type == FrameType.Ir or self.frame_type == FrameType.Depth:
+            return self.astype(np.float32)
+        else:
+            assert False
+
     def astype(self, data_type):
         if data_type != np.uint8 and data_type != np.float32:
             raise ValueError("np.uint8 or np.float32 is only supported")
@@ -84,7 +98,7 @@ cdef class pyFrameListener:
         pass
 
 
-cdef intenum_to_frame_type(n):
+cdef intenum_to_frame_type(int n):
     if n == FrameType.Color:
         return Color
     elif n == FrameType.Ir:
@@ -94,16 +108,20 @@ cdef intenum_to_frame_type(n):
     else:
         raise ValueError("Not supported")
 
-cdef str_to_frame_type(s):
+cdef str_to_int_frame_type(str s):
     s = s.lower()
     if s == "color":
-        return Color
+        return FrameType.Color
     elif s == "ir":
-        return Ir
+        return FrameType.Ir
     elif s == "depth":
-        return Depth
+        return FrameType.Depth
     else:
         raise ValueError("Not supported")
+
+cdef str_to_frame_type(str s):
+    return intenum_to_frame_type(str_to_int_frame_type(s))
+
 
 cdef class pyFrameMap:
     cdef map[LibFreenect2FrameType, Frame*] internal_frame_map
@@ -116,15 +134,19 @@ cdef class pyFrameMap:
 
     def __getitem__(self, key):
         cdef LibFreenect2FrameType frame_type
+        cdef intkey
+
         if isinstance(key, int) or isinstance(key, FrameType):
             frame_type = intenum_to_frame_type(key)
+            intkey = key
         elif isinstance(key, str):
             frame_type = str_to_frame_type(key)
+            intkey = str_to_int_frame_type(key)
         else:
             raise KeyError("")
 
         cdef Frame* frame_ptr = self.internal_frame_map[frame_type]
-        frame = pyFrame()
+        frame = pyFrame(frame_type=intkey)
         frame.ptr = frame_ptr
         return frame
 

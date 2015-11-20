@@ -72,7 +72,7 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
             float my_x0y0
 
         cppclass IrCameraParams:
-            float fx, fy, cx, cy, k1, k2, k3, p1, p2;
+            float fx, fy, cx, cy, k1, k2, k3, p1, p2
 
         ColorCameraParams getColorCameraParams()
         IrCameraParams getIrCameraParams()
@@ -86,6 +86,14 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         void start()
         void stop()
         void close()
+
+cdef extern from "registration.h" namespace "libfreenect2":
+    cdef cppclass Registration:
+        Registration(Freenect2Device.IrCameraParams, Freenect2Device.ColorCameraParams) except +
+
+        # undistort/register a whole image
+        void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*) const
+
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass Freenect2:

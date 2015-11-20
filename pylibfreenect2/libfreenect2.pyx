@@ -12,6 +12,23 @@ from pylibfreenect2 import FrameType
 
 cdef class pyFrame:
     cdef Frame* ptr
+    cdef bool take_ownership
+
+    def __cinit__(self, width=None, height=None, bytes_per_pixel=None):
+        w,h,b = width, height, bytes_per_pixel
+        all_none = (w is None) and (h is None) and (b is None)
+        all_not_none = (w is not None) and (h is not None) and (b is not None)
+        assert all_none or all_not_none
+
+        if all_not_none:
+            self.take_ownership = True
+            self.ptr = new Frame(width, height, bytes_per_pixel)
+        else:
+            self.take_ownership = False
+
+    def __dealloc__(self):
+        if self.take_ownership and self.ptr is not NULL:
+            del self.ptr
 
     @property
     def bytes_per_pixel(self):
@@ -166,6 +183,26 @@ cdef class pyIrCameraParams:
     @property
     def cy(self):
         return self.params.cy
+
+cdef class pyRegistration:
+    cdef Registration* ptr
+
+    def __cinit__(self, pyIrCameraParams irparams, pyColorCameraParams cparams):
+        cdef Freenect2Device.IrCameraParams i = irparams.params
+        cdef Freenect2Device.ColorCameraParams c = cparams.params
+        self.ptr = new Registration(i, c)
+
+    def __dealloc__(self):
+        if self.ptr is not NULL:
+            del self.ptr
+
+    def apply(self, pyFrame color, pyFrame depth, pyFrame undistored, pyFrame registered):
+        assert color.take_ownership == False
+        assert depth.take_ownership == False
+        assert undistored.take_ownership == True
+        assert registered.take_ownership == True
+
+        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, True, NULL)
 
 
 cdef class pyFreenect2Device:

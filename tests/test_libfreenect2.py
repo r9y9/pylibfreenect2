@@ -3,7 +3,7 @@
 import numpy as np
 
 from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
-from pylibfreenect2 import FrameType
+from pylibfreenect2 import FrameType, pyRegistration, pyFrame
 
 
 def test_sync_multi_frame():
@@ -31,12 +31,20 @@ def test_sync_multi_frame():
 
     device.start()
 
+    # Registration
+    registration = pyRegistration(device.getIrCameraParams(),
+                                  device.getColorCameraParams())
+    undistorted = pyFrame(512, 424, 4)
+    registered = pyFrame(512, 424, 4)
+
     frames = pyFrameMap()
     listener.waitForNewFrame(frames)
 
     color = frames[FrameType.Color]
     ir = frames[FrameType.Ir]
     depth = frames[FrameType.Depth]
+
+    registration.apply(color, depth, undistorted, registered)
 
     ### Color ###
     assert color.width == 1920

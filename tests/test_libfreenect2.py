@@ -4,12 +4,12 @@ import numpy as np
 
 from nose.tools import raises
 
-from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
-from pylibfreenect2 import FrameType, pyRegistration, pyFrame
+from pylibfreenect2 import Freenect2, FrameMap, SyncMultiFrameListener
+from pylibfreenect2 import FrameType, Registration, Frame
 
 
 def test_sync_multi_frame():
-    fn = pyFreenect2()
+    fn = Freenect2()
 
     num_devices = fn.enumerateDevices()
     assert num_devices > 0
@@ -24,7 +24,7 @@ def test_sync_multi_frame():
     assert fn.getDefaultDeviceSerialNumber() == device.getSerialNumber()
     device.getFirmwareVersion()
 
-    listener = pySyncMultiFrameListener(
+    listener = SyncMultiFrameListener(
         FrameType.Color | FrameType.Ir | FrameType.Depth)
 
     # Register listeners
@@ -34,12 +34,12 @@ def test_sync_multi_frame():
     device.start()
 
     # Registration
-    registration = pyRegistration(device.getIrCameraParams(),
-                                  device.getColorCameraParams())
-    undistorted = pyFrame(512, 424, 4)
-    registered = pyFrame(512, 424, 4)
+    registration = Registration(device.getIrCameraParams(),
+                                device.getColorCameraParams())
+    undistorted = Frame(512, 424, 4)
+    registered = Frame(512, 424, 4)
 
-    frames = pyFrameMap()
+    frames = FrameMap()
     listener.waitForNewFrame(frames)
 
     color = frames[FrameType.Color]

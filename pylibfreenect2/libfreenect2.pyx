@@ -1,5 +1,16 @@
 # coding: utf-8
 # cython: boundscheck=True, wraparound=True
+
+"""
+libfreenect2 wrapper implementation
+
+.. note:
+    For consistency, all exported classes and methods are designed to have
+    same name in `libfreenect2`:
+    e.g: `Freenect2`, not `pyFreenect2`
+    e.g. `getDeviceSerialNumber`, not `get_device_serial_number`
+"""
+
 import numpy as np
 
 cimport numpy as np
@@ -10,8 +21,8 @@ cimport libfreenect2
 
 from pylibfreenect2 import FrameType
 
-cdef class pyFrame:
-    cdef Frame* ptr
+cdef class Frame:
+    cdef _Frame* ptr
     cdef bool take_ownership
     cdef int frame_type
 
@@ -25,7 +36,7 @@ cdef class pyFrame:
 
         if all_not_none:
             self.take_ownership = True
-            self.ptr = new Frame(width, height, bytes_per_pixel)
+            self.ptr = new _Frame(width, height, bytes_per_pixel)
         else:
             self.take_ownership = False
 
@@ -93,7 +104,7 @@ cdef class pyFrame:
 
 
 # TODO: utilize inheritance
-cdef class pyFrameListener:
+cdef class FrameListener:
     def onNewFrame(self):
         pass
 
@@ -123,8 +134,8 @@ cdef str_to_frame_type(str s):
     return intenum_to_frame_type(str_to_int_frame_type(s))
 
 
-cdef class pyFrameMap:
-    cdef map[LibFreenect2FrameType, Frame*] internal_frame_map
+cdef class FrameMap:
+    cdef map[LibFreenect2FrameType, _Frame*] internal_frame_map
 
     def __cinit__(self):
         pass
@@ -145,18 +156,18 @@ cdef class pyFrameMap:
         else:
             raise KeyError("")
 
-        cdef Frame* frame_ptr = self.internal_frame_map[frame_type]
-        frame = pyFrame(frame_type=intkey)
+        cdef _Frame* frame_ptr = self.internal_frame_map[frame_type]
+        cdef Frame frame = Frame(frame_type=intkey)
         frame.ptr = frame_ptr
         return frame
 
 
-cdef class pySyncMultiFrameListener(pyFrameListener):
-    cdef SyncMultiFrameListener* ptr
+cdef class SyncMultiFrameListener(FrameListener):
+    cdef _SyncMultiFrameListener* ptr
 
     def __cinit__(self, unsigned int frame_types=<unsigned int>(
                         FrameType.Color | FrameType.Ir | FrameType.Depth)):
-        self.ptr = new SyncMultiFrameListener(frame_types)
+        self.ptr = new _SyncMultiFrameListener(frame_types)
 
     def __dealloc__(self):
         if self.ptr is not NULL:
@@ -165,17 +176,17 @@ cdef class pySyncMultiFrameListener(pyFrameListener):
     def hasNewFrame(self):
         return self.ptr.hasNewFrame()
 
-    def waitForNewFrame(self, pyFrameMap frame_map):
+    def waitForNewFrame(self, FrameMap frame_map):
         self.ptr.waitForNewFrame(frame_map.internal_frame_map)
 
-    def release(self, pyFrameMap frame_map):
+    def release(self, FrameMap frame_map):
         self.ptr.release(frame_map.internal_frame_map)
 
 
-cdef class pyColorCameraParams:
-    cdef Freenect2Device.ColorCameraParams params
+cdef class ColorCameraParams:
+    cdef _Freenect2Device._ColorCameraParams params
 
-    # TODO: non complete. すべて手で書くのは面倒なので、自動生成がいい？
+    # TODO: not complete. すべて手で書くのは面倒なので、自動生成がいい？
     # pythonでマクロ使えたら楽なんだが、、
     @property
     def fx(self):
@@ -194,8 +205,8 @@ cdef class pyColorCameraParams:
         return self.params.cy
 
 
-cdef class pyIrCameraParams:
-    cdef Freenect2Device.IrCameraParams params
+cdef class IrCameraParams:
+    cdef _Freenect2Device._IrCameraParams params
 
     @property
     def fx(self):
@@ -213,19 +224,19 @@ cdef class pyIrCameraParams:
     def cy(self):
         return self.params.cy
 
-cdef class pyRegistration:
-    cdef Registration* ptr
+cdef class Registration:
+    cdef _Registration* ptr
 
-    def __cinit__(self, pyIrCameraParams irparams, pyColorCameraParams cparams):
-        cdef Freenect2Device.IrCameraParams i = irparams.params
-        cdef Freenect2Device.ColorCameraParams c = cparams.params
-        self.ptr = new Registration(i, c)
+    def __cinit__(self, IrCameraParams irparams, ColorCameraParams cparams):
+        cdef _Freenect2Device._IrCameraParams i = irparams.params
+        cdef _Freenect2Device._ColorCameraParams c = cparams.params
+        self.ptr = new _Registration(i, c)
 
     def __dealloc__(self):
         if self.ptr is not NULL:
             del self.ptr
 
-    def apply(self, pyFrame color, pyFrame depth, pyFrame undistored, pyFrame registered):
+    def apply(self, Frame color, Frame depth, Frame undistored, Frame registered):
         assert color.take_ownership == False
         assert depth.take_ownership == False
         assert undistored.take_ownership == True
@@ -234,8 +245,8 @@ cdef class pyRegistration:
         self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, True, NULL)
 
 
-cdef class pyFreenect2Device:
-    cdef Freenect2Device* ptr
+cdef class Freenect2Device:
+    cdef _Freenect2Device* ptr
 
     def getSerialNumber(self):
         return self.ptr.getSerialNumber()
@@ -244,25 +255,25 @@ cdef class pyFreenect2Device:
         return self.ptr.getFirmwareVersion()
 
     def getColorCameraParams(self):
-        cdef Freenect2Device.ColorCameraParams params
+        cdef _Freenect2Device._ColorCameraParams params
         params = self.ptr.getColorCameraParams()
-        cdef pyColorCameraParams pyparams = pyColorCameraParams()
+        cdef ColorCameraParams pyparams = ColorCameraParams()
         pyparams.params = params
         return pyparams
 
     def getIrCameraParams(self):
-        cdef Freenect2Device.IrCameraParams params
+        cdef _Freenect2Device._IrCameraParams params
         params = self.ptr.getIrCameraParams()
-        cdef pyIrCameraParams pyparams = pyIrCameraParams()
+        cdef IrCameraParams pyparams = IrCameraParams()
         pyparams.params = params
         return pyparams
 
-    def setColorFrameListener(self, pySyncMultiFrameListener listener):
-        cdef FrameListener* listener_ptr = <FrameListener*>(listener.ptr)
+    def setColorFrameListener(self, SyncMultiFrameListener listener):
+        cdef _FrameListener* listener_ptr = <_FrameListener*>(listener.ptr)
         self.ptr.setColorFrameListener(listener_ptr)
 
-    def setIrAndDepthFrameListener(self, pySyncMultiFrameListener listener):
-        cdef FrameListener* listener_ptr = <FrameListener*>(listener.ptr)
+    def setIrAndDepthFrameListener(self, SyncMultiFrameListener listener):
+        cdef _FrameListener* listener_ptr = <_FrameListener*>(listener.ptr)
         self.ptr.setIrAndDepthFrameListener(listener_ptr)
 
     def start(self):
@@ -275,11 +286,11 @@ cdef class pyFreenect2Device:
         self.ptr.close()
 
 
-cdef class pyFreenect2:
-    cdef Freenect2* ptr
+cdef class Freenect2:
+    cdef _Freenect2* ptr
 
     def __cinit__(self):
-        self.ptr = new Freenect2();
+        self.ptr = new _Freenect2();
 
     def __dealloc__(self):
         if self.ptr is not NULL:
@@ -295,14 +306,14 @@ cdef class pyFreenect2:
         return self.ptr.getDefaultDeviceSerialNumber()
 
     cdef __openDevice__intidx(self, int idx):
-        cdef Freenect2Device* dev_ptr = self.ptr.openDevice(idx)
-        cdef pyFreenect2Device device = pyFreenect2Device()
+        cdef _Freenect2Device* dev_ptr = self.ptr.openDevice(idx)
+        cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device
 
     cdef __openDevice__stridx(self, string serial):
-        cdef Freenect2Device* dev_ptr = self.ptr.openDevice(serial)
-        cdef pyFreenect2Device device = pyFreenect2Device()
+        cdef _Freenect2Device* dev_ptr = self.ptr.openDevice(serial)
+        cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device
 
@@ -315,7 +326,7 @@ cdef class pyFreenect2:
             ValueError("device name must be str or integer index")
 
     def openDefaultDevice(self):
-        cdef Freenect2Device* dev_ptr = self.ptr.openDefaultDevice()
-        cdef pyFreenect2Device device = pyFreenect2Device()
+        cdef _Freenect2Device* dev_ptr = self.ptr.openDefaultDevice()
+        cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device

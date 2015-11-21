@@ -1,5 +1,15 @@
 # distutils: language = c++
 
+"""
+libfreenect2 cdef externs
+
+.. note:
+    To resolve naming conflicts between C++ and python, I decided here to
+    use C name specification with underscore prefix (e.g. `_Frame` for C++
+    and `Frame` for python). Separating namespaces is probably better than
+    this.
+"""
+
 from libc.stdint cimport uint32_t
 from libcpp cimport bool
 from libcpp.string cimport string
@@ -13,7 +23,7 @@ cdef extern from "frame_listener.hpp" namespace "libfreenect2":
         Ir "libfreenect2::Frame::Type::Ir"
         Depth "libfreenect2::Frame::Type::Depth"
 
-    cdef cppclass Frame:
+    cdef cppclass _Frame "libfreenect2::Frame":
         uint32_t timestamp
         uint32_t sequence
         size_t width
@@ -21,22 +31,22 @@ cdef extern from "frame_listener.hpp" namespace "libfreenect2":
         size_t bytes_per_pixel
         unsigned char* data
 
-        Frame(size_t width, size_t height, size_t bytes_per_pixel) except +
+        _Frame(size_t width, size_t height, size_t bytes_per_pixel) except +
 
-    cdef cppclass FrameListener:
-        bool onNewFrame(int, Frame*)
+    cdef cppclass _FrameListener "libfreenect2::FrameListener":
+        bool onNewFrame(int, _Frame*)
 
 cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
-    cdef cppclass SyncMultiFrameListener:
-        SyncMultiFrameListener(unsigned int)
+    cdef cppclass _SyncMultiFrameListener "libfreenect2::SyncMultiFrameListener":
+        _SyncMultiFrameListener(unsigned int)
 
         bool hasNewFrame()
-        void waitForNewFrame(map[LibFreenect2FrameType, Frame*]&)
-        void release(map[LibFreenect2FrameType, Frame*]&)
+        void waitForNewFrame(map[LibFreenect2FrameType, _Frame*]&)
+        void release(map[LibFreenect2FrameType, _Frame*]&)
 
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
-    cdef cppclass Freenect2Device:
+    cdef cppclass _Freenect2Device "libfreenect2::Freenect2Device":
         unsigned int VendorId
         unsigned int ProductId
         unsigned int ProductIdPreview
@@ -44,7 +54,7 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         string getSerialNumber()
         string getFirmwareVersion()
 
-        cppclass ColorCameraParams:
+        cppclass _ColorCameraParams "ColorCameraParams":
             float fx, fy, cx, cy
 
             float shift_d, shift_m
@@ -71,43 +81,43 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
             float my_x0y1
             float my_x0y0
 
-        cppclass IrCameraParams:
+        cppclass _IrCameraParams "IrCameraParams":
             float fx, fy, cx, cy, k1, k2, k3, p1, p2
 
-        ColorCameraParams getColorCameraParams()
-        IrCameraParams getIrCameraParams()
+        _ColorCameraParams getColorCameraParams()
+        _IrCameraParams getIrCameraParams()
 
         # void setColorCameraParams(ColorCameraParams &)
         # void setIrCameraParams(const Freenect2Device::IrCameraParams &)
 
-        void setColorFrameListener(FrameListener*)
-        void setIrAndDepthFrameListener(FrameListener*)
+        void setColorFrameListener(_FrameListener*)
+        void setIrAndDepthFrameListener(_FrameListener*)
 
         void start()
         void stop()
         void close()
 
 cdef extern from "registration.h" namespace "libfreenect2":
-    cdef cppclass Registration:
-        Registration(Freenect2Device.IrCameraParams, Freenect2Device.ColorCameraParams) except +
+    cdef cppclass _Registration "libfreenect2::Registration":
+        _Registration(_Freenect2Device._IrCameraParams, _Freenect2Device._ColorCameraParams) except +
 
         # undistort/register a whole image
-        void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*) const
+        void apply(const _Frame*, const _Frame*, _Frame*, _Frame*, const bool, _Frame*) const
 
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
-    cdef cppclass Freenect2:
-        Freenect2() except +
+    cdef cppclass _Freenect2 "libfreenect2::Freenect2":
+        _Freenect2() except +
 
         int enumerateDevices()
 
         string getDeviceSerialNumber(int)
         string getDefaultDeviceSerialNumber()
 
-        Freenect2Device *openDevice(int);
+        _Freenect2Device *openDevice(int);
         # Freenect2Device *openDevice(int idx, const PacketPipeline *factory);
-        Freenect2Device *openDevice(const string &)
+        _Freenect2Device *openDevice(const string &)
         # Freenect2Device *openDevice(const string &serial, const PacketPipeline *factory);
 
-        Freenect2Device *openDefaultDevice()
+        _Freenect2Device *openDefaultDevice()
         #Freenect2Device *openDefaultDevice(const PacketPipeline *factory);

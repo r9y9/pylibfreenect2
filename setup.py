@@ -40,7 +40,9 @@ else:
 ext_modules = [
     Extension(
         name="pylibfreenect2.libfreenect2",
-        sources=[join("pylibfreenect2", "libfreenect2" + ext)],
+        sources=[
+            join("pylibfreenect2", "libfreenect2" + ext),
+        ],
         include_dirs=[np.get_include(), "/usr/local/include/libfreenect2"],
         library_dirs=["/usr/local/lib"],
         libraries=["freenect2"],

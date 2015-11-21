@@ -44,7 +44,6 @@ cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
         void waitForNewFrame(map[LibFreenect2FrameType, _Frame*]&)
         void release(map[LibFreenect2FrameType, _Frame*]&)
 
-
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass _Freenect2Device "libfreenect2::Freenect2Device":
         unsigned int VendorId
@@ -104,6 +103,20 @@ cdef extern from "registration.h" namespace "libfreenect2":
         # undistort/register a whole image
         void apply(const _Frame*, const _Frame*, _Frame*, _Frame*, const bool, _Frame*) const
 
+cdef extern from "packet_pipeline.h" namespace "libfreenect2":
+    cdef cppclass _PacketPipeline "libfreenect2::PacketPipeline":
+        _PacketPipeline *getRgbPacketParser() const
+        _PacketPipeline *getIrPacketParser() const
+
+    cdef cppclass _CpuPacketPipeline "libfreenect2::CpuPacketPipeline":
+        _CpuPacketPipeline()
+
+    cdef cppclass _OpenGLPacketPipeline "libfreenect2::OpenGLPacketPipeline":
+        _OpenGLPacketPipeline(void*, bool)
+
+    cdef cppclass _OpenCLPacketPipeline "libfreenect2::OpenCLPacketPipeline":
+        _OpenCLPacketPipeline(const int)
+
 
 cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass _Freenect2 "libfreenect2::Freenect2":
@@ -115,9 +128,9 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         string getDefaultDeviceSerialNumber()
 
         _Freenect2Device *openDevice(int);
-        # Freenect2Device *openDevice(int idx, const PacketPipeline *factory);
+        _Freenect2Device *openDevice(int idx, const _PacketPipeline *)
         _Freenect2Device *openDevice(const string &)
-        # Freenect2Device *openDevice(const string &serial, const PacketPipeline *factory);
+        _Freenect2Device *openDevice(const string &, const _PacketPipeline *)
 
         _Freenect2Device *openDefaultDevice()
-        #Freenect2Device *openDefaultDevice(const PacketPipeline *factory);
+        _Freenect2Device *openDefaultDevice(const _PacketPipeline *)

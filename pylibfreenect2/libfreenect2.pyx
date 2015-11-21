@@ -248,6 +248,42 @@ cdef class Registration:
         self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, enable_filter, bigdepth_ptr)
 
 
+cdef class PacketPipeline:
+    cdef _PacketPipeline* pipeline_ptr_alias
+
+cdef class CpuPacketPipeline(PacketPipeline):
+    cdef _CpuPacketPipeline* pipeline
+
+    def __cinit__(self):
+        self.pipeline = new _CpuPacketPipeline()
+        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
+
+    def __dealloc__(self):
+        pass
+
+
+cdef class OpenGLPacketPipeline(PacketPipeline):
+    cdef _OpenGLPacketPipeline* pipeline
+
+    def __cinit__(self, bool debug=False):
+        self.pipeline = new _OpenGLPacketPipeline(NULL, debug)
+        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
+
+    def __dealloc__(self):
+        pass
+
+
+cdef class OpenCLPacketPipeline(PacketPipeline):
+    cdef _OpenCLPacketPipeline* pipeline
+
+    def __cinit__(self, int device_id=-1):
+        self.pipeline = new _OpenCLPacketPipeline(device_id)
+        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
+
+    def __dealloc__(self):
+        pass
+
+
 cdef class Freenect2Device:
     cdef _Freenect2Device* ptr
 
@@ -308,28 +344,44 @@ cdef class Freenect2:
     def getDefaultDeviceSerialNumber(self):
         return self.ptr.getDefaultDeviceSerialNumber()
 
-    cdef __openDevice__intidx(self, int idx):
-        cdef _Freenect2Device* dev_ptr = self.ptr.openDevice(idx)
+    cdef __openDevice__intidx(self, int idx, PacketPipeline pipeline):
+        cdef _Freenect2Device* dev_ptr
+        if pipeline is None:
+            dev_ptr = self.ptr.openDevice(idx)
+        else:
+            dev_ptr = self.ptr.openDevice(idx, pipeline.pipeline_ptr_alias)
+
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device
 
-    cdef __openDevice__stridx(self, string serial):
-        cdef _Freenect2Device* dev_ptr = self.ptr.openDevice(serial)
+    cdef __openDevice__stridx(self, string serial, PacketPipeline pipeline):
+        cdef _Freenect2Device* dev_ptr
+        if pipeline is None:
+            dev_ptr = self.ptr.openDevice(serial)
+        else:
+            dev_ptr = self.ptr.openDevice(serial, pipeline.pipeline_ptr_alias)
+
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device
 
-    def openDevice(self, name):
+    def openDevice(self, name, PacketPipeline pipeline=None):
         if isinstance(name, int):
-            return self.__openDevice__intidx(name)
+            return self.__openDevice__intidx(name, pipeline)
         elif isinstance(name, str):
-            return self.__openDevice__stridx(name)
+            return self.__openDevice__stridx(name, pipeline)
         else:
             ValueError("device name must be str or integer index")
 
-    def openDefaultDevice(self):
-        cdef _Freenect2Device* dev_ptr = self.ptr.openDefaultDevice()
+    def openDefaultDevice(self, PacketPipeline pipeline=None):
+        cdef _Freenect2Device* dev_ptr
+
+        if pipeline is None:
+            dev_ptr = self.ptr.openDefaultDevice()
+        else:
+            dev_ptr = self.ptr.openDefaultDevice(pipeline.pipeline_ptr_alias)
+
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
         return device

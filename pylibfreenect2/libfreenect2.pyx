@@ -103,10 +103,8 @@ cdef class Frame:
             return self.__float32_data()
 
 
-# TODO: utilize inheritance
 cdef class FrameListener:
-    def onNewFrame(self):
-        pass
+    cdef _FrameListener* listener_ptr_alias
 
 
 cdef intenum_to_frame_type(int n):
@@ -168,6 +166,7 @@ cdef class SyncMultiFrameListener(FrameListener):
     def __cinit__(self, unsigned int frame_types=<unsigned int>(
                         FrameType.Color | FrameType.Ir | FrameType.Depth)):
         self.ptr = new _SyncMultiFrameListener(frame_types)
+        self.listener_ptr_alias = <_FrameListener*> self.ptr
 
     def __dealloc__(self):
         if self.ptr is not NULL:
@@ -307,13 +306,11 @@ cdef class Freenect2Device:
         pyparams.params = params
         return pyparams
 
-    def setColorFrameListener(self, SyncMultiFrameListener listener):
-        cdef _FrameListener* listener_ptr = <_FrameListener*>(listener.ptr)
-        self.ptr.setColorFrameListener(listener_ptr)
+    def setColorFrameListener(self, FrameListener listener):
+        self.ptr.setColorFrameListener(listener.listener_ptr_alias)
 
-    def setIrAndDepthFrameListener(self, SyncMultiFrameListener listener):
-        cdef _FrameListener* listener_ptr = <_FrameListener*>(listener.ptr)
-        self.ptr.setIrAndDepthFrameListener(listener_ptr)
+    def setIrAndDepthFrameListener(self, FrameListener listener):
+        self.ptr.setIrAndDepthFrameListener(listener.listener_ptr_alias)
 
     def start(self):
         self.ptr.start()

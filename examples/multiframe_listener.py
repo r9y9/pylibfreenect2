@@ -37,7 +37,7 @@ while True:
 
     cv2.imshow("ir", ir.asarray() / 65535.)
     cv2.imshow("depth", depth.asarray() / 4500.)
-    cv2.imshow("color", color.asarray())
+    cv2.imshow("color", cv2.resize(color.asarray(), (512, 424)))
     cv2.imshow("registered", registered.astype(np.uint8))
 
     listener.release(frames)

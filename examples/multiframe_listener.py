@@ -2,14 +2,14 @@
 
 import numpy as np
 import cv2
-from pylibfreenect2 import pyFreenect2, pyFrameMap, pySyncMultiFrameListener
-from pylibfreenect2 import FrameType, pyRegistration, pyFrame
+from pylibfreenect2 import Freenect2, FrameMap, SyncMultiFrameListener
+from pylibfreenect2 import FrameType, Registration, Frame
 
 
-fn = pyFreenect2()
+fn = Freenect2()
 device = fn.openDefaultDevice()
 
-listener = pySyncMultiFrameListener(
+listener = SyncMultiFrameListener(
     FrameType.Color | FrameType.Ir | FrameType.Depth)
 
 # Register listeners
@@ -19,14 +19,14 @@ device.setIrAndDepthFrameListener(listener)
 device.start()
 
 # NOTE: must be called after device.start()
-registration = pyRegistration(device.getIrCameraParams(),
-                              device.getColorCameraParams())
+registration = Registration(device.getIrCameraParams(),
+                            device.getColorCameraParams())
 
-undistorted = pyFrame(512, 424, 4)
-registered = pyFrame(512, 424, 4)
+undistorted = Frame(512, 424, 4)
+registered = Frame(512, 424, 4)
 
 while True:
-    frames = pyFrameMap()
+    frames = FrameMap()
     listener.waitForNewFrame(frames)
 
     color = frames["color"]

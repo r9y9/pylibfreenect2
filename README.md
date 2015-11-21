@@ -6,7 +6,7 @@
 
 - RGB image transfer
 - IR and depth image transfer
-- registration of RGB and depth images（まだ）
+- registration of RGB and depth images
 
 
 ## インストール
@@ -47,9 +47,20 @@ python setup.py install
 kinect v2が接続されていることを確認して、
 
 ```
+nosetests -v -w tests
+```
+
+要nose
+
+## 例
+
+
+```
 python examples/multiframe_listener.py
 ```
 
-color, ir, depth が表示される
+要opencv
+
+color, ir, depth, registerされた画像がリアルタイムで表示されます。
 
 libfreenect2の動作確認には、libfreenect2に付属のProtonectを使用してください

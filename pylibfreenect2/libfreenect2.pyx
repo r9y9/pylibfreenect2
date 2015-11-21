@@ -236,13 +236,16 @@ cdef class Registration:
         if self.ptr is not NULL:
             del self.ptr
 
-    def apply(self, Frame color, Frame depth, Frame undistored, Frame registered):
+    def apply(self, Frame color, Frame depth, Frame undistored, Frame registered, enable_filter=True, Frame bigdepth=None):
         assert color.take_ownership == False
         assert depth.take_ownership == False
         assert undistored.take_ownership == True
         assert registered.take_ownership == True
+        assert bigdepth is None or bigdepth.take_ownership == True
 
-        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, True, NULL)
+        cdef _Frame* bigdepth_ptr = <_Frame*>(NULL) if bigdepth is None else bigdepth.ptr
+
+        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, enable_filter, bigdepth_ptr)
 
 
 cdef class Freenect2Device:

@@ -247,6 +247,7 @@ cdef class Registration:
         self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, enable_filter, bigdepth_ptr)
 
 
+# MUST be declared before backend specific includes
 cdef class PacketPipeline:
     cdef _PacketPipeline* pipeline_ptr_alias
 
@@ -260,27 +261,11 @@ cdef class CpuPacketPipeline(PacketPipeline):
     def __dealloc__(self):
         pass
 
+IF LIBFREENECT2_WITH_OPENGL_SUPPORT == True:
+    include "opengl_packet_pipeline.pxi"
 
-cdef class OpenGLPacketPipeline(PacketPipeline):
-    cdef _OpenGLPacketPipeline* pipeline
-
-    def __cinit__(self, bool debug=False):
-        self.pipeline = new _OpenGLPacketPipeline(NULL, debug)
-        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
-
-    def __dealloc__(self):
-        pass
-
-
-cdef class OpenCLPacketPipeline(PacketPipeline):
-    cdef _OpenCLPacketPipeline* pipeline
-
-    def __cinit__(self, int device_id=-1):
-        self.pipeline = new _OpenCLPacketPipeline(device_id)
-        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
-
-    def __dealloc__(self):
-        pass
+IF LIBFREENECT2_WITH_OPENCL_SUPPORT == True:
+    include "opencl_packet_pipeline.pxi"
 
 
 cdef class Freenect2Device:

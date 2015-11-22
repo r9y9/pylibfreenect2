@@ -9,7 +9,7 @@ import numpy as np
 import os
 from glob import glob
 from os.path import join
-
+from subprocess import Popen, PIPE
 
 min_cython_ver = '0.19.0'
 try:
@@ -23,6 +23,7 @@ try:
     if not _CYTHON_INSTALLED:
         raise ImportError('No supported version of Cython installed.')
     from Cython.Distutils import build_ext
+    from Cython.Build import cythonize
     cython = True
 except ImportError:
     cython = False
@@ -36,9 +37,26 @@ else:
     if not os.path.exists(join("pylibfreenect2", "libfreenect2" + ext)):
         raise RuntimeError("Cython is required to generate C++ codes.")
 
-# define core cython module
-ext_modules = [
-    Extension(
+# should be configurable
+dylib_path = "/usr/local/lib/libfreenect2.dylib"
+
+
+def has_opengl_backend():
+    p = Popen("otool -L {} | grep OpenGL".format(dylib_path), stdin=PIPE,
+              stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
+    p.wait()
+    return len(p.stdout.readlines()) > 0
+
+
+def has_opencl_backend():
+    p = Popen("otool -L {} | grep OpenCL".format(dylib_path), stdin=PIPE,
+              stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
+    p.wait()
+    return len(p.stdout.readlines()) > 0
+
+    # define core cython module
+ext_modules = cythonize(
+    [Extension(
         name="pylibfreenect2.libfreenect2",
         sources=[
             join("pylibfreenect2", "libfreenect2" + ext),
@@ -48,8 +66,13 @@ ext_modules = [
         libraries=["freenect2"],
         extra_compile_args=["-std=c++11", "-stdlib=libc++", "-mmacosx-version-min=10.8"],
         extra_link_args=[],
-        language="c++"),
-]
+        language="c++")],
+    compile_time_env={
+        "LIBFREENECT2_WITH_OPENGL_SUPPORT": has_opengl_backend(),
+        "LIBFREENECT2_WITH_OPENCL_SUPPORT": has_opencl_backend(),
+    }
+)
+
 
 setup(
     name='pylibfreenect2',

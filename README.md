@@ -24,8 +24,6 @@ make
 make install
 ```
 
-注意：現状、OpenCL, OpenGLをONにしてlibfreenect2をインストールしないと、Cythonモジュールのコンパイルに失敗します
-
 ### pylibfreenect2
 
 cloneしたあと、

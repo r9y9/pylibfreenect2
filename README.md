@@ -19,10 +19,12 @@ cloneしたあと、
 
 ```
 mkdir -p build && cd build
-cmake .. -DENABLE_CXX11=ON
-make 
+cmake .. -DENABLE_CXX11=ON -DENABLE_OPENCL=ON -DENABLE_OPENGL=ON
+make
 make install
 ```
+
+注意：現状、OpenCL, OpenGLをONにしてlibfreenect2をインストールしないと、Cythonモジュールのコンパイルに失敗します
 
 ### pylibfreenect2
 

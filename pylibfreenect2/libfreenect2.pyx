@@ -251,15 +251,23 @@ cdef class Registration:
 cdef class PacketPipeline:
     cdef _PacketPipeline* pipeline_ptr_alias
 
+    # NOTE: once device is opened with pipeline, pipeline will be
+    # releaseed in the destructor of Freenect2DeviceImpl
+    cdef bool owned_by_device
+
+
 cdef class CpuPacketPipeline(PacketPipeline):
     cdef _CpuPacketPipeline* pipeline
 
     def __cinit__(self):
         self.pipeline = new _CpuPacketPipeline()
         self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
+        self.owned_by_device = False
 
     def __dealloc__(self):
-        pass
+        if not self.owned_by_device:
+            if self.pipeline is not NULL:
+                del self.pipeline
 
 IF LIBFREENECT2_WITH_OPENGL_SUPPORT == True:
     include "opengl_packet_pipeline.pxi"
@@ -332,6 +340,7 @@ cdef class Freenect2:
             dev_ptr = self.ptr.openDevice(idx)
         else:
             dev_ptr = self.ptr.openDevice(idx, pipeline.pipeline_ptr_alias)
+            pipeline.owned_by_device = True
 
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
@@ -343,6 +352,7 @@ cdef class Freenect2:
             dev_ptr = self.ptr.openDevice(serial)
         else:
             dev_ptr = self.ptr.openDevice(serial, pipeline.pipeline_ptr_alias)
+            pipeline.owned_by_device = True
 
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr
@@ -363,6 +373,7 @@ cdef class Freenect2:
             dev_ptr = self.ptr.openDefaultDevice()
         else:
             dev_ptr = self.ptr.openDefaultDevice(pipeline.pipeline_ptr_alias)
+            pipeline.owned_by_device = True
 
         cdef Freenect2Device device = Freenect2Device()
         device.ptr = dev_ptr

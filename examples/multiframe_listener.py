@@ -28,8 +28,7 @@ undistorted = Frame(512, 424, 4)
 registered = Frame(512, 424, 4)
 
 while True:
-    frames = FrameMap()
-    listener.waitForNewFrame(frames)
+    frames = listener.waitForNewFrame()
 
     color = frames["color"]
     ir = frames["ir"]
@@ -41,8 +40,6 @@ while True:
     cv2.imshow("depth", depth.asarray() / 4500.)
     cv2.imshow("color", cv2.resize(color.asarray(), (512, 424)))
     cv2.imshow("registered", registered.astype(np.uint8))
-
-    listener.release(frames)
 
     key = cv2.waitKey(delay=1)
     if key == ord('q'):

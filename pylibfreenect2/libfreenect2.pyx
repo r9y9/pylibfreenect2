@@ -134,12 +134,20 @@ cdef str_to_frame_type(str s):
 
 cdef class FrameMap:
     cdef map[LibFreenect2FrameType, _Frame*] internal_frame_map
+    cdef bool take_ownership
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, bool take_ownership=False):
+        self.take_ownership = take_ownership
 
     def __dealloc__(self):
-        pass
+        # Since libfreenect2 is for now designed to release FrameMap explicitly,
+        # __dealloc__  do nothing by default (take_ownership = False)
+        if self.take_ownership:
+            # similar to SyncMultiFrameListener::release(FrameMap &frame)
+            for key in self.internal_frame_map:
+                if key.second != NULL:
+                    del key.second
+                    key.second = NULL
 
     def __getitem__(self, key):
         cdef LibFreenect2FrameType frame_type
@@ -175,8 +183,13 @@ cdef class SyncMultiFrameListener(FrameListener):
     def hasNewFrame(self):
         return self.ptr.hasNewFrame()
 
-    def waitForNewFrame(self, FrameMap frame_map):
+    def waitForNewFrame(self):
+        # NOTE: frames are automatically released if FrameMap is deallocated, so
+        # you don't need to call `release` manually.
+        cdef FrameMap frame_map = FrameMap(take_ownership=True)
         self.ptr.waitForNewFrame(frame_map.internal_frame_map)
+        return frame_map
+
 
     def release(self, FrameMap frame_map):
         self.ptr.release(frame_map.internal_frame_map)

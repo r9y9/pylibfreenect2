@@ -374,10 +374,10 @@ cdef class Freenect2:
     def openDevice(self, name, PacketPipeline pipeline=None):
         if isinstance(name, int):
             return self.__openDevice__intidx(name, pipeline)
-        elif isinstance(name, str):
+        elif isinstance(name, str) or isinstance(name, bytes):
             return self.__openDevice__stridx(name, pipeline)
         else:
-            ValueError("device name must be str or integer index")
+            raise ValueError("device name must be of str, bytes or integer type")
 
     def openDefaultDevice(self, PacketPipeline pipeline=None):
         cdef _Freenect2Device* dev_ptr

@@ -39,8 +39,7 @@ def test_sync_multi_frame():
     undistorted = Frame(512, 424, 4)
     registered = Frame(512, 424, 4)
 
-    frames = FrameMap()
-    listener.waitForNewFrame(frames)
+    frames = listener.waitForNewFrame()
 
     color = frames[FrameType.Color]
     ir = frames[FrameType.Ir]
@@ -70,8 +69,6 @@ def test_sync_multi_frame():
 
     for frame in [registered, undistorted]:
         yield raises(ValueError)(__test_cannot_determine_type_of_frame), frame
-
-    listener.release(frames)
 
     device.stop()
     device.close()

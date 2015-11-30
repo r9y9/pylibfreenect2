@@ -36,17 +36,13 @@ cdef class Frame:
 
         if all_not_none:
             self.take_ownership = True
-            self.ptr = new _Frame(width, height, bytes_per_pixel)
+            self.ptr = new _Frame(width, height, bytes_per_pixel, NULL)
         else:
             self.take_ownership = False
 
     def __dealloc__(self):
         if self.take_ownership and self.ptr is not NULL:
             del self.ptr
-
-    @property
-    def bytes_per_pixel(self):
-        return self.ptr.bytes_per_pixel
 
     @property
     def timestamp(self):
@@ -63,6 +59,22 @@ cdef class Frame:
     @property
     def height(self):
         return self.ptr.height
+
+    @property
+    def bytes_per_pixel(self):
+        return self.ptr.bytes_per_pixel
+
+    @property
+    def exposure(self):
+        return self.ptr.exposure
+
+    @property
+    def gain(self):
+        return self.ptr.gain
+
+    @property
+    def gamma(self):
+        return self.ptr.gamma
 
     cdef __uint8_data(self):
         cdef np.npy_intp shape[3]

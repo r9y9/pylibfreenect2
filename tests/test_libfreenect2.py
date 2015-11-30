@@ -8,6 +8,16 @@ from pylibfreenect2 import Freenect2, FrameMap, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 
 
+def test_frame():
+    frame = Frame(512, 424, 4)
+    assert frame.width == 512
+    assert frame.height == 424
+    assert frame.bytes_per_pixel == 4
+    assert frame.exposure == 0
+    assert frame.gain == 0
+    assert frame.gamma == 0
+
+
 def test_sync_multi_frame():
     fn = Freenect2()
 
@@ -44,6 +54,16 @@ def test_sync_multi_frame():
     color = frames[FrameType.Color]
     ir = frames[FrameType.Ir]
     depth = frames[FrameType.Depth]
+
+    for frame in [ir, depth]:
+        assert frame.exposure == 0
+        assert frame.gain == 0
+        assert frame.gamma == 0
+
+    for frame in [color]:
+        assert frame.exposure > 0
+        assert frame.gain > 0
+        assert frame.gamma > 0
 
     registration.apply(color, depth, undistorted, registered)
 

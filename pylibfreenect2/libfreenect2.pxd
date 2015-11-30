@@ -30,8 +30,11 @@ cdef extern from "frame_listener.hpp" namespace "libfreenect2":
         size_t height
         size_t bytes_per_pixel
         unsigned char* data
+        float exposure
+        float gain
+        float gamma
 
-        _Frame(size_t width, size_t height, size_t bytes_per_pixel) except +
+        _Frame(size_t width, size_t height, size_t bytes_per_pixel, unsigned char*) except +
 
     cdef cppclass _FrameListener "libfreenect2::FrameListener":
         bool onNewFrame(int, _Frame*)

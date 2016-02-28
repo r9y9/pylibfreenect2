@@ -41,6 +41,8 @@ while True:
     cv2.imshow("color", cv2.resize(color.asarray(), (int(1920 / 3), int(1080 / 3))))
     cv2.imshow("registered", registered.astype(np.uint8))
 
+    listener.release(frames)
+
     key = cv2.waitKey(delay=1)
     if key == ord('q'):
         break

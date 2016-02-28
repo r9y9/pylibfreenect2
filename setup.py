@@ -53,7 +53,6 @@ def has_opencl_backend():
     p.wait()
     return len(p.stdout.readlines()) > 0
 
-    # define core cython module
 ext_modules = cythonize(
     [Extension(
         name="pylibfreenect2.libfreenect2",
@@ -95,7 +94,6 @@ setup(
         'develop': ['cython >= ' + min_cython_ver],
     },
     classifiers=[
-        "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX",
         "Operating System :: Unix",
         "Operating System :: MacOS",

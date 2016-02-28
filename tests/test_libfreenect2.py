@@ -27,7 +27,7 @@ def test_sync_multi_frame():
     serial = fn.getDefaultDeviceSerialNumber()
     assert serial == fn.getDeviceSerialNumber(0)
 
-    # TODO: 本当はどっちもテストしたい
+    # TODO: tests for openDefaultDevice
     # device = fn.openDefaultDevice()
     device = fn.openDevice(serial)
 

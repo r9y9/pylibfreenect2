@@ -4,7 +4,7 @@ import numpy as np
 
 from nose.tools import raises
 
-from pylibfreenect2 import Freenect2, FrameMap, SyncMultiFrameListener
+from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 
 
@@ -49,6 +49,9 @@ def test_sync_multi_frame():
     undistorted = Frame(512, 424, 4)
     registered = Frame(512, 424, 4)
 
+    # test if we can get two frames at least
+    frames = listener.waitForNewFrame()
+    listener.release(frames)
     frames = listener.waitForNewFrame()
 
     color = frames[FrameType.Color]
@@ -83,6 +86,8 @@ def test_sync_multi_frame():
     assert color.asarray().shape == (color.height, color.width, 4)
     assert ir.asarray().shape == (ir.height, ir.width)
     assert depth.astype(np.float32).shape == (depth.height, depth.width)
+
+    listener.release(frames)
 
     def __test_cannot_determine_type_of_frame(frame):
         frame.asarray()

@@ -16,8 +16,12 @@ In addition to the requirements for libfreenect2, pylibfreenect2 requires:
 
 ## Installation
 
-The package requires libfreenect2 installed in your system path, so please make sure that you have installed [libfreenect2](https://github.com/OpenKinect/libfreenect2) correctly. If you have confirmed that Protonect is working for you, then you should be able to install pylibfreenect2 as follows:
+The package requires libfreenect2 installed and the installed location in advance. Please make sure that:
 
+- You have installed [libfreenect2](https://github.com/OpenKinect/libfreenect2) correctly and confirm that Protonect works.
+- You have set `LIBFREENECT2_INSTALL_PREFIX` environmental variable (default: `/usr/local/`).
+
+After that, you should be able to install pylibfreenect2 as follows:
 
 ```
 pip install git+https://github.com/r9y9/pylibfreenect2

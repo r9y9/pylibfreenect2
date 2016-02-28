@@ -5,10 +5,30 @@ from __future__ import with_statement, print_function, absolute_import
 from setuptools import setup, find_packages, Extension
 from distutils.version import LooseVersion
 
+import platform
+
 import numpy as np
 import os
-from os.path import join
+from os.path import join, exists
 from subprocess import Popen, PIPE
+import sys
+
+libfreenect2_install_prefix = os.environ.get(
+    "LIBFREENECT2_INSTALL_PREFIX", "/usr/local/")
+
+libfreenect2_include_top = join(libfreenect2_install_prefix, "include")
+libfreenect2_library_path = join(libfreenect2_install_prefix, "lib")
+libfreenect2_configh_path = join(
+    libfreenect2_include_top, "libfreenect2", "config.h")
+
+if not exists(libfreenect2_configh_path):
+    raise OSError("{}: is not found".format(libfreenect2_configh_path))
+
+lib_candidates = list(filter(lambda l: l.startswith("libfreenect2."),
+                             os.listdir(join(libfreenect2_library_path))))
+
+if len(lib_candidates) == 0:
+    raise OSError("libfreenect2 library cannot be found")
 
 min_cython_ver = '0.19.0'
 try:
@@ -36,22 +56,23 @@ else:
     if not os.path.exists(join("pylibfreenect2", "libfreenect2" + ext)):
         raise RuntimeError("Cython is required to generate C++ codes.")
 
-# should be configurable
-dylib_path = "/usr/local/lib/libfreenect2.dylib"
 
-
-def has_opengl_backend():
-    p = Popen("otool -L {} | grep OpenGL".format(dylib_path), stdin=PIPE,
-              stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
+def has_define_in_config(key):
+    p = Popen("cat {0} | grep {1}".format(libfreenect2_configh_path, key),
+              stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
     p.wait()
-    return len(p.stdout.readlines()) > 0
+    lines = p.stdout.readlines()
+    if sys.version_info.major >= 3:
+        return len(lines) == 1 and lines[0].startswith(b"#define")
+    else:
+        return len(lines) == 1 and lines[0].startswith("#define")
 
-
-def has_opencl_backend():
-    p = Popen("otool -L {} | grep OpenCL".format(dylib_path), stdin=PIPE,
-              stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
-    p.wait()
-    return len(p.stdout.readlines()) > 0
+if platform.system() == "Darwin":
+    extra_compile_args = ["-std=c++11", "-stdlib=libc++",
+                          "-mmacosx-version-min=10.8"]
+else:
+    # TODO
+    extra_compile_args = []
 
 ext_modules = cythonize(
     [Extension(
@@ -59,15 +80,18 @@ ext_modules = cythonize(
         sources=[
             join("pylibfreenect2", "libfreenect2" + ext),
         ],
-        include_dirs=[np.get_include(), "/usr/local/include/libfreenect2"],
-        library_dirs=["/usr/local/lib"],
+        include_dirs=[np.get_include(),
+                      join(libfreenect2_include_top, "libfreenect2")],
+        library_dirs=[libfreenect2_library_path],
         libraries=["freenect2"],
-        extra_compile_args=["-std=c++11", "-stdlib=libc++", "-mmacosx-version-min=10.8"],
+        extra_compile_args=extra_compile_args,
         extra_link_args=[],
         language="c++")],
     compile_time_env={
-        "LIBFREENECT2_WITH_OPENGL_SUPPORT": has_opengl_backend(),
-        "LIBFREENECT2_WITH_OPENCL_SUPPORT": has_opencl_backend(),
+        "LIBFREENECT2_WITH_OPENGL_SUPPORT":
+        has_define_in_config("LIBFREENECT2_WITH_OPENGL_SUPPORT"),
+        "LIBFREENECT2_WITH_OPENCL_SUPPORT":
+        has_define_in_config("LIBFREENECT2_WITH_OPENCL_SUPPORT"),
     }
 )
 
@@ -75,7 +99,7 @@ ext_modules = cythonize(
 setup(
     name='pylibfreenect2',
     version='0.0.1-dev',
-    description='A python wrapper for libfreenect2',
+    description='A python interface for libfreenect2',
     author='Ryuichi Yamamoto',
     author_email='zryuichi@gmail.com',
     url='https://github.com/r9y9/pylibfreenect2',
@@ -89,7 +113,7 @@ setup(
     ],
     tests_require=['nose', 'coverage'],
     extras_require={
-        'docs': ['numpydoc', 'sphinx_rtd_theme', 'seaborn'],
+        'docs': ['numpydoc', 'sphinx_rtd_theme'],
         'test': ['nose'],
         'develop': ['cython >= ' + min_cython_ver],
     },

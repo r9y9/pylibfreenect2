@@ -1,66 +1,59 @@
 # pylibfreenect2
 
-[libfreenect2](https://github.com/OpenKinect/libfreenect2) の python ラッパーです。
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
 
-できること：
+A python interface for [libfreenect2](https://github.com/OpenKinect/libfreenect2). The package is compatible with python 2.7-3.5.
 
-- RGB image transfer
-- IR and depth image transfer
-- registration of RGB and depth images
+Note that this is much work in progress. Currently only tested on osx 10.10.4.
 
+## Build requirements
 
-## インストール
+In addition to the requirements for libfreenect2, pylibfreenect2 requires:
 
-### libfreenect2
+- python 2.7 or later
+- numpy
+- cython
 
-pylibfreenect2を使う前に、 [libfreenect2](https://github.com/OpenKinect/libfreenect2) を事前にインストールする
+## Installation
 
-cloneしたあと、
+The package requires libfreenect2 installed in your system path, so please make sure that you have installed [libfreenect2](https://github.com/OpenKinect/libfreenect2) correctly. If you have confirmed that Protonect is working for you, then you should be able to install pylibfreenect2 as follows:
 
-```
-mkdir -p build && cd build
-cmake .. -DENABLE_CXX11=ON -DENABLE_OPENCL=ON -DENABLE_OPENGL=ON
-make
-make install
-```
-
-### pylibfreenect2
-
-cloneしたあと、
 
 ```
-python setup.py develop
+pip install git+https://github.com/r9y9/pylibfreenect2
 ```
 
-もしくは、
+or clone the repository and then:
 
 ```
 python setup.py install
 ```
 
-注意：要numpy and cython
+## Run tests
 
-その他、何かパッケージが足りないと言われてしまったら、condaかpipでインストールしてください
-
-## 動作確認
-
-kinect v2が接続されていることを確認して、
+On top of the project directroy, you can run unittests by:
 
 ```
-nosetests -v -w tests
+nosetests -v -w tests/
 ```
 
-要nose
+It is assumed that you have `nose` installed.
 
-## 例
+## Documentation
 
+Please check [the official doc](https://openkinect.github.io/libfreenect2/). APIs are basically same between C++ and python but actually slightly different. pylibfreenect2 API docs will be comming soon.  
+
+
+### How it works
+
+Similar to Protonect example in libfreenect2, an example for grabbing and visualizing Kinect v2 data is available:
 
 ```
 python examples/multiframe_listener.py
 ```
 
-要opencv
+It requires a python binding of opencv for visualization. If you are using [anaconda](https://www.continuum.io/), you can install it by:
 
-color, ir, depth, registerされた画像がリアルタイムで表示されます。
-
-libfreenect2の動作確認には、libfreenect2に付属のProtonectを使用してください
+```
+conda install opencv
+```

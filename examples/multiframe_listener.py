@@ -2,9 +2,9 @@
 
 import numpy as np
 import cv2
-from pylibfreenect2 import Freenect2, FrameMap, SyncMultiFrameListener
+from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
-from pylibfreenect2 import OpenGLPacketPipeline, CpuPacketPipeline
+from pylibfreenect2 import OpenGLPacketPipeline
 
 
 fn = Freenect2()

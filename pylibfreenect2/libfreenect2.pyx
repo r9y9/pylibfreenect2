@@ -209,8 +209,7 @@ cdef class SyncMultiFrameListener(FrameListener):
 cdef class ColorCameraParams:
     cdef _Freenect2Device._ColorCameraParams params
 
-    # TODO: not complete. すべて手で書くのは面倒なので、自動生成がいい？
-    # pythonでマクロ使えたら楽なんだが、、
+    # TODO: wrap all instance variables
     @property
     def fx(self):
         return self.params.fx

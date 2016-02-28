@@ -7,7 +7,6 @@ from distutils.version import LooseVersion
 
 import numpy as np
 import os
-from glob import glob
 from os.path import join
 from subprocess import Popen, PIPE
 
@@ -86,7 +85,7 @@ setup(
     ext_modules=ext_modules,
     cmdclass=cmdclass,
     install_requires=[
-        'numpy >= 1.8.0',
+        'numpy >= 1.7.0',
         'six'
     ],
     tests_require=['nose', 'coverage'],

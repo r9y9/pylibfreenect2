@@ -8,8 +8,7 @@ Note that this is much work in progress. Currently only tested on osx 10.10.4.
 
 ## Build requirements
 
-In addition to the requirements for libfreenect2, pylibfreenect2 requires:
-
+- [libfreenect2](https://github.com/OpenKinect/libfreenect2) 0.1.0 or later
 - python 2.7 or later
 - numpy
 - cython

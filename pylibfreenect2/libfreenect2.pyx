@@ -156,6 +156,7 @@ cdef class FrameMap:
         # __dealloc__  do nothing by default (take_ownership = False)
         if self.take_ownership:
             # similar to SyncMultiFrameListener::release(FrameMap &frame)
+            # do nothing if already released
             for key in self.internal_frame_map:
                 if key.second != NULL:
                     del key.second
@@ -196,9 +197,7 @@ cdef class SyncMultiFrameListener(FrameListener):
         return self.ptr.hasNewFrame()
 
     def waitForNewFrame(self):
-        # NOTE: frames are automatically released if FrameMap is deallocated, so
-        # you don't need to call `release` manually.
-        cdef FrameMap frame_map = FrameMap(take_ownership=True)
+        cdef FrameMap frame_map = FrameMap(take_ownership=False)
         self.ptr.waitForNewFrame(frame_map.internal_frame_map)
         return frame_map
 

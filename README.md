@@ -5,7 +5,7 @@
 
 A python interface for [libfreenect2](https://github.com/OpenKinect/libfreenect2). The package is compatible with python 2.7-3.5.
 
-Note that this is much work in progress. Currently tested on osx 10.10 and ubuntu 14.04.
+Note that this is work in progress. Currently tested on osx 10.10 and ubuntu 14.04.
 
 ## Build requirements
 

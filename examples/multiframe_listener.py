@@ -4,11 +4,15 @@ import numpy as np
 import cv2
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
-from pylibfreenect2 import OpenGLPacketPipeline
 
+try:
+    from pylibfreenect2 import OpenGLPacketPipeline
+    pipeline = OpenGLPacketPipeline()
+except:
+    from pylibfreenect2 import CpuPacketPipeline
+    pipeline = CpuPacketPipeline()
 
 fn = Freenect2()
-pipeline = OpenGLPacketPipeline()
 device = fn.openDefaultDevice(pipeline=pipeline)
 
 listener = SyncMultiFrameListener(

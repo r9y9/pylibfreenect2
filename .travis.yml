@@ -1,0 +1,73 @@
+language: python
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      dist: trusty
+      python: "2.7"
+
+    - os: linux
+      sudo: required
+      dist: trusty
+      python: "3.4"
+
+    - os: linux
+      sudo: required
+      dist: trusty
+      python: "3.5"
+# TODO: python for osx is not supported for now
+# ref: https://github.com/travis-ci/travis-ci/issues/4729
+#    - os: osx
+#      python: "2.7"
+
+notifications:
+  email: false
+
+before_install:
+  - cd $HOME
+  - git clone https://github.com/OpenKinect/libfreenect2.git
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo apt-get update;
+      cd libfreenect2/depends;
+      ./download_debs_trusty.sh;
+      sudo apt-get install -y build-essential cmake pkg-config;
+      sudo dpkg -i debs/libusb*deb;
+      sudo apt-get install -y libturbojpeg libjpeg-turbo8-dev;
+      sudo apt-get install -y libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev;
+      sudo dpkg -i debs/libglfw3*deb;
+      sudo apt-get install -f;
+      sudo apt-get install -y libgl1-mesa-dri-lts-vivid;
+      MINICONDA_OSNAME="Linux";
+    elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      brew update;
+      brew install cmake pkg-config;
+      brew install libusb;
+      brew tap homebrew/versions;
+      brew install glfw3;
+      MINICONDA_OSNAME="MacOSX";
+    fi
+  - cd $HOME/libfreenect2
+  - mkdir build && cd build
+  - cmake ..
+  - make
+  - sudo make install
+  - if [["$TRAVIS_PYTHON_VERSION" == "2.7"]]; then
+      wget http://repo.continuum.io/miniconda/Miniconda-3.8.3-$MINICONDA_OSNAME-x86_64.sh -O miniconda.sh;
+    else
+      wget http://repo.continuum.io/miniconda/Miniconda3-3.8.3-$MINICONDA_OSNAME-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda config --add channels pypi
+  - conda info -a
+  - deps='numpy cython'
+  - conda create -q -n test-environment "python=$TRAVIS_PYTHON_VERSION" $deps
+  - source activate test-environment
+  - cd $TRAVIS_BUILD_DIR
+
+script:
+  - pip install -e .

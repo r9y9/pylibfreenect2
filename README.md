@@ -1,10 +1,11 @@
 # pylibfreenect2
 
+[![Build Status](https://travis-ci.org/r9y9/pylibfreenect2.svg?branch=master)](https://travis-ci.org/r9y9/pylibfreenect2)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
 
 A python interface for [libfreenect2](https://github.com/OpenKinect/libfreenect2). The package is compatible with python 2.7-3.5.
 
-Note that this is much work in progress. Currently only tested on osx 10.10.4.
+Note that this is much work in progress. Currently tested on osx 10.10 and ubuntu 14.04.
 
 ## Build requirements
 

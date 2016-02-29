@@ -95,6 +95,9 @@ ext_modules = cythonize(
     }
 )
 
+install_requires = ['numpy >= 1.7.0']
+if sys.version_info < (3, 4):
+    install_requires.append('enum34')
 
 setup(
     name='pylibfreenect2',
@@ -107,10 +110,7 @@ setup(
     packages=find_packages(),
     ext_modules=ext_modules,
     cmdclass=cmdclass,
-    install_requires=[
-        'numpy >= 1.7.0',
-        'six'
-    ],
+    install_requires=install_requires,
     tests_require=['nose', 'coverage'],
     extras_require={
         'docs': ['numpydoc', 'sphinx_rtd_theme'],

@@ -16,9 +16,10 @@ matrix:
       sudo: required
       dist: trusty
       python: "3.5"
-
-    - os: osx
-      python: "2.7"
+# TODO: python for osx is not supported for now
+# ref: https://github.com/travis-ci/travis-ci/issues/4729
+#    - os: osx
+#      python: "2.7"
 
 notifications:
   email: false

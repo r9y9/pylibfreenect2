@@ -130,7 +130,7 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         string getDeviceSerialNumber(int)
         string getDefaultDeviceSerialNumber()
 
-        _Freenect2Device *openDevice(int);
+        _Freenect2Device *openDevice(int)
         _Freenect2Device *openDevice(int idx, const _PacketPipeline *)
         _Freenect2Device *openDevice(const string &)
         _Freenect2Device *openDevice(const string &, const _PacketPipeline *)

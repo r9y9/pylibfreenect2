@@ -71,8 +71,8 @@ if platform.system() == "Darwin":
     extra_compile_args = ["-std=c++11", "-stdlib=libc++",
                           "-mmacosx-version-min=10.8"]
 else:
-    # TODO
-    extra_compile_args = []
+    # should work with Ubuntu 14.04 with anaconda python3 instaleld
+    extra_compile_args = ["-std=c++11"]
 
 ext_modules = cythonize(
     [Extension(

@@ -28,6 +28,7 @@ before_install:
   - cd $HOME
   - git clone https://github.com/OpenKinect/libfreenect2.git
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      export LD_LIBRARY_PATH=/usr/local/lib
       sudo apt-get update;
       cd libfreenect2/depends;
       ./download_debs_trusty.sh;
@@ -40,6 +41,7 @@ before_install:
       sudo apt-get install -y libgl1-mesa-dri-lts-vivid;
       MINICONDA_OSNAME="Linux";
     elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      export DYLD_LIBRARY_PATH=/usr/local/lib
       brew update;
       brew install cmake pkg-config;
       brew install libusb;

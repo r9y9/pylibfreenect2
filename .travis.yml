@@ -64,10 +64,13 @@ before_install:
   # Useful for debugging any issues with conda
   - conda config --add channels pypi
   - conda info -a
-  - deps='numpy cython'
+  - deps='numpy cython nose'
   - conda create -q -n test-environment "python=$TRAVIS_PYTHON_VERSION" $deps
   - source activate test-environment
   - cd $TRAVIS_BUILD_DIR
 
-script:
+install:
   - pip install -e .
+
+script:
+  - nosetests -v -w tests/ -a '!require_device'

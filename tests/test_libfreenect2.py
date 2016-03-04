@@ -6,7 +6,7 @@ from nose.tools import raises
 from nose.plugins.attrib import attr
 
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
-from pylibfreenect2 import FrameType, Registration, Frame
+from pylibfreenect2 import FrameType, Registration, Frame, FrameMap
 
 
 def test_frame():
@@ -70,7 +70,10 @@ def test_sync_multi_frame():
     # test if we can get two frames at least
     frames = listener.waitForNewFrame()
     listener.release(frames)
-    frames = listener.waitForNewFrame()
+
+    # frames as a first argment also should work
+    frames = FrameMap()
+    listener.waitForNewFrame(frames)
 
     color = frames[FrameType.Color]
     ir = frames[FrameType.Ir]

@@ -3,6 +3,7 @@
 import numpy as np
 
 from nose.tools import raises
+from nose.plugins.attrib import attr
 
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
@@ -18,6 +19,25 @@ def test_frame():
     assert frame.gamma == 0
 
 
+def test_enumerateDevices():
+    fn = Freenect2()
+    fn.enumerateDevices()
+
+
+@attr('require_device')
+def test_openDefaultDevice():
+    fn = Freenect2()
+
+    num_devices = fn.enumerateDevices()
+    assert num_devices > 0
+
+    device = fn.openDefaultDevice()
+
+    device.stop()
+    device.close()
+
+
+@attr('require_device')
 def test_sync_multi_frame():
     fn = Freenect2()
 
@@ -27,8 +47,6 @@ def test_sync_multi_frame():
     serial = fn.getDefaultDeviceSerialNumber()
     assert serial == fn.getDeviceSerialNumber(0)
 
-    # TODO: tests for openDefaultDevice
-    # device = fn.openDefaultDevice()
     device = fn.openDevice(serial)
 
     assert fn.getDefaultDeviceSerialNumber() == device.getSerialNumber()

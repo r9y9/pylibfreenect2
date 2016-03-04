@@ -113,7 +113,7 @@ setup(
     install_requires=install_requires,
     tests_require=['nose', 'coverage'],
     extras_require={
-        'docs': ['numpydoc', 'sphinx_rtd_theme'],
+        'docs': ['numpydoc', 'sphinx_rtd_theme', 'seaborn'],
         'test': ['nose'],
         'develop': ['cython >= ' + min_cython_ver],
     },

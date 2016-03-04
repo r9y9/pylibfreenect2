@@ -17,16 +17,32 @@ cimport numpy as np
 np.import_array()
 
 cimport cython
-cimport libfreenect2
+
+from libcpp cimport bool
+from libcpp.string cimport string
+from libcpp.map cimport map
+
+# Import libfreenect2 definitions
+from libfreenect2 cimport libfreenect2
+
+# A workaround to access nested cppclass that externed in a separate namespace.
+# Nested cppclass Freenect2Device::ColorCameraParams cannot be accesed
+# with chained ‘.‘ access (i.e.
+# `libfreenect2.Freenect2Device.ColorCameraParams`), here I explicitly import
+#  Freenect2Device as _Freenect2Device (to avoid name conflict) and use
+# `_Freenect2Device.ColorCameraParams` to access nested cppclass
+# ColorCameraParams.
+from libfreenect2.libfreenect2 cimport Freenect2Device as _Freenect2Device
 
 from pylibfreenect2 import FrameType
 
 cdef class Frame:
-    cdef _Frame* ptr
+    cdef libfreenect2.Frame* ptr
     cdef bool take_ownership
     cdef int frame_type
 
-    def __cinit__(self, width=None, height=None, bytes_per_pixel=None, int frame_type=-1):
+    def __cinit__(self, width=None, height=None, bytes_per_pixel=None,
+            int frame_type=-1):
         w,h,b = width, height, bytes_per_pixel
         all_none = (w is None) and (h is None) and (b is None)
         all_not_none = (w is not None) and (h is not None) and (b is not None)
@@ -36,7 +52,8 @@ cdef class Frame:
 
         if all_not_none:
             self.take_ownership = True
-            self.ptr = new _Frame(width, height, bytes_per_pixel, NULL)
+            self.ptr = new libfreenect2.Frame(
+                width, height, bytes_per_pixel, NULL)
         else:
             self.take_ownership = False
 
@@ -81,8 +98,8 @@ cdef class Frame:
         shape[0] = <np.npy_intp> self.ptr.height
         shape[1] = <np.npy_intp> self.ptr.width
         shape[2] = <np.npy_intp> 4
-        cdef np.ndarray array = np.PyArray_SimpleNewFromData(3, shape, np.NPY_UINT8,
-         self.ptr.data)
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(
+            3, shape, np.NPY_UINT8, self.ptr.data)
 
         return array
 
@@ -90,8 +107,8 @@ cdef class Frame:
         cdef np.npy_intp shape[2]
         shape[0] = <np.npy_intp> self.ptr.height
         shape[1] = <np.npy_intp> self.ptr.width
-        cdef np.ndarray array = np.PyArray_SimpleNewFromData(2, shape, np.NPY_FLOAT32,
-         self.ptr.data)
+        cdef np.ndarray array = np.PyArray_SimpleNewFromData(
+            2, shape, np.NPY_FLOAT32, self.ptr.data)
 
         return array
 
@@ -116,16 +133,16 @@ cdef class Frame:
 
 
 cdef class FrameListener:
-    cdef _FrameListener* listener_ptr_alias
+    cdef libfreenect2.FrameListener* listener_ptr_alias
 
 
 cdef intenum_to_frame_type(int n):
     if n == FrameType.Color:
-        return Color
+        return libfreenect2.Color
     elif n == FrameType.Ir:
-        return Ir
+        return libfreenect2.Ir
     elif n == FrameType.Depth:
-        return Depth
+        return libfreenect2.Depth
     else:
         raise ValueError("Not supported")
 
@@ -145,7 +162,7 @@ cdef str_to_frame_type(str s):
 
 
 cdef class FrameMap:
-    cdef map[LibFreenect2FrameType, _Frame*] internal_frame_map
+    cdef map[libfreenect2.LibFreenect2FrameType, libfreenect2.Frame*] internal_frame_map
     cdef bool take_ownership
 
     def __cinit__(self, bool take_ownership=False):
@@ -163,7 +180,7 @@ cdef class FrameMap:
                     key.second = NULL
 
     def __getitem__(self, key):
-        cdef LibFreenect2FrameType frame_type
+        cdef libfreenect2.LibFreenect2FrameType frame_type
         cdef intkey
 
         if isinstance(key, int) or isinstance(key, FrameType):
@@ -175,19 +192,19 @@ cdef class FrameMap:
         else:
             raise KeyError("")
 
-        cdef _Frame* frame_ptr = self.internal_frame_map[frame_type]
+        cdef libfreenect2.Frame* frame_ptr = self.internal_frame_map[frame_type]
         cdef Frame frame = Frame(frame_type=intkey)
         frame.ptr = frame_ptr
         return frame
 
 
 cdef class SyncMultiFrameListener(FrameListener):
-    cdef _SyncMultiFrameListener* ptr
+    cdef libfreenect2.SyncMultiFrameListener* ptr
 
     def __cinit__(self, unsigned int frame_types=<unsigned int>(
                         FrameType.Color | FrameType.Ir | FrameType.Depth)):
-        self.ptr = new _SyncMultiFrameListener(frame_types)
-        self.listener_ptr_alias = <_FrameListener*> self.ptr
+        self.ptr = new libfreenect2.SyncMultiFrameListener(frame_types)
+        self.listener_ptr_alias = <libfreenect2.FrameListener*> self.ptr
 
     def __dealloc__(self):
         if self.ptr is not NULL:
@@ -208,7 +225,7 @@ cdef class SyncMultiFrameListener(FrameListener):
 
 
 cdef class ColorCameraParams:
-    cdef _Freenect2Device._ColorCameraParams params
+    cdef _Freenect2Device.ColorCameraParams params
 
     # TODO: wrap all instance variables
     @property
@@ -229,7 +246,7 @@ cdef class ColorCameraParams:
 
 
 cdef class IrCameraParams:
-    cdef _Freenect2Device._IrCameraParams params
+    cdef _Freenect2Device.IrCameraParams params
 
     @property
     def fx(self):
@@ -248,32 +265,35 @@ cdef class IrCameraParams:
         return self.params.cy
 
 cdef class Registration:
-    cdef _Registration* ptr
+    cdef libfreenect2.Registration* ptr
 
     def __cinit__(self, IrCameraParams irparams, ColorCameraParams cparams):
-        cdef _Freenect2Device._IrCameraParams i = irparams.params
-        cdef _Freenect2Device._ColorCameraParams c = cparams.params
-        self.ptr = new _Registration(i, c)
+        cdef _Freenect2Device.IrCameraParams i = irparams.params
+        cdef _Freenect2Device.ColorCameraParams c = cparams.params
+        self.ptr = new libfreenect2.Registration(i, c)
 
     def __dealloc__(self):
         if self.ptr is not NULL:
             del self.ptr
 
-    def apply(self, Frame color, Frame depth, Frame undistored, Frame registered, enable_filter=True, Frame bigdepth=None):
+    def apply(self, Frame color, Frame depth, Frame undistored,
+            Frame registered, enable_filter=True, Frame bigdepth=None):
         assert color.take_ownership == False
         assert depth.take_ownership == False
         assert undistored.take_ownership == True
         assert registered.take_ownership == True
         assert bigdepth is None or bigdepth.take_ownership == True
 
-        cdef _Frame* bigdepth_ptr = <_Frame*>(NULL) if bigdepth is None else bigdepth.ptr
+        cdef libfreenect2.Frame* bigdepth_ptr = <libfreenect2.Frame*>(NULL) \
+            if bigdepth is None else bigdepth.ptr
 
-        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr, enable_filter, bigdepth_ptr)
+        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr,
+            enable_filter, bigdepth_ptr)
 
 
 # MUST be declared before backend specific includes
 cdef class PacketPipeline:
-    cdef _PacketPipeline* pipeline_ptr_alias
+    cdef libfreenect2.PacketPipeline* pipeline_ptr_alias
 
     # NOTE: once device is opened with pipeline, pipeline will be
     # releaseed in the destructor of Freenect2DeviceImpl
@@ -281,11 +301,11 @@ cdef class PacketPipeline:
 
 
 cdef class CpuPacketPipeline(PacketPipeline):
-    cdef _CpuPacketPipeline* pipeline
+    cdef libfreenect2.CpuPacketPipeline* pipeline
 
     def __cinit__(self):
-        self.pipeline = new _CpuPacketPipeline()
-        self.pipeline_ptr_alias = <_PacketPipeline*>self.pipeline
+        self.pipeline = new libfreenect2.CpuPacketPipeline()
+        self.pipeline_ptr_alias = <libfreenect2.PacketPipeline*>self.pipeline
         self.owned_by_device = False
 
     def __dealloc__(self):
@@ -310,14 +330,14 @@ cdef class Freenect2Device:
         return self.ptr.getFirmwareVersion()
 
     def getColorCameraParams(self):
-        cdef _Freenect2Device._ColorCameraParams params
+        cdef _Freenect2Device.ColorCameraParams params
         params = self.ptr.getColorCameraParams()
         cdef ColorCameraParams pyparams = ColorCameraParams()
         pyparams.params = params
         return pyparams
 
     def getIrCameraParams(self):
-        cdef _Freenect2Device._IrCameraParams params
+        cdef _Freenect2Device.IrCameraParams params
         params = self.ptr.getIrCameraParams()
         cdef IrCameraParams pyparams = IrCameraParams()
         pyparams.params = params
@@ -340,10 +360,10 @@ cdef class Freenect2Device:
 
 
 cdef class Freenect2:
-    cdef _Freenect2* ptr
+    cdef libfreenect2.Freenect2* ptr
 
     def __cinit__(self):
-        self.ptr = new _Freenect2();
+        self.ptr = new libfreenect2.Freenect2();
 
     def __dealloc__(self):
         if self.ptr is not NULL:

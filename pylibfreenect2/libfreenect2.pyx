@@ -17,6 +17,7 @@ the top-level ``pylibfreenect2.*`` namespace.
 The sections below are organized by following
 `the offical docs <https://openkinect.github.io/libfreenect2/modules.html>`_.
 
+
 Frame Listeners
 ---------------
 
@@ -210,42 +211,42 @@ cdef class Frame:
 
     @property
     def timestamp(self):
-        """Timestamp"""
+        """Same as ``libfreenect2::Frame::timestamp``"""
         return self.ptr.timestamp
 
     @property
     def sequence(self):
-        """Sequence"""
+        """Same as ``libfreenect2::Frame::sequence``"""
         return self.ptr.sequence
 
     @property
     def width(self):
-        """Width"""
+        """Same as ``libfreenect2::Frame::width``"""
         return self.ptr.width
 
     @property
     def height(self):
-        """Height"""
+        """Same as ``libfreenect2::Frame::height``"""
         return self.ptr.height
 
     @property
     def bytes_per_pixel(self):
-        """Bytes per pixel"""
+        """Same as ``libfreenect2::Frame::bytes_per_pixel``"""
         return self.ptr.bytes_per_pixel
 
     @property
     def exposure(self):
-        """Exposure"""
+        """Same as ``libfreenect2::Frame::exposure``"""
         return self.ptr.exposure
 
     @property
     def gain(self):
-        """Gain"""
+        """Same as ``libfreenect2::Frame::gain``"""
         return self.ptr.gain
 
     @property
     def gamma(self):
-        """Gamma"""
+        """Same as ``libfreenect2::Frame::gamma``"""
         return self.ptr.gamma
 
     cdef __uint8_data(self):
@@ -561,33 +562,33 @@ cdef class SyncMultiFrameListener(FrameListener):
 
 
 cdef class ColorCameraParams:
-    """Python interface for ``libfreenect2::ColorCameraParams``.
+    """Python interface for ``libfreenect2::Freenect2Device::ColorCameraParams``.
 
     Attributes
     ----------
-    params : libfreenect2.Freenect2Device.ColorCameraParams
+    params : ``libfreenect2::Freenect2Device::ColorCameraParams``
     """
     cdef _Freenect2Device.ColorCameraParams params
 
     # TODO: wrap all instance variables
     @property
     def fx(self):
-        """Fx"""
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::fx``"""
         return self.params.fx
 
     @property
     def fy(self):
-        """Fy"""
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::fy``"""
         return self.params.fy
 
     @property
     def cx(self):
-        """Cx"""
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::cx``"""
         return self.params.cx
 
     @property
     def cy(self):
-        """Cy"""
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::cy``"""
         return self.params.cy
 
 
@@ -596,28 +597,28 @@ cdef class IrCameraParams:
 
     Attributes
     ----------
-    params : libfreenect2.Freenect2Device.IrCameraParams
+    params : ``libfreenect2::Freenect2Device::IrCameraParams``
     """
     cdef _Freenect2Device.IrCameraParams params
 
     @property
     def fx(self):
-        """Fx"""
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::fx``"""
         return self.params.fx
 
     @property
     def fy(self):
-        """Fy"""
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::fy``"""
         return self.params.fy
 
     @property
     def cx(self):
-        """Cx"""
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::cx``"""
         return self.params.cx
 
     @property
     def cy(self):
-        """Cy"""
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::cy``"""
         return self.params.cy
 
 cdef class Registration:
@@ -638,6 +639,12 @@ cdef class Registration:
 
     cparams : ColorCameraParams
         Color camera parameters.
+
+    See also
+    --------
+    pylibfreenect2.libfreenect2.IrCameraParams
+    pylibfreenect2.libfreenect2.ColorCameraParams
+
     """
     cdef libfreenect2.Registration* ptr
 
@@ -686,9 +693,9 @@ cdef class PacketPipeline:
 
     See also
     --------
-    pylibfreenect2.CpuPacketPipeline
-    pylibfreenect2.OpenCLPacketPipeline
-    pylibfreenect2.OpenGLPacketPipeline
+    pylibfreenect2.libfreenect2.CpuPacketPipeline
+    pylibfreenect2.libfreenect2.OpenCLPacketPipeline
+    pylibfreenect2.libfreenect2.OpenGLPacketPipeline
     """
     cdef libfreenect2.PacketPipeline* pipeline_ptr_alias
 
@@ -735,7 +742,7 @@ cdef class Freenect2Device:
 
     See also
     --------
-    pylibfreenect2.Freenect2
+    pylibfreenect2.libfreenect2.Freenect2
 
     """
 
@@ -803,7 +810,7 @@ cdef class Freenect2:
 
     See also
     --------
-    pylibfreenect2.Freenect2Device
+    pylibfreenect2.libfreenect2.Freenect2Device
 
     """
 

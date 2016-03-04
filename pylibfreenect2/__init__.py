@@ -51,9 +51,9 @@ class FrameType(IntEnum):
     See also
     --------
 
-    pylibfreenect2.Frame
-    pylibfreenect2.FrameMap
-    pylibfreenect2.SyncMultiFrameListener
+    pylibfreenect2.libfreenect2.Frame
+    pylibfreenect2.libfreenect2.FrameMap
+    pylibfreenect2.libfreenect2.SyncMultiFrameListener
 
     """
     Color = 1

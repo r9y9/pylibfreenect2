@@ -196,8 +196,9 @@ cdef class SyncMultiFrameListener(FrameListener):
     def hasNewFrame(self):
         return self.ptr.hasNewFrame()
 
-    def waitForNewFrame(self):
-        cdef FrameMap frame_map = FrameMap(take_ownership=False)
+    def waitForNewFrame(self, FrameMap frame_map=None):
+        if frame_map is None:
+            frame_map = FrameMap(take_ownership=False)
         self.ptr.waitForNewFrame(frame_map.internal_frame_map)
         return frame_map
 

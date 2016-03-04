@@ -1,4 +1,16 @@
 cdef class OpenCLPacketPipeline(PacketPipeline):
+    """Pipeline with OpenCL depth processing.
+
+    Attributes
+    ----------
+    pipeline : `libfreenect2::OpenCLPacketPipeline*`
+
+    Parameters
+    ----------
+    device_id : int, optional
+        Device id. Default is -1.
+
+    """
     cdef libfreenect2.OpenCLPacketPipeline* pipeline
 
     def __cinit__(self, int device_id=-1):

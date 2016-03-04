@@ -2,14 +2,114 @@
 # cython: boundscheck=True, wraparound=True
 
 """
-libfreenect2 wrapper implementation
+API
+===
 
-.. note:
-    For consistency, all exported classes and methods are designed to have
-    same name in `libfreenect2`:
-    e.g: `Freenect2`, not `pyFreenect2`
-    e.g. `getDeviceSerialNumber`, not `get_device_serial_number`
+.. important::
+    Python API's are designed to minimize differences in C++ and Python; i.e. all
+    classes and methods should have the same name; function signatures should
+    also be same as possible. For the slight differences, see below in details.
+
+
+All functionality in ``pylibfreenect2.libfreenect2`` is directly accesible from
+the top-level ``pylibfreenect2.*`` namespace.
+
+The sections below are organized by following
+`the offical docs <https://openkinect.github.io/libfreenect2/modules.html>`_.
+
+Frame Listeners
+---------------
+
+FrameType
+^^^^^^^^^
+
+.. autoclass:: pylibfreenect2.FrameType
+    :members:
+
+Frame
+^^^^^
+
+.. autoclass:: Frame
+    :members:
+
+FrameMap
+^^^^^^^^
+
+.. autoclass:: FrameMap
+    :members:
+    :special-members: __getitem__
+
+SyncMultiFrameListener
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: SyncMultiFrameListener
+    :members:
+
+Initialization and Device Control
+---------------------------------
+
+Freenect2Device
+^^^^^^^^^^^^^^^
+
+.. autoclass:: Freenect2Device
+    :members:
+
+Freenect2
+^^^^^^^^^
+
+.. autoclass:: Freenect2
+    :members:
+
+ColorCameraParams
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: ColorCameraParams
+    :members:
+
+IrCameraParams
+^^^^^^^^^^^^^^
+
+.. autoclass:: IrCameraParams
+    :members:
+
+
+Packet Pipelines
+----------------
+
+PacketPipeline
+^^^^^^^^^^^^^^
+
+.. autoclass:: PacketPipeline
+    :members:
+
+CpuPacketPipeline
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: CpuPacketPipeline
+    :members:
+
+OpenCLPacketPipeline
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: OpenCLPacketPipeline
+    :members:
+
+OpenGLPacketPipeline
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: OpenGLPacketPipeline
+    :members:
+
+Registration and Geometry
+-------------------------
+
+Registration
+^^^^^^^^^^^^
+
+.. autoclass:: Registration
+    :members:
 """
+
 
 import numpy as np
 
@@ -37,6 +137,53 @@ from libfreenect2.libfreenect2 cimport Freenect2Device as _Freenect2Device
 from pylibfreenect2 import FrameType
 
 cdef class Frame:
+    """Python interface for ``libfreenect2::Frame``.
+
+    The Frame is a container of the C++ pointer ``libfreenect2::Frame*``.
+
+    .. note::
+        By default, Frame just keeps a pointer of ``libfreenect2::Frame`` that
+        should be allocated and released by SyncMultiFrameListener (i.e. Frame
+        itself doesn't own the allocated memory) as in C++. However, if Frame is
+        created by providing ``width``, ``height`` and ``bytes_per_pixel``, then
+        it allocates necessary memory in ``__cinit__`` and release it in
+        ``__dealloc__`` method.
+
+    Attributes
+    ----------
+    ptr : libfreenect2::Frame*
+        Pointer of Frame.
+
+    take_ownership : bool
+        If True, the class instance allocates memory for Frame* and release it
+        in ``__dealloc__``. If `width`, `height` and `bytes_per_pixel` are given
+        in ``__cinit__``, which is necessary to allocate how much memory we need,
+        ``take_ownership`` is set to True internally, otherwise False. Note that
+        the value itself cannot be set by users.
+
+    frame_type : int
+        Underlying frame type.
+
+    Parameters
+    ----------
+    width : int, optional
+        Width of Frame. Default is None.
+
+    height : int, optional
+        Height of Frame. Default is None.
+
+    bytes_per_pixel : int, optional
+        Bytes per pixels of Frame. Default is None.
+
+    frame_type : int, optional
+        Underlying frame type. Default is -1. Used by ``asarray`` method.
+
+    See also
+    --------
+
+    pylibfreenect2.FrameType
+    """
+
     cdef libfreenect2.Frame* ptr
     cdef bool take_ownership
     cdef int frame_type
@@ -63,34 +210,42 @@ cdef class Frame:
 
     @property
     def timestamp(self):
+        """Timestamp"""
         return self.ptr.timestamp
 
     @property
     def sequence(self):
+        """Sequence"""
         return self.ptr.sequence
 
     @property
     def width(self):
+        """Width"""
         return self.ptr.width
 
     @property
     def height(self):
+        """Height"""
         return self.ptr.height
 
     @property
     def bytes_per_pixel(self):
+        """Bytes per pixel"""
         return self.ptr.bytes_per_pixel
 
     @property
     def exposure(self):
+        """Exposure"""
         return self.ptr.exposure
 
     @property
     def gain(self):
+        """Gain"""
         return self.ptr.gain
 
     @property
     def gamma(self):
+        """Gamma"""
         return self.ptr.gamma
 
     cdef __uint8_data(self):
@@ -112,7 +267,48 @@ cdef class Frame:
 
         return array
 
+    def astype(self, data_type):
+        """Frame to ``numpy.ndarray`` conversion with specified data type.
+
+        Internal data of Frame can be represented as:
+
+        - 3d array of ``numpy.uint8`` for color
+        - 2d array of ``numpy.float32`` for IR and depth
+
+        Returns
+        -------
+        array : ``numpy.ndarray``, shape: ``(height, width)`` for IR and depth,
+        ``(4, height, width)`` for Color.
+            Array of internal frame.
+
+        Raises
+        ------
+        ValueError
+            - If a type that is neither ``numpy.uint8`` nor ``numpy.float32`` is specified
+
+        """
+        if data_type != np.uint8 and data_type != np.float32:
+            raise ValueError("np.uint8 or np.float32 is only supported")
+        if data_type == np.uint8:
+            return self.__uint8_data()
+        else:
+            return self.__float32_data()
+
     def asarray(self):
+        """Frame to ``numpy.ndarray`` conversion
+
+        Returns
+        -------
+        array : ``numpy.ndarray``, shape: ``(height, width)`` for IR and depth,
+        ``(4, height, width)`` for Color.
+            Array of internal frame.
+
+        Raises
+        ------
+        ValueError
+            - If underlying frame type cannot be determined.
+
+        """
         if self.frame_type < 0:
             raise ValueError("Cannnot determine type of raw data. Use astype instead.")
 
@@ -122,14 +318,6 @@ cdef class Frame:
             return self.astype(np.float32)
         else:
             assert False
-
-    def astype(self, data_type):
-        if data_type != np.uint8 and data_type != np.float32:
-            raise ValueError("np.uint8 or np.float32 is only supported")
-        if data_type == np.uint8:
-            return self.__uint8_data()
-        else:
-            return self.__float32_data()
 
 
 cdef class FrameListener:
@@ -162,6 +350,22 @@ cdef str_to_frame_type(str s):
 
 
 cdef class FrameMap:
+    """Python interface for ``libfreenect2::FrameMap``.
+
+    The FrameMap is a container of C++ value ``libfreenect2::FrameMap`` (aliased
+    to ``std::map<libfreenect2::Frame::Type,libfreenect2::Frame*>`` in C++).
+
+    .. note::
+        By default, FrameMap just keeps a reference of ``libfreenect2::FrameMap``
+        that should be allcoated and released by SyncMultiFrameListener (i.e.
+        FrameMap itself doesn't own the allocated memory) as in C++.
+
+    Attributes
+    ----------
+    internal_frame_map : std::map<libfreenect2::Frame::Type, libfreenect2::Frame*>
+        Internal FrameMap.
+
+    """
     cdef map[libfreenect2.LibFreenect2FrameType, libfreenect2.Frame*] internal_frame_map
     cdef bool take_ownership
 
@@ -180,6 +384,47 @@ cdef class FrameMap:
                     key.second = NULL
 
     def __getitem__(self, key):
+        """Get access to the internal FrameMap.
+
+        This allows the following dict-like syntax:
+
+        .. code-block:: python
+
+            color = frames[pylibfreenect2.FrameType.Color]
+
+        .. code-block:: python
+
+            color = frames['color']
+
+        .. code-block:: python
+
+            color = frames[1] # with IntEnum value
+
+        The key can be of ``FrameType`` (a subclass of IntEnum), str or int type
+        as shown above.
+
+        Parameters
+        ----------
+        key : ``FrameType``, str or int
+            Key for the internal FrameMap. available str keys are ``color``,
+            ``ir`` and ``depth``.
+
+        Returns
+        -------
+        frame : Frame
+            Frame for the specified key.
+
+        Raises
+        ------
+        KeyError
+            if unknown key is specified
+
+        See also
+        --------
+
+        pylibfreenect2.FrameType
+
+        """
         cdef libfreenect2.LibFreenect2FrameType frame_type
         cdef intkey
 
@@ -199,6 +444,41 @@ cdef class FrameMap:
 
 
 cdef class SyncMultiFrameListener(FrameListener):
+    """Python interface for ``libfreenect2::SyncMultiFrameListener``.
+
+    The SyncMultiFrameListener is a container of
+    C++ pointer ``libfreenect2::SyncMultiFrameListener*``. The pointer of
+    SyncMultiFrameListener is allocated in ``__cinit__`` and released in
+    ``__dealloc__`` method.
+
+    Parameters
+    ----------
+    frame_types : unsigned int, optional
+        Frame types that we want to listen. It can be logical OR of:
+
+            - ``FrameType.Color``
+            - ``FrameType.Ir``
+            - ``FrameType.Depth``
+
+        Default is ``FrameType.Color | FrameType.Ir | FrameType.Depth``
+
+    Attributes
+    ----------
+    ptr : libfreenect2.SyncMultiFrameListener*
+        Pointer of ``libfreenect2::SyncMultiFrameListener``
+
+    listener_ptr_alias : libfreenect2.FrameListener*
+        Pointer of ``libfreenect2::FrameListener``. This is necessary to call
+        methods that operate on ``libfreenect2::FrameListener*``, not
+        ``libfreenect2::SyncMultiFrameListener``.
+
+    See also
+    --------
+
+    pylibfreenect2.FrameType
+
+    """
+
     cdef libfreenect2.SyncMultiFrameListener* ptr
 
     def __cinit__(self, unsigned int frame_types=<unsigned int>(
@@ -211,9 +491,58 @@ cdef class SyncMultiFrameListener(FrameListener):
             del self.ptr
 
     def hasNewFrame(self):
+        """Same as ``libfreenect2::SyncMultiFrameListener::hasNewFrame()``.
+
+        Returns
+        -------
+        r : Bool
+            True if SyncMultiFrameListener has a new frame, False otherwise.
+        """
         return self.ptr.hasNewFrame()
 
     def waitForNewFrame(self, FrameMap frame_map=None):
+        """Same as ``libfreenect2::SyncMultiFrameListener::waitForNewFrame(Frame&)``.
+
+        Parameters
+        ----------
+        frame_map : FrameMap, optional
+            If not None, SyncMultiFrameListener write to it inplace, otherwise
+            a new FrameMap is allocated within the function and then returned.
+
+        Returns
+        -------
+        frame_map : FrameMap
+            FrameMap.
+
+            .. note::
+                FrameMap must be releaseed by call-side by calling ``release``
+                function.
+
+        .. warning::
+
+            Function signature can be different between Python and C++.
+
+        Suppose the following C++ code:
+
+        .. code-block:: c++
+
+            libfreenect2::FrameMap frames;
+            listener->waitForNewFrame(frames);
+
+        This can be translated in Python as follows:
+
+        .. code-block:: python
+
+            frames = listener.waitForNewFrame()
+
+        or you can write it more similar to C++:
+
+        .. code-block:: python
+
+            frames = pylibfreenect2.FrameMap()
+            listener.waitForNewFrame(frames)
+
+        """
         if frame_map is None:
             frame_map = FrameMap(take_ownership=False)
         self.ptr.waitForNewFrame(frame_map.internal_frame_map)
@@ -221,50 +550,95 @@ cdef class SyncMultiFrameListener(FrameListener):
 
 
     def release(self, FrameMap frame_map):
+        """Same as ``libfreenect2::SyncMultiFrameListener::release(Frame&)``.
+
+        Parameters
+        ----------
+        frame_map : FrameMap
+            FrameMap.
+        """
         self.ptr.release(frame_map.internal_frame_map)
 
 
 cdef class ColorCameraParams:
+    """Python interface for ``libfreenect2::ColorCameraParams``.
+
+    Attributes
+    ----------
+    params : libfreenect2.Freenect2Device.ColorCameraParams
+    """
     cdef _Freenect2Device.ColorCameraParams params
 
     # TODO: wrap all instance variables
     @property
     def fx(self):
+        """Fx"""
         return self.params.fx
 
     @property
     def fy(self):
+        """Fy"""
         return self.params.fy
 
     @property
     def cx(self):
+        """Cx"""
         return self.params.cx
 
     @property
     def cy(self):
+        """Cy"""
         return self.params.cy
 
 
 cdef class IrCameraParams:
+    """Python interface for ``libfreenect2::IrCameraParams``.
+
+    Attributes
+    ----------
+    params : libfreenect2.Freenect2Device.IrCameraParams
+    """
     cdef _Freenect2Device.IrCameraParams params
 
     @property
     def fx(self):
+        """Fx"""
         return self.params.fx
 
     @property
     def fy(self):
+        """Fy"""
         return self.params.fy
 
     @property
     def cx(self):
+        """Cx"""
         return self.params.cx
 
     @property
     def cy(self):
+        """Cy"""
         return self.params.cy
 
 cdef class Registration:
+    """Python interface for ``libfreenect2::Registration``.
+
+    The Registration is a container of C++ pointer
+    ``libfreenect2::Registration*``. The pointer of Registration is allocated
+    in ``__cinit__`` and released in ``__dealloc__`` method.
+
+    Attributes
+    ----------
+    ptr : ``libfreenect2::Registration*``
+
+    Parameters
+    ----------
+    irparams : IrCameraParams
+        IR camera parameters.
+
+    cparams : ColorCameraParams
+        Color camera parameters.
+    """
     cdef libfreenect2.Registration* ptr
 
     def __cinit__(self, IrCameraParams irparams, ColorCameraParams cparams):
@@ -276,9 +650,19 @@ cdef class Registration:
         if self.ptr is not NULL:
             del self.ptr
 
-    def apply(self, Frame color, Frame depth, Frame undistored,
+    def apply(self, Frame rgb, Frame depth, Frame undistored,
             Frame registered, enable_filter=True, Frame bigdepth=None):
-        assert color.take_ownership == False
+        """Same as ``libfreenect2::Registration::apply``.
+
+        Parameters
+        ----------
+        rgb : Frame
+        depth : Frame
+        registered : Frame
+        enable_filter : Bool, optional
+        bigdepth : Frame, optional
+        """
+        assert rgb.take_ownership == False
         assert depth.take_ownership == False
         assert undistored.take_ownership == True
         assert registered.take_ownership == True
@@ -287,12 +671,25 @@ cdef class Registration:
         cdef libfreenect2.Frame* bigdepth_ptr = <libfreenect2.Frame*>(NULL) \
             if bigdepth is None else bigdepth.ptr
 
-        self.ptr.apply(color.ptr, depth.ptr, undistored.ptr, registered.ptr,
+        self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
             enable_filter, bigdepth_ptr)
 
 
 # MUST be declared before backend specific includes
 cdef class PacketPipeline:
+    """Base class for other pipeline classes.
+
+    Attributes
+    ----------
+    pipeline_ptr_alias : ``libfreenect2::PacketPipeline*``
+    owened_by_device : bool
+
+    See also
+    --------
+    pylibfreenect2.CpuPacketPipeline
+    pylibfreenect2.OpenCLPacketPipeline
+    pylibfreenect2.OpenGLPacketPipeline
+    """
     cdef libfreenect2.PacketPipeline* pipeline_ptr_alias
 
     # NOTE: once device is opened with pipeline, pipeline will be
@@ -301,6 +698,12 @@ cdef class PacketPipeline:
 
 
 cdef class CpuPacketPipeline(PacketPipeline):
+    """Pipeline with CPU depth processing.
+
+    Attributes
+    ----------
+    pipeline : `libfreenect2::CpuPacketPipeline*`
+    """
     cdef libfreenect2.CpuPacketPipeline* pipeline
 
     def __cinit__(self):
@@ -321,15 +724,33 @@ IF LIBFREENECT2_WITH_OPENCL_SUPPORT == True:
 
 
 cdef class Freenect2Device:
+    """Python interface for ``libfreenect2::Freenect2Device``.
+
+    The Freenect2Device is a container of C++ pointer
+    ``libfreenect2::Freenect2Device*``.
+
+    Attributes
+    ----------
+    ptr : ``libfreenect2::Freenect2Device*``
+
+    See also
+    --------
+    pylibfreenect2.Freenect2
+
+    """
+
     cdef _Freenect2Device* ptr
 
     def getSerialNumber(self):
+        """Same as ``libfreenect2::Freenect2Device::getSerialNumber()``"""
         return self.ptr.getSerialNumber()
 
     def getFirmwareVersion(self):
+        """Same as ``libfreenect2::Freenect2Device::getFirmwareVersion()``"""
         return self.ptr.getFirmwareVersion()
 
     def getColorCameraParams(self):
+        """Same as ``libfreenect2::Freenect2Device::getColorCameraParams()``"""
         cdef _Freenect2Device.ColorCameraParams params
         params = self.ptr.getColorCameraParams()
         cdef ColorCameraParams pyparams = ColorCameraParams()
@@ -337,6 +758,7 @@ cdef class Freenect2Device:
         return pyparams
 
     def getIrCameraParams(self):
+        """Same as ``libfreenect2::Freenect2Device::getIrCameraParams()``"""
         cdef _Freenect2Device.IrCameraParams params
         params = self.ptr.getIrCameraParams()
         cdef IrCameraParams pyparams = IrCameraParams()
@@ -344,22 +766,47 @@ cdef class Freenect2Device:
         return pyparams
 
     def setColorFrameListener(self, FrameListener listener):
+        """Same as
+        ``libfreenect2::Freenect2Device::setColorFrameListener(FrameListener*)``
+        """
         self.ptr.setColorFrameListener(listener.listener_ptr_alias)
 
     def setIrAndDepthFrameListener(self, FrameListener listener):
+        """Same as
+        ``libfreenect2::Freenect2Device::setIrAndDepthFrameListener(FrameListener*)``
+        """
         self.ptr.setIrAndDepthFrameListener(listener.listener_ptr_alias)
 
     def start(self):
+        """Same as ``libfreenect2::Freenect2Device::start()``"""
         self.ptr.start()
 
     def stop(self):
+        """Same as ``libfreenect2::Freenect2Device::stop()``"""
         self.ptr.stop()
 
     def close(self):
+        """Same as ``libfreenect2::Freenect2Device::close()``"""
         self.ptr.close()
 
 
 cdef class Freenect2:
+    """Python interface for ``libfreenect2::Freenect2``.
+
+    The Freenect2 is a container of C++ pointer
+    ``libfreenect2::Freenect2*``. The pointer of Freenect2 is allocated
+    in ``__cinit__`` and released in ``__dealloc__`` method.
+
+    Attributes
+    ----------
+    ptr : ``libfreenect2::Freenect2*``
+
+    See also
+    --------
+    pylibfreenect2.Freenect2Device
+
+    """
+
     cdef libfreenect2.Freenect2* ptr
 
     def __cinit__(self):
@@ -370,12 +817,15 @@ cdef class Freenect2:
             del self.ptr
 
     def enumerateDevices(self):
+        """Same as ``libfreenect2::Freenect2::enumerateDevices()``"""
         return self.ptr.enumerateDevices()
 
     def getDeviceSerialNumber(self, int idx):
+        """Same as ``libfreenect2::Freenect2::getDeviceSerialNumber(int)``"""
         return self.ptr.getDeviceSerialNumber(idx)
 
     def getDefaultDeviceSerialNumber(self):
+        """Same as ``libfreenect2::Freenect2::getDefaultDeviceSerialNumber()``"""
         return self.ptr.getDefaultDeviceSerialNumber()
 
     cdef __openDevice__intidx(self, int idx, PacketPipeline pipeline):
@@ -403,6 +853,22 @@ cdef class Freenect2:
         return device
 
     def openDevice(self, name, PacketPipeline pipeline=None):
+        """Open device by serial number or index
+
+        Parameters
+        ----------
+        name : int or str
+            Serial number (str) or device index (int)
+
+        pipeline : PacketPipeline, optional
+            Pipeline. Default is None.
+
+        Raises
+        ------
+        ValueError
+            If invalid name is specified.
+
+        """
         if isinstance(name, int):
             return self.__openDevice__intidx(name, pipeline)
         elif isinstance(name, str) or isinstance(name, bytes):
@@ -411,6 +877,18 @@ cdef class Freenect2:
             raise ValueError("device name must be of str, bytes or integer type")
 
     def openDefaultDevice(self, PacketPipeline pipeline=None):
+        """Open the first device
+
+        Parameters
+        ----------
+        pipeline : PacketPipeline, optional
+            Pipeline. Default is None.
+
+        Returns
+        -------
+        device : Freenect2Device
+
+        """
         cdef _Freenect2Device* dev_ptr
 
         if pipeline is None:

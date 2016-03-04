@@ -1,4 +1,16 @@
 cdef class OpenGLPacketPipeline(PacketPipeline):
+    """Pipeline with OpenGL depth processing.
+
+    Attributes
+    ----------
+    pipeline : `libfreenect2::OpenGLPacketPipeline*`
+
+    Parameters
+    ----------
+    debug : bool, optional
+        Debugging mode. Default is False.
+
+    """
     cdef libfreenect2.OpenGLPacketPipeline* pipeline
 
     def __cinit__(self, bool debug=False):

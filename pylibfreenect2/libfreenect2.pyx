@@ -268,13 +268,18 @@ cdef class Frame:
 
         return array
 
-    def astype(self, data_type):
+    def astype(self, dtype):
         """Frame to ``numpy.ndarray`` conversion with specified data type.
 
         Internal data of Frame can be represented as:
 
         - 3d array of ``numpy.uint8`` for color
         - 2d array of ``numpy.float32`` for IR and depth
+
+        Parameters
+        ----------
+        dtype : numpy dtype
+            Designed data type (``numpy.uint8`` or ``numpy.float32``)
 
         Returns
         -------
@@ -287,10 +292,17 @@ cdef class Frame:
         ValueError
             - If a type that is neither ``numpy.uint8`` nor ``numpy.float32`` is specified
 
+        Examples
+        --------
+        >>> undistorted = Frame(512, 424, 4)
+        >>> registered = Frame(512, 424, 4)
+        >>> undistorted_arrray = undistorted.astype(np.float32)
+        >>> registered_array = registered.astype(np.uint8)
+
         """
-        if data_type != np.uint8 and data_type != np.float32:
+        if dtype != np.uint8 and dtype != np.float32:
             raise ValueError("np.uint8 or np.float32 is only supported")
-        if data_type == np.uint8:
+        if dtype == np.uint8:
             return self.__uint8_data()
         else:
             return self.__float32_data()
@@ -308,6 +320,12 @@ cdef class Frame:
         ------
         ValueError
             - If underlying frame type cannot be determined.
+
+        Examples
+        --------
+        >>> rgb_array = frames["color"].asarray()
+        >>> ir_array = frames["ir"].asarray()
+        >>> depth_array = frames["depth"].asarray()
 
         """
         if self.frame_type < 0:
@@ -523,6 +541,9 @@ cdef class SyncMultiFrameListener(FrameListener):
 
             Function signature can be different between Python and C++.
 
+        Examples
+        --------
+
         Suppose the following C++ code:
 
         .. code-block:: c++
@@ -567,6 +588,10 @@ cdef class ColorCameraParams:
     Attributes
     ----------
     params : ``libfreenect2::Freenect2Device::ColorCameraParams``
+
+    See also
+    --------
+    pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams
     """
     cdef _Freenect2Device.ColorCameraParams params
 
@@ -598,6 +623,10 @@ cdef class IrCameraParams:
     Attributes
     ----------
     params : ``libfreenect2::Freenect2Device::IrCameraParams``
+
+    See also
+    --------
+    pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams
     """
     cdef _Freenect2Device.IrCameraParams params
 
@@ -644,7 +673,8 @@ cdef class Registration:
     --------
     pylibfreenect2.libfreenect2.IrCameraParams
     pylibfreenect2.libfreenect2.ColorCameraParams
-
+    pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams
+    pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams
     """
     cdef libfreenect2.Registration* ptr
 
@@ -736,6 +766,29 @@ cdef class Freenect2Device:
     The Freenect2Device is a container of C++ pointer
     ``libfreenect2::Freenect2Device*``.
 
+    .. note::
+        Freenect2Device just keeps a pointer of
+        ``libfreenect2::Freenect2Device`` that should be allocated and released
+        by Freenect2. Freenect2Device itself doesn't own the memory.
+
+
+    A valid device can be created by ``openDefaultDevice``:
+
+    .. code-block:: python
+
+        fn = Freenect2()
+        assert fn.enumerateDevices() > 0
+        device = fn.openDefaultDevice()
+
+    or  by ``openDevice``:
+
+    .. code-block:: python
+
+        fn = Freenect2()
+        assert fn.enumerateDevices() > 0
+        serial = fn.getDeviceSerialNumber(0)
+        device = fn.openDevice(serial)
+
     Attributes
     ----------
     ptr : ``libfreenect2::Freenect2Device*``
@@ -743,6 +796,8 @@ cdef class Freenect2Device:
     See also
     --------
     pylibfreenect2.libfreenect2.Freenect2
+    pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice
+    pylibfreenect2.libfreenect2.Freenect2.openDevice
 
     """
 

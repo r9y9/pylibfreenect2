@@ -25,6 +25,9 @@ class FrameType(IntEnum):
     .. warning::
         The name is slightly different between Python and C++.
 
+    Examples
+    --------
+
     Suppose the following C++ code:
 
     .. code-block:: c++

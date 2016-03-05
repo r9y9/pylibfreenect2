@@ -5,12 +5,19 @@
 
 A python interface for [libfreenect2](https://github.com/OpenKinect/libfreenect2). The package is compatible with python 2.7-3.5.
 
-Note that this is work in progress. Currently tested on osx 10.10 and ubuntu 14.04.
+## Supported platforms
+
+- Mac OS X
+- Ubuntu 14.04
+
+## Documentation
+
+See http://r9y9.github.io/pylibfreenect2/ for Python API docs.
 
 ## Build requirements
 
 - [libfreenect2](https://github.com/OpenKinect/libfreenect2) 0.1.0 or later
-- python 2.7 or later
+- python 2.7 or later ([anaconda](https://www.continuum.io/) is recommended)
 - numpy
 - cython
 
@@ -43,21 +50,15 @@ nosetests -v -w tests/
 
 It is assumed that you have `nose` installed.
 
-## Documentation
 
-Please check [the official doc](https://openkinect.github.io/libfreenect2/). APIs are basically same between C++ and python but actually slightly different. pylibfreenect2 API docs will be comming soon.  
+### Getting started
 
+See [examples/multiframe_listener.py](examples/multiframe_listener.py)
 
-### How it works
-
-Similar to Protonect example in libfreenect2, an example for grabbing and visualizing Kinect v2 data is available:
-
-```
-python examples/multiframe_listener.py
-```
-
-It requires a python binding of opencv for visualization. If you are using [anaconda](https://www.continuum.io/), you can install it by:
+The example code demonstrates basic usage of pylibfreenect2. It requires a python binding of opencv for visualization. If you are using [anaconda](https://www.continuum.io/), you can install it by:
 
 ```
 conda install opencv
 ```
+
+Have fun!

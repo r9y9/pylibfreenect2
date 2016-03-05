@@ -60,7 +60,7 @@ while True:
 
     # NOTE for visualization:
     # cv2.imshow without OpenGL backend seems to be quite slow to draw all
-    # things below. Try commenting out some imshow if you doesn't have a fast
+    # things below. Try commenting out some imshow if you don't have a fast
     # visualization backend.
     cv2.imshow("ir", ir.asarray() / 65535.)
     cv2.imshow("depth", depth.asarray() / 4500.)

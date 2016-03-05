@@ -64,6 +64,7 @@
           
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#supported-platforms">Supported platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#build-requirements">Build requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
 </ul>
@@ -137,6 +138,11 @@ the top-level <code class="docutils literal"><span class="pre">pylibfreenect2.*<
 <p class="first admonition-title">Warning</p>
 <p class="last">The name is slightly different between Python and C++.</p>
 </div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Frame" title="pylibfreenect2.libfreenect2.Frame"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Frame</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.FrameMap" title="pylibfreenect2.libfreenect2.FrameMap"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.FrameMap</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener" title="pylibfreenect2.libfreenect2.SyncMultiFrameListener"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.SyncMultiFrameListener</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
 <p>Suppose the following C++ code:</p>
 <div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span> <span class="o">*</span><span class="n">rgb</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span><span class="o">::</span><span class="n">Color</span><span class="p">];</span>
 <span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span> <span class="o">*</span><span class="n">ir</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span><span class="o">::</span><span class="n">Ir</span><span class="p">];</span>
@@ -154,10 +160,6 @@ the top-level <code class="docutils literal"><span class="pre">pylibfreenect2.*<
 <span class="n">ir</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span>
 <span class="n">depth</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span>
 </pre></div>
-</div>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Frame" title="pylibfreenect2.libfreenect2.Frame"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Frame</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.FrameMap" title="pylibfreenect2.libfreenect2.FrameMap"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.FrameMap</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener" title="pylibfreenect2.libfreenect2.SyncMultiFrameListener"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.SyncMultiFrameListener</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -249,6 +251,12 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rgb_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ir_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">depth_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -264,14 +272,20 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>array</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, shape: <code class="docutils literal"><span class="pre">(height,</span> <span class="pre">width)</span></code> for IR and depth,</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dtype</strong> : numpy dtype</p>
+<blockquote>
+<div><p>Designed data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>array</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, shape: <code class="docutils literal"><span class="pre">(height,</span> <span class="pre">width)</span></code> for IR and depth,</p>
 <p><code class="docutils literal"><span class="pre">(4,</span> <span class="pre">height,</span> <span class="pre">width)</span></code> for Color.</p>
 <blockquote>
 <div><p>Array of internal frame.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
 <blockquote class="last">
 <div><ul class="simple">
 <li>If a type that is neither <code class="docutils literal"><span class="pre">numpy.uint8</span></code> nor <code class="docutils literal"><span class="pre">numpy.float32</span></code> is specified</li>
@@ -281,6 +295,13 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">undistorted</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registered</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">undistorted_arrray</span> <span class="o">=</span> <span class="n">undistorted</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registered_array</span> <span class="o">=</span> <span class="n">registered</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -519,10 +540,15 @@ a new FrameMap is allocated within the function and then returned.</p>
 function.</p>
 </div>
 </div></blockquote>
-<div class="admonition warning">
+<div class="last admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Function signature can be different between Python and C++.</p>
 </div>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
 <p>Suppose the following C++ code:</p>
 <div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">FrameMap</span> <span class="n">frames</span><span class="p">;</span>
 <span class="n">listener</span><span class="o">-&gt;</span><span class="n">waitForNewFrame</span><span class="p">(</span><span class="n">frames</span><span class="p">);</span>
@@ -533,14 +559,10 @@ function.</p>
 </pre></div>
 </div>
 <p>or you can write it more similar to C++:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">frames</span> <span class="o">=</span> <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameMap</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">frames</span> <span class="o">=</span> <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameMap</span><span class="p">()</span>
 <span class="n">listener</span><span class="o">.</span><span class="n">waitForNewFrame</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
 </pre></div>
 </div>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </dd></dl>
@@ -557,9 +579,28 @@ function.</p>
 <dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device</span></code>.</p>
 <p>The Freenect2Device is a container of C++ pointer
 <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device*</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Freenect2Device just keeps a pointer of
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device</span></code> that should be allocated and released
+by Freenect2. Freenect2Device itself doesn&#8217;t own the memory.</p>
+</div>
+<p>A valid device can be created by <code class="docutils literal"><span class="pre">openDefaultDevice</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">Freenect2</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">fn</span><span class="o">.</span><span class="n">enumerateDevices</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">openDefaultDevice</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or  by <code class="docutils literal"><span class="pre">openDevice</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">Freenect2</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">fn</span><span class="o">.</span><span class="n">enumerateDevices</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">serial</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">getDeviceSerialNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">openDevice</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2" title="pylibfreenect2.libfreenect2.Freenect2"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2</span></code></a></p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2" title="pylibfreenect2.libfreenect2.Freenect2"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice" title="pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2.openDevice" title="pylibfreenect2.libfreenect2.Freenect2.openDevice"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2.openDevice</span></code></a></p>
 </div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
@@ -733,6 +774,10 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 <dt id="pylibfreenect2.libfreenect2.ColorCameraParams">
 <em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">ColorCameraParams</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams</span></code></a></p>
+</div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -778,6 +823,10 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 <dt id="pylibfreenect2.libfreenect2.IrCameraParams">
 <em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">IrCameraParams</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::IrCameraParams</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams</span></code></a></p>
+</div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -965,7 +1014,7 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.IrCameraParams" title="pylibfreenect2.libfreenect2.IrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.IrCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.ColorCameraParams" title="pylibfreenect2.libfreenect2.ColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.ColorCameraParams</span></code></a></p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.IrCameraParams" title="pylibfreenect2.libfreenect2.IrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.IrCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.ColorCameraParams" title="pylibfreenect2.libfreenect2.ColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.ColorCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams</span></code></a></p>
 </div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">

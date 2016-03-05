@@ -1,6 +1,12 @@
 Installation guide
 ==================
 
+Supported platforms
+-------------------
+
+- Mac OS X
+- Ubuntu 14.04
+
 Build requirements
 ------------------
 

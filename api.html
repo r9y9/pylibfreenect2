@@ -274,7 +274,7 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dtype</strong> : numpy dtype</p>
 <blockquote>
-<div><p>Designed data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>)</p>
+<div><p>Data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -520,6 +520,10 @@ SyncMultiFrameListener is allocated in <code class="docutils literal"><span clas
 <dt id="pylibfreenect2.libfreenect2.SyncMultiFrameListener.waitForNewFrame">
 <code class="descname">waitForNewFrame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener.waitForNewFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener::waitForNewFrame(Frame&amp;)</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Function signature can be different between Python and C++.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -532,7 +536,7 @@ a new FrameMap is allocated within the function and then returned.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>frame_map</strong> : FrameMap</p>
-<blockquote>
+<blockquote class="last">
 <div><p>FrameMap.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -540,10 +544,6 @@ a new FrameMap is allocated within the function and then returned.</p>
 function.</p>
 </div>
 </div></blockquote>
-<div class="last admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Function signature can be different between Python and C++.</p>
-</div>
 </td>
 </tr>
 </tbody>

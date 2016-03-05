@@ -279,7 +279,7 @@ cdef class Frame:
         Parameters
         ----------
         dtype : numpy dtype
-            Designed data type (``numpy.uint8`` or ``numpy.float32``)
+             Data type (``numpy.uint8`` or ``numpy.float32``)
 
         Returns
         -------
@@ -522,6 +522,10 @@ cdef class SyncMultiFrameListener(FrameListener):
     def waitForNewFrame(self, FrameMap frame_map=None):
         """Same as ``libfreenect2::SyncMultiFrameListener::waitForNewFrame(Frame&)``.
 
+        .. warning::
+
+            Function signature can be different between Python and C++.
+
         Parameters
         ----------
         frame_map : FrameMap, optional
@@ -536,10 +540,6 @@ cdef class SyncMultiFrameListener(FrameListener):
             .. note::
                 FrameMap must be releaseed by call-side by calling ``release``
                 function.
-
-        .. warning::
-
-            Function signature can be different between Python and C++.
 
         Examples
         --------

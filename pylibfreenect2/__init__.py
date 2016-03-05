@@ -2,6 +2,7 @@
 
 """
 A python interface for `libfreenect2 <https://github.com/OpenKinect/libfreenect2>`_.
+
 The package is compatible with python 2.7-3.5.
 
 https://github.com/r9y9/pylibfreenect2
@@ -32,7 +33,7 @@ class FrameType(IntEnum):
         libfreenect2::Frame *ir = frames[libfreenect2::Frame::Ir];
         libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
 
-    This can be tranlated in Python like:
+    This can be translated in Python like:
 
     .. code-block:: python
 

@@ -127,7 +127,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'pylibfreenect2'
-copyright = u'2015, Ryuichi YAMAMOTO'
+copyright = u'2016, Ryuichi YAMAMOTO'
 author = u'Ryuichi YAMAMOTO'
 
 # The version info for the project you're documenting, acts as replacement for

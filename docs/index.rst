@@ -16,9 +16,13 @@ Installation guide
 
     introduction
 
+libfreenect2 documentation
+**************************
 
-API documentation
-*****************
+https://openkinect.github.io/libfreenect2/
+
+Python API documentation
+************************
 
 .. toctree::
     :maxdepth: 2

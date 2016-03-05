@@ -18,7 +18,9 @@ num_devices = fn.enumerateDevices()
 if num_devices == 0:
     print("No device connected!")
     sys.exit(1)
-device = fn.openDefaultDevice(pipeline=pipeline)
+
+serial = fn.getDeviceSerialNumber(0)
+device = fn.openDevice(serial, pipeline=pipeline)
 
 listener = SyncMultiFrameListener(
     FrameType.Color | FrameType.Ir | FrameType.Depth)
@@ -36,6 +38,15 @@ registration = Registration(device.getIrCameraParams(),
 undistorted = Frame(512, 424, 4)
 registered = Frame(512, 424, 4)
 
+# Optinal parameters for registration
+# set True if you need
+need_bigdepth = False
+need_color_depth_map = False
+
+bigdepth = Frame(1920, 1082, 4) if need_bigdepth else None
+color_depth_map = np.zeros((424, 512),  np.int32).ravel() \
+    if need_color_depth_map else None
+
 while True:
     frames = listener.waitForNewFrame()
 
@@ -43,12 +54,25 @@ while True:
     ir = frames["ir"]
     depth = frames["depth"]
 
-    registration.apply(color, depth, undistorted, registered)
+    registration.apply(color, depth, undistorted, registered,
+                       bigdepth=bigdepth,
+                       color_depth_map=color_depth_map)
 
+    # NOTE for visualization:
+    # cv2.imshow without OpenGL backend seems to be quite slow to draw all
+    # things below. Try commenting out some imshow if you doesn't have a fast
+    # visualization backend.
     cv2.imshow("ir", ir.asarray() / 65535.)
     cv2.imshow("depth", depth.asarray() / 4500.)
-    cv2.imshow("color", cv2.resize(color.asarray(), (int(1920 / 3), int(1080 / 3))))
+    cv2.imshow("color", cv2.resize(color.asarray(),
+                                   (int(1920 / 3), int(1080 / 3))))
     cv2.imshow("registered", registered.astype(np.uint8))
+
+    if need_bigdepth:
+        cv2.imshow("bigdepth", cv2.resize(bigdepth.astype(np.float32),
+                                          (int(1920 / 3), int(1082 / 3))))
+    if need_color_depth_map:
+        cv2.imshow("color_depth_map", color_depth_map.reshape(424, 512))
 
     listener.release(frames)
 

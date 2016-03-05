@@ -98,7 +98,7 @@ cdef extern from "registration.h" namespace "libfreenect2":
         Registration(Freenect2Device.IrCameraParams, Freenect2Device.ColorCameraParams) except +
 
         # undistort/register a whole image
-        void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*) const
+        void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*, int*) const
 
 cdef extern from "packet_pipeline.h" namespace "libfreenect2":
     cdef cppclass PacketPipeline:

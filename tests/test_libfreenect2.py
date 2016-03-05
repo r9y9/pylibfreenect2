@@ -67,6 +67,10 @@ def test_sync_multi_frame():
     undistorted = Frame(512, 424, 4)
     registered = Frame(512, 424, 4)
 
+    # optional parameters for registration
+    bigdepth = Frame(1920, 1082, 4)
+    color_depth_map = np.zeros((424, 512), np.int32)
+
     # test if we can get two frames at least
     frames = listener.waitForNewFrame()
     listener.release(frames)
@@ -91,7 +95,11 @@ def test_sync_multi_frame():
 
     registration.apply(color, depth, undistorted, registered)
 
-    ### Color ###
+    # with optinal parameters
+    registration.apply(color, depth, undistorted, registered,
+                       bigdepth=bigdepth,
+                       color_depth_map=color_depth_map.ravel())
+
     assert color.width == 1920
     assert color.height == 1080
     assert color.bytes_per_pixel == 4

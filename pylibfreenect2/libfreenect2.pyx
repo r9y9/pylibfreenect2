@@ -688,17 +688,67 @@ cdef class Registration:
             del self.ptr
 
     def apply(self, Frame rgb, Frame depth, Frame undistored,
-            Frame registered, enable_filter=True, Frame bigdepth=None):
+            Frame registered, enable_filter=True, Frame bigdepth=None,
+            np.ndarray[np.int32_t, ndim=1, mode="c"] color_depth_map=None):
         """Same as ``libfreenect2::Registration::apply``.
 
         Parameters
         ----------
         rgb : Frame
+            ``(1920, 1080)`` color frame
+
         depth : Frame
+            ``(512, 424)`` depth frame
+
+        undistored : Frame
+            ``(512, 424)`` registered depth frame
+
         registered : Frame
+            ``(512, 424)`` registered color frame
+
         enable_filter : Bool, optional
+
         bigdepth : Frame, optional
+            ``(1920, 1082)`` bigdepth frame
+
+        color_depth_map : ``numpy.ndarray``, optional
+            Array of shape: ``(424*512,)``, dtype ``np.int32``
+
+        Raises
+        ------
+        ValueError
+            If invalid shape of frame/array is provided
+
         """
+        if rgb.width != 1920 or rgb.height != 1080:
+            raise ValueError(
+                "Shape of color frame {}x{} is invalid. Expected 1920x1080.".format(
+                rgb.width, rgb.height))
+        if depth.width != 512 or depth.height != 424:
+            raise ValueError(
+                "Shape of depth frame {}x{} is invalid. Expected 512x424.".format(
+                depth.width, depth.height))
+        if undistored.width != 512 or undistored.height != 424:
+            raise ValueError(
+                "Shape of undistored frame {}x{} is invalid. Expected 512x424.".format(
+                undistored.width, undistored.height))
+        if registered.width != 512 or registered.height != 424:
+            raise ValueError(
+                "Shape of registered frame {}x{} is invalid. Expected 512x424.".format(
+                registered.width, registered.height))
+
+        if bigdepth is not None:
+            if bigdepth.width != 1920 or bigdepth.height != 1082:
+                raise ValueError(
+                    "Shape of bigdepth frame {}x{} is invalid. Expected 1920x1082.".format(
+                    bigdepth.width, bigdepth.height))
+
+        if color_depth_map is not None:
+            if color_depth_map.shape[0] != 424*512:
+                raise ValueError(
+                    "Shape of color_depth_map array ({},) is invalid. Expected (424*512,)".format(
+                    color_depth_map.shape[0]))
+
         assert rgb.take_ownership == False
         assert depth.take_ownership == False
         assert undistored.take_ownership == True
@@ -707,9 +757,11 @@ cdef class Registration:
 
         cdef libfreenect2.Frame* bigdepth_ptr = <libfreenect2.Frame*>(NULL) \
             if bigdepth is None else bigdepth.ptr
+        cdef int* color_depth_map_ptr = <int*>(NULL) if color_depth_map is None \
+            else <int*>(&color_depth_map[0])
 
         self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
-            enable_filter, bigdepth_ptr)
+            enable_filter, bigdepth_ptr, color_depth_map_ptr)
 
 
 # MUST be declared before backend specific includes

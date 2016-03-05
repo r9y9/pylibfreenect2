@@ -1037,10 +1037,36 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rgb</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(1920,</span> <span class="pre">1080)</span></code> color frame</p>
+</div></blockquote>
 <p><strong>depth</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> depth frame</p>
+</div></blockquote>
+<p><strong>undistored</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered depth frame</p>
+</div></blockquote>
 <p><strong>registered</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered color frame</p>
+</div></blockquote>
 <p><strong>enable_filter</strong> : Bool, optional</p>
-<p class="last"><strong>bigdepth</strong> : Frame, optional</p>
+<p><strong>bigdepth</strong> : Frame, optional</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(1920,</span> <span class="pre">1082)</span></code> bigdepth frame</p>
+</div></blockquote>
+<p><strong>color_depth_map</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, optional</p>
+<blockquote>
+<div><p>Array of shape: <code class="docutils literal"><span class="pre">(424*512,)</span></code>, dtype <code class="docutils literal"><span class="pre">np.int32</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If invalid shape of frame/array is provided</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>

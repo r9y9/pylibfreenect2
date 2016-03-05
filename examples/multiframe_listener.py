@@ -2,6 +2,7 @@
 
 import numpy as np
 import cv2
+import sys
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 
@@ -13,6 +14,10 @@ except:
     pipeline = CpuPacketPipeline()
 
 fn = Freenect2()
+num_devices = fn.enumerateDevices()
+if num_devices == 0:
+    print("No device connected!")
+    sys.exit(1)
 device = fn.openDefaultDevice(pipeline=pipeline)
 
 listener = SyncMultiFrameListener(

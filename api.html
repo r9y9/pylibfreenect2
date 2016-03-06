@@ -230,39 +230,6 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 <dt id="pylibfreenect2.libfreenect2.Frame.asarray">
 <code class="descname">asarray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.asarray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Frame to <code class="docutils literal"><span class="pre">numpy.ndarray</span></code> conversion</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>array</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, shape: <code class="docutils literal"><span class="pre">(height,</span> <span class="pre">width)</span></code> for IR and depth,</p>
-<p><code class="docutils literal"><span class="pre">(4,</span> <span class="pre">height,</span> <span class="pre">width)</span></code> for Color.</p>
-<blockquote>
-<div><p>Array of internal frame.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
-<blockquote class="last">
-<div><ul class="simple">
-<li>If underlying frame type cannot be determined.</li>
-</ul>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rgb_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ir_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">depth_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylibfreenect2.libfreenect2.Frame.astype">
-<code class="descname">astype</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.astype" title="Permalink to this definition">¶</a></dt>
-<dd><p>Frame to <code class="docutils literal"><span class="pre">numpy.ndarray</span></code> conversion with specified data type.</p>
 <p>Internal data of Frame can be represented as:</p>
 <ul class="simple">
 <li>3d array of <code class="docutils literal"><span class="pre">numpy.uint8</span></code> for color</li>
@@ -272,9 +239,10 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dtype</strong> : numpy dtype</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dtype</strong> : numpy dtype, optional</p>
 <blockquote>
-<div><p>Data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>)</p>
+<div><p>Data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>). If None, data
+type is automatically selected if possible. Default is None.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -288,7 +256,8 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
 <blockquote class="last">
 <div><ul class="simple">
-<li>If a type that is neither <code class="docutils literal"><span class="pre">numpy.uint8</span></code> nor <code class="docutils literal"><span class="pre">numpy.float32</span></code> is specified</li>
+<li>If dtype is None and underlying frame type cannot be determined.</li>
+<li>If dtype neither <code class="docutils literal"><span class="pre">numpy.uint8</span></code> nor <code class="docutils literal"><span class="pre">numpy.float32</span></code> is specified</li>
 </ul>
 </div></blockquote>
 </td>
@@ -296,10 +265,15 @@ it allocates necessary memory in <code class="docutils literal"><span class="pre
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">undistorted</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">registered</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">undistorted_arrray</span> <span class="o">=</span> <span class="n">undistorted</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">registered_array</span> <span class="o">=</span> <span class="n">registered</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rgb_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="n">ir_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="n">depth_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">undistorted</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">registered</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">undistorted_arrray</span> <span class="o">=</span> <span class="n">undistorted</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">registered_array</span> <span class="o">=</span> <span class="n">registered</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

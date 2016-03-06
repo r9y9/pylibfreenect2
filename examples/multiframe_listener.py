@@ -66,10 +66,10 @@ while True:
     cv2.imshow("depth", depth.asarray() / 4500.)
     cv2.imshow("color", cv2.resize(color.asarray(),
                                    (int(1920 / 3), int(1080 / 3))))
-    cv2.imshow("registered", registered.astype(np.uint8))
+    cv2.imshow("registered", registered.asarray(np.uint8))
 
     if need_bigdepth:
-        cv2.imshow("bigdepth", cv2.resize(bigdepth.astype(np.float32),
+        cv2.imshow("bigdepth", cv2.resize(bigdepth.asarray(np.float32),
                                           (int(1920 / 3), int(1082 / 3))))
     if need_color_depth_map:
         cv2.imshow("color_depth_map", color_depth_map.reshape(424, 512))

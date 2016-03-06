@@ -268,8 +268,16 @@ cdef class Frame:
 
         return array
 
-    def astype(self, dtype):
-        """Frame to ``numpy.ndarray`` conversion with specified data type.
+    def __asarray(self, dtype):
+        if dtype != np.uint8 and dtype != np.float32:
+            raise ValueError("np.uint8 or np.float32 is only supported")
+        if dtype == np.uint8:
+            return self.__uint8_data()
+        else:
+            return self.__float32_data()
+
+    def asarray(self, dtype=None):
+        """Frame to ``numpy.ndarray`` conversion
 
         Internal data of Frame can be represented as:
 
@@ -278,8 +286,9 @@ cdef class Frame:
 
         Parameters
         ----------
-        dtype : numpy dtype
-             Data type (``numpy.uint8`` or ``numpy.float32``)
+        dtype : numpy dtype, optional
+             Data type (``numpy.uint8`` or ``numpy.float32``). If None, data
+             type is automatically selected if possible. Default is None.
 
         Returns
         -------
@@ -290,54 +299,38 @@ cdef class Frame:
         Raises
         ------
         ValueError
-            - If a type that is neither ``numpy.uint8`` nor ``numpy.float32`` is specified
+            - If dtype is None and underlying frame type cannot be determined.
+            - If dtype neither ``numpy.uint8`` nor ``numpy.float32`` is specified
 
         Examples
         --------
-        >>> undistorted = Frame(512, 424, 4)
-        >>> registered = Frame(512, 424, 4)
-        >>> undistorted_arrray = undistorted.astype(np.float32)
-        >>> registered_array = registered.astype(np.uint8)
+
+        .. code-block:: python
+
+            rgb_array = frames["color"].asarray()
+            ir_array = frames["ir"].asarray()
+            depth_array = frames["depth"].asarray()
+
+        .. code-block:: python
+
+            undistorted = Frame(512, 424, 4)
+            registered = Frame(512, 424, 4)
+            undistorted_arrray = undistorted.asarray(dtype=np.float32)
+            registered_array = registered.asarray(dtype=np.uint8)
 
         """
-        if dtype != np.uint8 and dtype != np.float32:
-            raise ValueError("np.uint8 or np.float32 is only supported")
-        if dtype == np.uint8:
-            return self.__uint8_data()
+        if dtype is None and self.frame_type < 0:
+            raise ValueError("Cannot determine type of data. Specify dtype explicitly.")
+
+        if dtype is None:
+            if self.frame_type == FrameType.Color:
+                return self.__asarray(np.uint8)
+            elif self.frame_type == FrameType.Ir or self.frame_type == FrameType.Depth:
+                return self.__asarray(np.float32)
+            else:
+                assert False
         else:
-            return self.__float32_data()
-
-    def asarray(self):
-        """Frame to ``numpy.ndarray`` conversion
-
-        Returns
-        -------
-        array : ``numpy.ndarray``, shape: ``(height, width)`` for IR and depth,
-        ``(4, height, width)`` for Color.
-            Array of internal frame.
-
-        Raises
-        ------
-        ValueError
-            - If underlying frame type cannot be determined.
-
-        Examples
-        --------
-        >>> rgb_array = frames["color"].asarray()
-        >>> ir_array = frames["ir"].asarray()
-        >>> depth_array = frames["depth"].asarray()
-
-        """
-        if self.frame_type < 0:
-            raise ValueError("Cannnot determine type of raw data. Use astype instead.")
-
-        if self.frame_type == FrameType.Color:
-            return self.astype(np.uint8)
-        elif self.frame_type == FrameType.Ir or self.frame_type == FrameType.Depth:
-            return self.astype(np.float32)
-        else:
-            assert False
-
+            return self.__asarray(dtype)
 
 cdef class FrameListener:
     cdef libfreenect2.FrameListener* listener_ptr_alias

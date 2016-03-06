@@ -114,7 +114,7 @@ def test_sync_multi_frame():
 
     assert color.asarray().shape == (color.height, color.width, 4)
     assert ir.asarray().shape == (ir.height, ir.width)
-    assert depth.astype(np.float32).shape == (depth.height, depth.width)
+    assert depth.asarray(np.float32).shape == (depth.height, depth.width)
 
     listener.release(frames)
 

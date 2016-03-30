@@ -81,7 +81,7 @@ ext_modules = cythonize(
             join("pylibfreenect2", "libfreenect2" + ext),
         ],
         include_dirs=[np.get_include(),
-                      join(libfreenect2_include_top, "libfreenect2")],
+                      join(libfreenect2_include_top)],
         library_dirs=[libfreenect2_library_path],
         libraries=["freenect2"],
         extra_compile_args=extra_compile_args,

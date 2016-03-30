@@ -10,7 +10,7 @@ from libcpp.string cimport string
 from libcpp.map cimport map
 
 
-cdef extern from "frame_listener.hpp" namespace "libfreenect2":
+cdef extern from "libfreenect2/frame_listener.hpp" namespace "libfreenect2":
     # ugly but works
     cdef enum LibFreenect2FrameType "libfreenect2::Frame::Type":
         Color "libfreenect2::Frame::Type::Color"
@@ -33,7 +33,7 @@ cdef extern from "frame_listener.hpp" namespace "libfreenect2":
     cdef cppclass FrameListener:
         bool onNewFrame(int, Frame*)
 
-cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
+cdef extern from "libfreenect2/frame_listener_impl.h" namespace "libfreenect2":
     cdef cppclass SyncMultiFrameListener:
         SyncMultiFrameListener(unsigned int)
 
@@ -41,7 +41,7 @@ cdef extern from "frame_listener_impl.h" namespace "libfreenect2":
         void waitForNewFrame(map[LibFreenect2FrameType, Frame*]&)
         void release(map[LibFreenect2FrameType, Frame*]&)
 
-cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
+cdef extern from "libfreenect2/libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass Freenect2Device:
         unsigned int VendorId
         unsigned int ProductId
@@ -93,14 +93,14 @@ cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
         void stop()
         void close()
 
-cdef extern from "registration.h" namespace "libfreenect2":
+cdef extern from "libfreenect2/registration.h" namespace "libfreenect2":
     cdef cppclass Registration:
         Registration(Freenect2Device.IrCameraParams, Freenect2Device.ColorCameraParams) except +
 
         # undistort/register a whole image
         void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*, int*) const
 
-cdef extern from "packet_pipeline.h" namespace "libfreenect2":
+cdef extern from "libfreenect2/packet_pipeline.h" namespace "libfreenect2":
     cdef cppclass PacketPipeline:
         PacketPipeline *getRgbPacketParser() const
         PacketPipeline *getIrPacketParser() const
@@ -115,7 +115,7 @@ cdef extern from "packet_pipeline.h" namespace "libfreenect2":
         OpenCLPacketPipeline(const int)
 
 
-cdef extern from "libfreenect2.hpp" namespace "libfreenect2":
+cdef extern from "libfreenect2/libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass Freenect2:
         Freenect2() except +
 

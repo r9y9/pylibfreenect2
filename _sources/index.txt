@@ -8,8 +8,8 @@ pylibfreenect2
 
 .. automodule:: pylibfreenect2
 
-Installation guide
-******************
+Introduction
+************
 
 .. toctree::
     :maxdepth: 2

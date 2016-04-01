@@ -24,8 +24,12 @@ libfreenect2_configh_path = join(
 if not exists(libfreenect2_configh_path):
     raise OSError("{}: is not found".format(libfreenect2_configh_path))
 
-lib_candidates = list(filter(lambda l: l.startswith("libfreenect2."),
-                             os.listdir(join(libfreenect2_library_path))))
+if platform.system() == "Windows":
+    lib_candidates = list(filter(lambda l: l.startswith("freenect2."),
+                                 os.listdir(join(libfreenect2_library_path))))
+else:
+    lib_candidates = list(filter(lambda l: l.startswith("libfreenect2."),
+                                 os.listdir(join(libfreenect2_library_path))))
 
 if len(lib_candidates) == 0:
     raise OSError("libfreenect2 library cannot be found")
@@ -57,9 +61,15 @@ else:
         raise RuntimeError("Cython is required to generate C++ codes.")
 
 
-def has_define_in_config(key):
+def has_define_in_config(key, close_fds=None):
+    if close_fds is None:
+        if platform.system() == "Windows":
+            close_fds = False
+        else:
+            close_fds = True
+
     p = Popen("cat {0} | grep {1}".format(libfreenect2_configh_path, key),
-              stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True, shell=True)
+              stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=close_fds, shell=True)
     p.wait()
     lines = p.stdout.readlines()
     if sys.version_info.major >= 3:

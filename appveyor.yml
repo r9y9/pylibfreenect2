@@ -41,7 +41,7 @@ build_script:
   - pip install -e .
 
 test_script:
-  - nosetests -v -w tests -a '!require_device'
+  - nosetests -v -w tests -a "!require_device"
 
 after_test:
   - python setup.py bdist_wheel

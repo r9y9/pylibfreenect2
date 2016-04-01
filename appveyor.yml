@@ -1,0 +1,50 @@
+environment:
+  matrix:
+    - PYTHON_VERSION: "3.5"
+      PYTHON_ARCH: "64"
+      MINICONDA: C:\Miniconda3-x64
+
+branches:
+  only:
+    - master
+    - /release-.*/
+
+skip_commits:
+  message: /\[av skip\]/
+
+notifications:
+  - provider: Email
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: false
+
+init:
+  - "ECHO %PYTHON_VERSION% %PYTHON_ARCH% %MINICONDA%"
+
+install:
+  - "SET PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes  --set changeps1 no
+  - conda update -q conda
+  - conda config --add channels pypi
+  - conda info -a
+  - "conda create -q -n test-environment python=%PYTHON_VERSION% numpy cython nose"
+  - activate test-environment
+
+build_script:
+  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+  - set ARCHIVE_NAME=libfreenect2-0.1.0-vs2015-x64
+  - set LIBFREENECT2_BIN=https://github.com/OpenKinect/libfreenect2/releases/download/v0.1.0/%ARCHIVE_NAME%.zip
+  - curl -sLO %LIBFREENECT2_BIN%
+  - 7z x %ARCHIVE_NAME%.zip
+  - set LIBFREENECT2_INSTALL_PREFIX=C:\\projects\\pylibfreenect2\\%ARCHIVE_NAME%
+  - set PATH=%LIBFREENECT2_INSTALL_PREFIX%\\bin;%PATH%
+  - pip install -e .
+
+test_script:
+  - nosetests -v -w tests -a "!require_device"
+
+after_test:
+  - python setup.py bdist_wheel
+
+artifacts:
+  - path: dist\*

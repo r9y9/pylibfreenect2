@@ -3,6 +3,14 @@ environment:
     - PYTHON_VERSION: "3.5"
       PYTHON_ARCH: "64"
       MINICONDA: C:\Miniconda3-x64
+      LIBFREENECT2_ARCHIVE_NAME: libfreenect2-0.1.0-vs2015-x64
+      LIBFREENECT2_VERSION: v0.1.0
+
+    - PYTHON_VERSION: "3.5"
+      PYTHON_ARCH: "64"
+      MINICONDA: C:\Miniconda3-x64
+      LIBFREENECT2_ARCHIVE_NAME: libfreenect2-0.2.0-libusbk-vs2015-x64
+      LIBFREENECT2_VERSION: v0.2.0
 
 branches:
   only:
@@ -32,11 +40,10 @@ install:
 
 build_script:
   - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-  - set ARCHIVE_NAME=libfreenect2-0.1.0-vs2015-x64
-  - set LIBFREENECT2_BIN=https://github.com/OpenKinect/libfreenect2/releases/download/v0.1.0/%ARCHIVE_NAME%.zip
+  - set LIBFREENECT2_BIN=https://github.com/OpenKinect/libfreenect2/releases/download/%LIBFREENECT2_VERSION%/%LIBFREENECT2_ARCHIVE_NAME%.zip
   - curl -sLO %LIBFREENECT2_BIN%
-  - 7z x %ARCHIVE_NAME%.zip
-  - set LIBFREENECT2_INSTALL_PREFIX=C:\\projects\\pylibfreenect2\\%ARCHIVE_NAME%
+  - 7z x %LIBFREENECT2_ARCHIVE_NAME%.zip
+  - set LIBFREENECT2_INSTALL_PREFIX=C:\\projects\\pylibfreenect2\\%LIBFREENECT2_ARCHIVE_NAME%
   - set PATH=%LIBFREENECT2_INSTALL_PREFIX%\\bin;%PATH%
   - pip install -e .
 

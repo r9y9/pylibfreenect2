@@ -6,16 +6,25 @@ matrix:
       sudo: required
       dist: trusty
       python: "2.7"
+      env: LIBFREENECT2_VERSION="v0.2.0"
 
     - os: linux
       sudo: required
       dist: trusty
       python: "3.4"
+      env: LIBFREENECT2_VERSION="v0.2.0"
 
     - os: linux
       sudo: required
       dist: trusty
       python: "3.5"
+      env: LIBFREENECT2_VERSION="v0.2.0"
+
+    - os: linux
+      sudo: required
+      dist: trusty
+      python: "3.5"
+      env: LIBFREENECT2_VERSION="master"
 # TODO: python for osx is not supported for now
 # ref: https://github.com/travis-ci/travis-ci/issues/4729
 #    - os: osx
@@ -27,10 +36,12 @@ notifications:
 before_install:
   - cd $HOME
   - git clone https://github.com/OpenKinect/libfreenect2.git
+  - cd libfreenect2
+  - git checkout $LIBFREENECT2_VERSION
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       export LD_LIBRARY_PATH=/usr/local/lib
       sudo apt-get update;
-      cd libfreenect2/depends;
+      cd depends;
       ./download_debs_trusty.sh;
       sudo apt-get install -y build-essential cmake pkg-config;
       sudo dpkg -i debs/libusb*deb;

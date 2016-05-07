@@ -131,3 +131,21 @@ cdef extern from "libfreenect2/libfreenect2.hpp" namespace "libfreenect2":
 
         Freenect2Device *openDefaultDevice()
         Freenect2Device *openDefaultDevice(const PacketPipeline *)
+
+cdef extern from "libfreenect2/logger.h" namespace "libfreenect2":
+    # ugly but works
+    cdef enum LoggerLevel "libfreenect2::Logger::Level":
+        None "libfreenect2::Logger::Level::None"
+        Error "libfreenect2::Logger::Level::Error"
+        Warning "libfreenect2::Logger::Level::Warning"
+        Info "libfreenect2::Logger::Level::Info"
+        Debug "libfreenect2::Logger::Level::Debug"
+
+    cdef cppclass Logger:
+        LoggerLevel level() const
+        void log(LoggerLevel, const string &)
+
+    Logger* createConsoleLogger(LoggerLevel)
+    Logger* createConsoleLoggerWithDefaultLevel()
+    Logger* getGlobalLogger()
+    void setGlobalLogger(Logger *logger)

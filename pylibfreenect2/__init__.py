@@ -23,7 +23,8 @@ class FrameType(IntEnum):
     The value can be Color, Ir or Depth.
 
     .. warning::
-        The name is slightly different between Python and C++.
+        The name is slightly different between Python and C++ (
+        ``Frame::Type`` -> ``FrameType``).
 
     Examples
     --------
@@ -64,5 +65,43 @@ class FrameType(IntEnum):
     Ir = 2
     Depth = 4
 
+
+class LoggerLevel(IntEnum):
+    """Python-side enum for ``libfreenect::Logger::Level`` in C++.
+
+    .. warning::
+        The name is slightly different between Python and C++ (
+        ``Logger::Level`` -> ``LoggerLevel``).
+
+    Examples
+    --------
+
+    Suppose the following C++ code:
+
+    .. code-block:: c++
+
+        libfreenect2::Logger* logger = libfreenect2::createConsoleLogger(
+            libfreenect2::Logger::Level::Debug);
+
+
+    This can be translated in Python like:
+
+    .. code-block:: python
+
+        logger = pylibfreenect2.createConsoleLogger(
+            pylibfreenect2.LoggerLevel.Debug)
+
+
+    See also
+    --------
+
+    pylibfreenect2.libfreenect2.createConsoleLogger
+
+    """
+    NONE = 0
+    Error = 1
+    Warning = 2
+    Info = 3
+    Debug = 4
 
 from .libfreenect2 import *

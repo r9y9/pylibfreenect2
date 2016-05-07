@@ -73,6 +73,31 @@ IrCameraParams
 .. autoclass:: IrCameraParams
     :members:
 
+Logging utilities
+-----------------
+
+LoggerLevel
+^^^^^^^^^^^
+
+.. autoclass:: pylibfreenect2.LoggerLevel
+    :members:
+
+Logger
+^^^^^^
+
+.. autoclass:: Logger
+    :members:
+
+Functions
+^^^^^^^^^
+
+.. autosummary::
+    :toctree: generated/
+
+    createConsoleLogger
+    createConsoleLoggerWithDefaultLevel
+    getGlobalLogger
+    setGlobalLogger
 
 Packet Pipelines
 ----------------
@@ -755,6 +780,103 @@ cdef class Registration:
 
         self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
             enable_filter, bigdepth_ptr, color_depth_map_ptr)
+
+
+cdef class Logger:
+    """Python interface for libfreenect2::Logger
+
+
+    The Logger is a container of C++ pointer ``libfreenect2::Logger*``.
+
+    Attributes
+    ----------
+    ptr : libfreenect2::Logger*
+        C++ pointer of Logger
+
+    """
+    cdef libfreenect2.Logger* ptr
+
+    def level(self):
+        """Same as ``Level level()``"""
+        return self.ptr.level()
+
+    def log(self, level, message):
+        """Same as ``void log(Level level, const std::string &messagge)``"""
+        self.ptr.log(level, message)
+
+
+def createConsoleLogger(level):
+    """Same as ``Logger* libfreenect2::createConsoleLogger(Level level)``
+
+    Parameters
+    ----------
+    level : pylibfreenect2.LoggerLevel
+        Logger level
+
+    Returns
+    -------
+    logger : Logger
+        Allocated logger
+
+    Examples
+    --------
+    .. code-block:: python
+
+        logger = pylibfreenect2.createConsoleLogger(
+            pylibfreenect2.LoggerLevel.Debug)
+
+    See also
+    --------
+
+    pylibfreenect2.LoggerLevel
+    pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel
+    """
+    cdef Logger logger = Logger()
+    logger.ptr = libfreenect2.createConsoleLogger(level)
+    return logger
+
+
+def createConsoleLoggerWithDefaultLevel():
+    """Same as ``Logger* libfreenect2::createConsoleLoggerWithDefaultLevel()``
+
+    Returns
+    -------
+    logger : Logger
+        Allocated logger
+
+    See also
+    --------
+
+    pylibfreenect2.libfreenect2.createConsoleLogger
+    """
+    cdef Logger logger = Logger()
+    cdef libfreenect2.Logger* ptr = libfreenect2.createConsoleLoggerWithDefaultLevel()
+    logger.ptr = <libfreenect2.Logger*>ptr
+    return logger
+
+
+def getGlobalLogger():
+    """Same as ``Logger* libfreenect2::getGlobalLogger()``"""
+    cdef Logger logger = Logger()
+    logger.ptr = libfreenect2.getGlobalLogger()
+    return logger
+
+
+def setGlobalLogger(Logger logger=None):
+    """Same as ``void libfreenect2::getGlobalLogger(Logger*)``
+
+    Parameters
+    ----------
+    logger : Logger
+        Python side instance for ``libfreenect2::Logger*``. If None,
+        ``setGlobalLogger(NULL)`` will be called, i.e. logging is disabled.
+        Default is None.
+
+    """
+    if logger is None:
+        libfreenect2.setGlobalLogger(NULL)
+    else:
+        libfreenect2.setGlobalLogger(logger.ptr)
 
 
 # MUST be declared before backend specific includes

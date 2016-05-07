@@ -1,12 +1,19 @@
 # coding: utf-8
 
 import numpy as np
+import sys
 
 from nose.tools import raises
 from nose.plugins.attrib import attr
 
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame, FrameMap
+from pylibfreenect2 import (Logger,
+                            createConsoleLogger,
+                            createConsoleLoggerWithDefaultLevel,
+                            getGlobalLogger,
+                            setGlobalLogger,
+                            LoggerLevel)
 
 
 def test_frame():
@@ -17,6 +24,31 @@ def test_frame():
     assert frame.exposure == 0
     assert frame.gain == 0
     assert frame.gamma == 0
+
+
+def test_logger():
+    logger_default = createConsoleLoggerWithDefaultLevel()
+    assert isinstance(logger_default, Logger)
+
+    for level in [LoggerLevel.NONE, LoggerLevel.Error,
+                  LoggerLevel.Warning,
+                  LoggerLevel.Info,
+                  LoggerLevel.Debug]:
+        logger = createConsoleLogger(level)
+        setGlobalLogger(logger)
+        assert getGlobalLogger().level() == level
+
+    # Turn logging off
+    setGlobalLogger(None)
+    # Set to default
+    setGlobalLogger(logger_default)
+
+    logger = getGlobalLogger()
+    if sys.version_info.major >= 3:
+        message = b"test debugging message"
+    else:
+        message = "test debugging message"
+    logger.log(LoggerLevel.Debug, message)
 
 
 def test_enumerateDevices():

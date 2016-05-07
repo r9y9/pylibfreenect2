@@ -5,6 +5,8 @@ import cv2
 import sys
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
+from pylibfreenect2 import createConsoleLogger, setGlobalLogger
+from pylibfreenect2 import LoggerLevel
 
 try:
     from pylibfreenect2 import OpenGLPacketPipeline
@@ -12,6 +14,10 @@ try:
 except:
     from pylibfreenect2 import CpuPacketPipeline
     pipeline = CpuPacketPipeline()
+
+# Create and set logger
+logger = createConsoleLogger(LoggerLevel.Debug)
+setGlobalLogger(logger)
 
 fn = Freenect2()
 num_devices = fn.enumerateDevices()
@@ -82,3 +88,5 @@ while True:
 
 device.stop()
 device.close()
+
+sys.exit(0)

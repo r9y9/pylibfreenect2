@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#frame-listeners">Frame Listeners</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#initialization-and-device-control">Initialization and Device Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#logging-utilities">Logging utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#packet-pipelines">Packet Pipelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#registration-and-geometry">Registration and Geometry</a></li>
 </ul>
@@ -141,7 +142,8 @@
 <span class="sd">    The value can be Color, Ir or Depth.</span>
 
 <span class="sd">    .. warning::</span>
-<span class="sd">        The name is slightly different between Python and C++.</span>
+<span class="sd">        The name is slightly different between Python and C++ (</span>
+<span class="sd">        ``Frame::Type`` -&gt; ``FrameType``).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -182,6 +184,44 @@
     <span class="n">Ir</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">Depth</span> <span class="o">=</span> <span class="mi">4</span>
 
+</div>
+<div class="viewcode-block" id="LoggerLevel"><a class="viewcode-back" href="../api.html#pylibfreenect2.LoggerLevel">[docs]</a><span class="k">class</span> <span class="nc">LoggerLevel</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Python-side enum for ``libfreenect::Logger::Level`` in C++.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        The name is slightly different between Python and C++ (</span>
+<span class="sd">        ``Logger::Level`` -&gt; ``LoggerLevel``).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Suppose the following C++ code:</span>
+
+<span class="sd">    .. code-block:: c++</span>
+
+<span class="sd">        libfreenect2::Logger* logger = libfreenect2::createConsoleLogger(</span>
+<span class="sd">            libfreenect2::Logger::Level::Debug);</span>
+
+
+<span class="sd">    This can be translated in Python like:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        logger = pylibfreenect2.createConsoleLogger(</span>
+<span class="sd">            pylibfreenect2.LoggerLevel.Debug)</span>
+
+
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    pylibfreenect2.libfreenect2.createConsoleLogger</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Error</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="ne">Warning</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">Info</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">Debug</span> <span class="o">=</span> <span class="mi">4</span>
 </div>
 <span class="kn">from</span> <span class="nn">.libfreenect2</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>

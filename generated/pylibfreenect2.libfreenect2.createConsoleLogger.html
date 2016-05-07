@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
+  <title>pylibfreenect2.libfreenect2.createConsoleLogger &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="../index.html"/> 
+    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="../index.html"/>
+        <link rel="up" title="API" href="../api.html"/>
+        <link rel="next" title="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel" href="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html"/>
+        <link rel="prev" title="pylibfreenect2.libfreenect2.setGlobalLogger" href="pylibfreenect2.libfreenect2.setGlobalLogger.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -71,11 +74,11 @@
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#frame-listeners">Frame Listeners</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#initialization-and-device-control">Initialization and Device Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#logging-utilities">Logging utilities</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#logging-utilities">Logging utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#packet-pipelines">Packet Pipelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#registration-and-geometry">Registration and Geometry</a></li>
 </ul>
@@ -104,8 +107,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Overview: module code</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+      
+    <li>pylibfreenect2.libfreenect2.createConsoleLogger</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/generated/pylibfreenect2.libfreenect2.createConsoleLogger.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -113,13 +120,55 @@
 </div>
           <div role="main" class="document">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="pylibfreenect2.html">pylibfreenect2</a></li>
-<ul><li><a href="pylibfreenect2/libfreenect2.html">pylibfreenect2.libfreenect2</a></li>
-</ul></ul>
+  <div class="section" id="pylibfreenect2-libfreenect2-createconsolelogger">
+<h1>pylibfreenect2.libfreenect2.createConsoleLogger<a class="headerlink" href="#pylibfreenect2-libfreenect2-createconsolelogger" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylibfreenect2.libfreenect2.createConsoleLogger">
+<code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">createConsoleLogger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.createConsoleLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">Logger*</span> <span class="pre">libfreenect2::createConsoleLogger(Level</span> <span class="pre">level)</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> : pylibfreenect2.LoggerLevel</p>
+<blockquote>
+<div><p>Logger level</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>logger</strong> : Logger</p>
+<blockquote class="last">
+<div><p>Allocated logger</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../api.html#pylibfreenect2.LoggerLevel" title="pylibfreenect2.LoggerLevel"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.LoggerLevel</span></code></a>, <a class="reference internal" href="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html#pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel" title="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">createConsoleLogger</span><span class="p">(</span>
+    <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">LoggerLevel</span><span class="o">.</span><span class="n">Debug</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html" class="btn btn-neutral float-right" title="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pylibfreenect2.libfreenect2.setGlobalLogger.html" class="btn btn-neutral" title="pylibfreenect2.libfreenect2.setGlobalLogger"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

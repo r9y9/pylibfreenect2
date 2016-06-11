@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pylibfreenect2 &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
+  <title>Getting started &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
   
 
   
@@ -30,8 +30,9 @@
   
 
   
-    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="#"/>
-        <link rel="next" title="Installation" href="installation.html"/> 
+    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="index.html"/>
+        <link rel="next" title="Developer Documentation" href="dev.html"/>
+        <link rel="prev" title="pylibfreenect2.libfreenect2.setGlobalLogger" href="generated/pylibfreenect2.libfreenect2.setGlobalLogger.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -46,7 +47,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
         
-          <a href="#" class="fa fa-home"> pylibfreenect2</a>
+          <a href="index.html" class="fa fa-home"> pylibfreenect2</a>
         
         
 <div role="search">
@@ -80,8 +81,8 @@
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting started</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting started</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a><ul>
@@ -101,7 +102,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">pylibfreenect2</a>
+        <a href="index.html">pylibfreenect2</a>
       </nav>
 
 
@@ -110,12 +111,12 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
+    <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>pylibfreenect2</li>
+    <li>Getting started</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          <a href="_sources/getstarted.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -123,69 +124,15 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="module-pylibfreenect2">
-<span id="pylibfreenect2"></span><h1>pylibfreenect2<a class="headerlink" href="#module-pylibfreenect2" title="Permalink to this headline">¶</a></h1>
-<p>A python interface for <a class="reference external" href="https://github.com/OpenKinect/libfreenect2">libfreenect2</a>.</p>
-<p><a class="reference external" href="https://github.com/r9y9/pylibfreenect2">https://github.com/r9y9/pylibfreenect2</a></p>
-<p>The package is compatible with python 2.7, 3.4 and 3.5.</p>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#supported-platforms">Supported platforms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#build-requirements">Build requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#building-pylibfreenect2">Building pylibfreenect2</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>See <a class="reference external" href="https://github.com/r9y9/pylibfreenect2/blob/master/examples/multiframe_listener.py">examples/multiframe_listener.py</a>.</p>
+<p>The example code demonstrates basic usage of pylibfreenect2. It requires a python binding of opencv for visualization.
+If you are using <a class="reference external" href="https://www.continuum.io/">Anaconda</a>, you can install it by:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>conda install opencv
+</pre></div>
 </div>
-</div>
-<div class="section" id="libfreenect2-documentation">
-<h2>libfreenect2 documentation<a class="headerlink" href="#libfreenect2-documentation" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://openkinect.github.io/libfreenect2/">https://openkinect.github.io/libfreenect2/</a></p>
-</div>
-<div class="section" id="python-api-documentation">
-<h2>Python API documentation<a class="headerlink" href="#python-api-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#frame-listeners">Frame Listeners</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#initialization-and-device-control">Initialization and Device Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#logging-utilities">Logging utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#packet-pipelines">Packet Pipelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#registration-and-geometry">Registration and Geometry</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="getting-started">
-<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting started</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="developer-documentation">
-<h2>Developer Documentation<a class="headerlink" href="#developer-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev.html#run-tests">Run tests</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
-</ul>
+<p>Have fun!</p>
 </div>
 
 
@@ -194,8 +141,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dev.html" class="btn btn-neutral float-right" title="Developer Documentation">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+      
+        <a href="generated/pylibfreenect2.libfreenect2.setGlobalLogger.html" class="btn btn-neutral" title="pylibfreenect2.libfreenect2.setGlobalLogger"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
+  <title>Installation &mdash; pylibfreenect2 0.0.1.dev0 documentation</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="index.html"/> 
+    <link rel="top" title="pylibfreenect2 0.0.1.dev0 documentation" href="index.html"/>
+        <link rel="next" title="API" href="api.html"/>
+        <link rel="prev" title="pylibfreenect2" href="index.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -49,7 +51,7 @@
         
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -61,11 +63,11 @@
         
           
           
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#supported-platforms">Supported platforms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#build-requirements">Build requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#building-pylibfreenect2">Building pylibfreenect2</a></li>
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-platforms">Supported platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-requirements">Build requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-pylibfreenect2">Building pylibfreenect2</a></li>
 </ul>
 </li>
 </ul>
@@ -111,8 +113,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Installation</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -120,22 +124,69 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="supported-platforms">
+<h2>Supported platforms<a class="headerlink" href="#supported-platforms" title="Permalink to this headline">¶</a></h2>
+<p>This package is tested with the following platforms:</p>
+<ul class="simple">
+<li>Mac OS X 10.11.4 with clang (Apple LLVM version 7.3.0) (locally)</li>
+<li>Ubuntu 14.04 with gcc 4.8.4 (Travis CI)</li>
+<li>Windows with Visual Studio 2015 x64 (AppVeyor CI, only for python 3.5)</li>
+</ul>
+<p>Others might be supported, but not guaranteed yet.</p>
+</div>
+<div class="section" id="build-requirements">
+<h2>Build requirements<a class="headerlink" href="#build-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/OpenKinect/libfreenect2">libfreenect2</a> (0.2.0 or later)</li>
+<li>python (2.7, 3.4 or 3.5)</li>
+<li>numpy</li>
+<li>cython</li>
+<li>C++ compiler (clang, gcc or MSVC)</li>
+</ul>
+</div>
+<div class="section" id="building-pylibfreenect2">
+<h2>Building pylibfreenect2<a class="headerlink" href="#building-pylibfreenect2" title="Permalink to this headline">¶</a></h2>
+<p>The package requires libfreenect2 installed and its location in advance. Please make sure that:</p>
+<ul class="simple">
+<li>You have installed <a class="reference external" href="https://github.com/OpenKinect/libfreenect2">libfreenect2</a> correctly and confirm that Protonect works.</li>
+<li>You have set <code class="docutils literal"><span class="pre">LIBFREENECT2_INSTALL_PREFIX</span></code> environmental variable (default: <code class="docutils literal"><span class="pre">/usr/local/</span></code>).</li>
+</ul>
+<p>After that, you should be able to install pylibfreenect2 as follows:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>pip install pylibfreenect2
+</pre></div>
+</div>
+<p>If you want the development version of pylibfreenect2,</p>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>pip install git+https://github.com/r9y9/pylibfreenect2
+</pre></div>
+</div>
+<p>or clone the repository and then:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>python setup.py install
+</pre></div>
+</div>
+<p>This should resolve the package dependencies and install <code class="docutils literal"><span class="pre">pylibfreenect2</span></code> property.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have installed libfreenect2 in your custom path (e.g. ~/freenect2),
+make sure that the libfreenect2 shared library is in your library search
+path (<code class="docutils literal"><span class="pre">DYLD_LIBRARY_PATH</span></code> for osx and <code class="docutils literal"><span class="pre">LD_LIBRARY_PATH</span></code> for linux).</p>
+</div>
+</div>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="pylibfreenect2"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -173,7 +224,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -189,14 +239,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

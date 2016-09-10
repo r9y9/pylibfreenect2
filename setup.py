@@ -34,7 +34,7 @@ else:
 if len(lib_candidates) == 0:
     raise OSError("libfreenect2 library cannot be found")
 
-min_cython_ver = '0.19.0'
+min_cython_ver = '0.21.0'
 try:
     import Cython
     ver = Cython.__version__

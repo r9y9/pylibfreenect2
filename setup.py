@@ -119,7 +119,7 @@ if sys.version_info < (3, 4):
 
 setup(
     name='pylibfreenect2',
-    version='0.1.1',
+    version='0.1.2-dev',
     description='A python interface for libfreenect2',
     author='Ryuichi Yamamoto',
     author_email='zryuichi@gmail.com',

@@ -68,11 +68,19 @@ def has_define_in_config(key, close_fds=None):
         else:
             close_fds = True
 
-    p = Popen("cat {0} | grep {1}".format(libfreenect2_configh_path, key),
-              stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=close_fds, shell=True)
-    p.wait()
-    lines = p.stdout.readlines()
-    if sys.version_info.major >= 3:
+    if platform.system() == "Windows":
+        lines = []
+        with open(libfreenect2_configh_path, 'r') as f:
+            for line in f:
+                if key in line:
+                    lines.append(line)
+    else:
+        p = Popen("cat {0} | grep {1}".format(libfreenect2_configh_path, key),
+                  stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=close_fds, shell=True)
+        p.wait()
+        lines = p.stdout.readlines()
+
+    if sys.version_info.major >= 3 and not platform.system() == "Windows":
         return len(lines) == 1 and lines[0].startswith(b"#define")
     else:
         return len(lines) == 1 and lines[0].startswith("#define")

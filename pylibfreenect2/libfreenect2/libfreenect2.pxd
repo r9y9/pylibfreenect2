@@ -100,6 +100,13 @@ cdef extern from "libfreenect2/registration.h" namespace "libfreenect2":
         # undistort/register a whole image
         void apply(const Frame*, const Frame*, Frame*, Frame*, const bool, Frame*, int*) const
 
+        # construct a 3-D point with color in a point cloud
+        void getPointXYZRGB(const Frame*, const Frame*, int, int, float&, float&, float&, float&) const
+
+        # construct a 3-D point in a point cloud
+        void getPointXYZ(const Frame*, int, int, float&, float&, float&) const
+
+
 cdef extern from "libfreenect2/packet_pipeline.h" namespace "libfreenect2":
     cdef cppclass PacketPipeline:
         PacketPipeline *getRgbPacketParser() const

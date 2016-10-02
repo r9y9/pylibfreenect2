@@ -781,6 +781,60 @@ cdef class Registration:
         self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
             enable_filter, bigdepth_ptr, color_depth_map_ptr)
 
+    def getPointXYZRGB(self, Frame undistored, Frame registered, r, c):
+        """Same as ``libfreenect2::Registration::getPointXYZRGB``.
+
+        Parameters
+        ----------
+        undistored : Frame
+            ``(512, 424)`` Undistorted depth frame
+
+        registered : Frame
+            ``(512, 424)`` Registered color frame
+
+        r : int
+            Row (y) index in depth image
+
+        c : int
+            Column (x) index in depth image.
+
+        Returns
+        -------
+        tuple : (X coordinate of the 3-D point (meter),
+                 Y coordinate of the 3-D point (meter),
+                 Z coordinate of the 3-D point (meter),
+                 rgb)
+
+        """
+        cdef float x, y, z, rgb
+        self.ptr.getPointXYZRGB(undistored.ptr, registered.ptr, r, c, x, y, z, rgb)
+        return (x, y, z, rgb)
+
+    def getPointXYZ(self, Frame undistored, r, c):
+        """Same as ``libfreenect2::Registration::getPointXYZ``.
+
+        Parameters
+        ----------
+        undistored : Frame
+            ``(512, 424)`` Undistorted depth frame
+
+        r : int
+            Row (y) index in depth image
+
+        c : int
+            Column (x) index in depth image.
+
+        Returns
+        -------
+        tuple : (X coordinate of the 3-D point (meter),
+                 Y coordinate of the 3-D point (meter),
+                 Z coordinate of the 3-D point (meter))
+
+        """
+        cdef float x, y, z
+        self.ptr.getPointXYZ(undistored.ptr, r, c, x, y, z)
+        return (x, y, z)
+
 
 cdef class Logger:
     """Python interface for libfreenect2::Logger

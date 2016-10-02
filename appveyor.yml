@@ -3,12 +3,6 @@ environment:
     - PYTHON_VERSION: "3.5"
       PYTHON_ARCH: "64"
       MINICONDA: C:\Miniconda3-x64
-      LIBFREENECT2_ARCHIVE_NAME: libfreenect2-0.1.0-vs2015-x64
-      LIBFREENECT2_VERSION: v0.1.0
-
-    - PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "64"
-      MINICONDA: C:\Miniconda3-x64
       LIBFREENECT2_ARCHIVE_NAME: libfreenect2-0.2.0-libusbk-vs2015-x64
       LIBFREENECT2_VERSION: v0.2.0
 

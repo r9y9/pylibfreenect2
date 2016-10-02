@@ -29,7 +29,7 @@ Python API documentation
 
     api
 
-Getting started
+Getting Started
 ***************
 
 .. toctree::

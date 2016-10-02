@@ -148,6 +148,13 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.map cimport map
 
+from libcpp.cast cimport reinterpret_cast
+from libc.stdint cimport uint8_t
+
+# Workaround for use of pointer type in reinterpret_cast
+# https://groups.google.com/forum/#!msg/cython-users/FgEf7Vrx4AM/dm7WY_bMCAAJ
+ctypedef uint8_t* uint8_pt
+
 # Import libfreenect2 definitions
 from libfreenect2 cimport libfreenect2
 
@@ -803,12 +810,15 @@ cdef class Registration:
         tuple : (X coordinate of the 3-D point (meter),
                  Y coordinate of the 3-D point (meter),
                  Z coordinate of the 3-D point (meter),
-                 rgb)
+                 B,
+                 G,
+                 R)
 
         """
-        cdef float x, y, z, rgb
+        cdef float x = 0, y = 0, z = 0, rgb = 0
         self.ptr.getPointXYZRGB(undistored.ptr, registered.ptr, r, c, x, y, z, rgb)
-        return (x, y, z, rgb)
+        cdef uint8_t* bgrptr = reinterpret_cast[uint8_pt](&rgb);
+        return (x, y, z, bgrptr[0], bgrptr[1], bgrptr[2])
 
     def getPointXYZ(self, Frame undistored, r, c):
         """Same as ``libfreenect2::Registration::getPointXYZ``.
@@ -831,7 +841,7 @@ cdef class Registration:
                  Z coordinate of the 3-D point (meter))
 
         """
-        cdef float x, y, z
+        cdef float x = 0, y = 0, z = 0
         self.ptr.getPointXYZ(undistored.ptr, r, c, x, y, z)
         return (x, y, z)
 

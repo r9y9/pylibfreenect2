@@ -156,5 +156,20 @@ def test_sync_multi_frame():
     for frame in [registered, undistorted]:
         yield raises(ValueError)(__test_cannot_determine_type_of_frame), frame
 
+    # getPointXYZ
+    x, y, z = registration.getPointXYZ(undistorted, 512 // 2, 424 // 2)
+    if not np.isnan([x, y, z]).any():
+        assert z > 0
+
+    # getPointXYZRGB
+    x, y, z, b, g, r = registration.getPointXYZRGB(undistorted, registered,
+                                                   512 // 2, 424 // 2)
+    if not np.isnan([x, y, z]).any():
+        assert z > 0
+    assert np.isfinite([b, g, r]).all()
+
+    for pix in [b, g, r]:
+        assert pix >= 0 and pix <= 255
+
     device.stop()
     device.close()

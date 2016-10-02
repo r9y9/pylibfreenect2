@@ -148,6 +148,13 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.map cimport map
 
+from libcpp.cast cimport reinterpret_cast
+from libc.stdint cimport uint8_t
+
+# Workaround for use of pointer type in reinterpret_cast
+# https://groups.google.com/forum/#!msg/cython-users/FgEf7Vrx4AM/dm7WY_bMCAAJ
+ctypedef uint8_t* uint8_pt
+
 # Import libfreenect2 definitions
 from libfreenect2 cimport libfreenect2
 
@@ -780,6 +787,63 @@ cdef class Registration:
 
         self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
             enable_filter, bigdepth_ptr, color_depth_map_ptr)
+
+    def getPointXYZRGB(self, Frame undistored, Frame registered, r, c):
+        """Same as ``libfreenect2::Registration::getPointXYZRGB``.
+
+        Parameters
+        ----------
+        undistored : Frame
+            ``(512, 424)`` Undistorted depth frame
+
+        registered : Frame
+            ``(512, 424)`` Registered color frame
+
+        r : int
+            Row (y) index in depth image
+
+        c : int
+            Column (x) index in depth image.
+
+        Returns
+        -------
+        tuple : (X coordinate of the 3-D point (meter),
+                 Y coordinate of the 3-D point (meter),
+                 Z coordinate of the 3-D point (meter),
+                 B,
+                 G,
+                 R)
+
+        """
+        cdef float x = 0, y = 0, z = 0, rgb = 0
+        self.ptr.getPointXYZRGB(undistored.ptr, registered.ptr, r, c, x, y, z, rgb)
+        cdef uint8_t* bgrptr = reinterpret_cast[uint8_pt](&rgb);
+        return (x, y, z, bgrptr[0], bgrptr[1], bgrptr[2])
+
+    def getPointXYZ(self, Frame undistored, r, c):
+        """Same as ``libfreenect2::Registration::getPointXYZ``.
+
+        Parameters
+        ----------
+        undistored : Frame
+            ``(512, 424)`` Undistorted depth frame
+
+        r : int
+            Row (y) index in depth image
+
+        c : int
+            Column (x) index in depth image.
+
+        Returns
+        -------
+        tuple : (X coordinate of the 3-D point (meter),
+                 Y coordinate of the 3-D point (meter),
+                 Z coordinate of the 3-D point (meter))
+
+        """
+        cdef float x = 0, y = 0, z = 0
+        self.ptr.getPointXYZ(undistored.ptr, r, c, x, y, z)
+        return (x, y, z)
 
 
 cdef class Logger:

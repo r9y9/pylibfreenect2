@@ -121,6 +121,9 @@ cdef extern from "libfreenect2/packet_pipeline.h" namespace "libfreenect2":
     cdef cppclass OpenCLPacketPipeline:
         OpenCLPacketPipeline(const int)
 
+    cdef cppclass OpenCLKdePacketPipeline:
+        OpenCLKdePacketPipeline(const int)
+
 
 cdef extern from "libfreenect2/libfreenect2.hpp" namespace "libfreenect2":
     cdef cppclass Freenect2:

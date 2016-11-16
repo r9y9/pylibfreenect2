@@ -16,6 +16,14 @@ Installation
 
     installation
 
+Getting Started
+***************
+
+.. toctree::
+    :maxdepth: 1
+
+    getstarted
+
 libfreenect2 documentation
 **************************
 
@@ -28,14 +36,6 @@ Python API documentation
     :maxdepth: 2
 
     api
-
-Getting Started
-***************
-
-.. toctree::
-    :maxdepth: 1
-
-    getstarted
 
 Developer Documentation
 ***********************

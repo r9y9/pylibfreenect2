@@ -27,7 +27,7 @@ Building pylibfreenect2
 The package requires libfreenect2 installed and its location in advance. Please make sure that:
 
 - You have installed `libfreenect2 <https://github.com/OpenKinect/libfreenect2>`_ correctly and confirm that Protonect works.
-- You have set ``LIBFREENECT2_INSTALL_PREFIX`` environmental variable (default: ``/usr/local/``).
+- You have set ``LIBFREENECT2_INSTALL_PREFIX`` environmental variable (default: ``/usr/local/``) and confirm that ``${LIBFREENECT2_INSTALL_PREFIX}include/libfreenect2/config.h`` exists.
 
 
 After that, you should be able to install pylibfreenect2 as follows:

@@ -10,4 +10,8 @@ A python interface for [libfreenect2](https://github.com/OpenKinect/libfreenect2
 
 ## Documentation
 
-See http://r9y9.github.io/pylibfreenect2/.
+- [**STABLE**][docs-stable-url] &mdash; **most recently tagged version of the documentation.**
+- [**LATEST**][docs-latest-url] &mdash; *in-development version of the documentation.*
+
+[docs-latest-url]: http://r9y9.github.io/pylibfreenect2/latest/
+[docs-stable-url]: http://r9y9.github.io/pylibfreenect2/stable/

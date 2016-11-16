@@ -1,0 +1,1277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; pylibfreenect2 0.1.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pylibfreenect2 0.1.1 documentation" href="index.html"/>
+        <link rel="next" title="pylibfreenect2.libfreenect2.createConsoleLogger" href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pylibfreenect2
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#frame-listeners">Frame Listeners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#frametype">FrameType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frame">Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#framemap">FrameMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#syncmultiframelistener">SyncMultiFrameListener</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#initialization-and-device-control">Initialization and Device Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#freenect2device">Freenect2Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#freenect2">Freenect2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colorcameraparams">ColorCameraParams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ircameraparams">IrCameraParams</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-utilities">Logging utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#loggerlevel">LoggerLevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logger">Logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html">pylibfreenect2.libfreenect2.createConsoleLogger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html">pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.getGlobalLogger.html">pylibfreenect2.libfreenect2.getGlobalLogger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.setGlobalLogger.html">pylibfreenect2.libfreenect2.setGlobalLogger</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#packet-pipelines">Packet Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#packetpipeline">PacketPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpupacketpipeline">CpuPacketPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openclpacketpipeline">OpenCLPacketPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openglpacketpipeline">OpenGLPacketPipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#registration-and-geometry">Registration and Geometry</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#registration">Registration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">pylibfreenect2</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/api.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-pylibfreenect2.libfreenect2"></span><div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Python API&#8217;s are designed to minimize differences in C++ and Python; i.e. all
+classes and methods should have the same name; function signatures should
+also be same as possible. For the slight differences, see below in details.</p>
+</div>
+<p>All functionality in <code class="docutils literal"><span class="pre">pylibfreenect2.libfreenect2</span></code> is directly accesible from
+the top-level <code class="docutils literal"><span class="pre">pylibfreenect2.*</span></code> namespace.</p>
+<p>The sections below are organized by following
+<a class="reference external" href="https://openkinect.github.io/libfreenect2/modules.html">the offical docs</a>.</p>
+<div class="section" id="frame-listeners">
+<h2>Frame Listeners<a class="headerlink" href="#frame-listeners" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="frametype">
+<h3>FrameType<a class="headerlink" href="#frametype" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.FrameType">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.</code><code class="descname">FrameType</code><a class="reference internal" href="_modules/pylibfreenect2.html#FrameType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylibfreenect2.FrameType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python-side enum for <code class="docutils literal"><span class="pre">libfreenect::Frame::Type</span></code> in C++.</p>
+<p>The value can be Color, Ir or Depth.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The name is slightly different between Python and C++ (
+<code class="docutils literal"><span class="pre">Frame::Type</span></code> -&gt; <code class="docutils literal"><span class="pre">FrameType</span></code>).</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Frame" title="pylibfreenect2.libfreenect2.Frame"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Frame</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.FrameMap" title="pylibfreenect2.libfreenect2.FrameMap"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.FrameMap</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener" title="pylibfreenect2.libfreenect2.SyncMultiFrameListener"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.SyncMultiFrameListener</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<p>Suppose the following C++ code:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span> <span class="o">*</span><span class="n">rgb</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span><span class="o">::</span><span class="n">Color</span><span class="p">];</span>
+<span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span> <span class="o">*</span><span class="n">ir</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span><span class="o">::</span><span class="n">Ir</span><span class="p">];</span>
+<span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span> <span class="o">*</span><span class="n">depth</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Frame</span><span class="o">::</span><span class="n">Depth</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>This can be translated in Python like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rgb</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameType</span><span class="o">.</span><span class="n">Color</span><span class="p">]</span>
+<span class="n">ir</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameType</span><span class="o">.</span><span class="n">Ir</span><span class="p">]</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameType</span><span class="o">.</span><span class="n">Depth</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>or you can use str key:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rgb</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span>
+<span class="n">ir</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="frame">
+<h3>Frame<a class="headerlink" href="#frame" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.Frame">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">Frame</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Frame</span></code>.</p>
+<p>The Frame is a container of the C++ pointer <code class="docutils literal"><span class="pre">libfreenect2::Frame*</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, Frame just keeps a pointer of <code class="docutils literal"><span class="pre">libfreenect2::Frame</span></code> that
+should be allocated and released by SyncMultiFrameListener (i.e. Frame
+itself doesn&#8217;t own the allocated memory) as in C++. However, if Frame is
+created by providing <code class="docutils literal"><span class="pre">width</span></code>, <code class="docutils literal"><span class="pre">height</span></code> and <code class="docutils literal"><span class="pre">bytes_per_pixel</span></code>, then
+it allocates necessary memory in <code class="docutils literal"><span class="pre">__cinit__</span></code> and release it in
+<code class="docutils literal"><span class="pre">__dealloc__</span></code> method.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>width</strong> : int, optional</p>
+<blockquote>
+<div><p>Width of Frame. Default is None.</p>
+</div></blockquote>
+<p><strong>height</strong> : int, optional</p>
+<blockquote>
+<div><p>Height of Frame. Default is None.</p>
+</div></blockquote>
+<p><strong>bytes_per_pixel</strong> : int, optional</p>
+<blockquote>
+<div><p>Bytes per pixels of Frame. Default is None.</p>
+</div></blockquote>
+<p><strong>frame_type</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Underlying frame type. Default is -1. Used by <code class="docutils literal"><span class="pre">asarray</span></code> method.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.FrameType" title="pylibfreenect2.FrameType"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.FrameType</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(libfreenect2::Frame*) Pointer of Frame.</td>
+</tr>
+<tr class="row-even"><td>take_ownership</td>
+<td>(bool) If True, the class instance allocates memory for Frame* and release it in <code class="docutils literal"><span class="pre">__dealloc__</span></code>. If <cite>width</cite>, <cite>height</cite> and <cite>bytes_per_pixel</cite> are given in <code class="docutils literal"><span class="pre">__cinit__</span></code>, which is necessary to allocate how much memory we need, <code class="docutils literal"><span class="pre">take_ownership</span></code> is set to True internally, otherwise False. Note that the value itself cannot be set by users.</td>
+</tr>
+<tr class="row-odd"><td>frame_type</td>
+<td>(int) Underlying frame type.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Frame.asarray">
+<code class="descname">asarray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.asarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frame to <code class="docutils literal"><span class="pre">numpy.ndarray</span></code> conversion</p>
+<p>Internal data of Frame can be represented as:</p>
+<ul class="simple">
+<li>3d array of <code class="docutils literal"><span class="pre">numpy.uint8</span></code> for color</li>
+<li>2d array of <code class="docutils literal"><span class="pre">numpy.float32</span></code> for IR and depth</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dtype</strong> : numpy dtype, optional</p>
+<blockquote>
+<div><p>Data type (<code class="docutils literal"><span class="pre">numpy.uint8</span></code> or <code class="docutils literal"><span class="pre">numpy.float32</span></code>). If None, data
+type is automatically selected if possible. Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>array</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, shape: <code class="docutils literal"><span class="pre">(height,</span> <span class="pre">width)</span></code> for IR and depth,</p>
+<p><code class="docutils literal"><span class="pre">(4,</span> <span class="pre">height,</span> <span class="pre">width)</span></code> for Color.</p>
+<blockquote>
+<div><p>Array of internal frame.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>If dtype is None and underlying frame type cannot be determined.</li>
+<li>If dtype neither <code class="docutils literal"><span class="pre">numpy.uint8</span></code> nor <code class="docutils literal"><span class="pre">numpy.float32</span></code> is specified</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rgb_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="n">ir_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;ir&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+<span class="n">depth_array</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">undistorted</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">registered</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">424</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">undistorted_arrray</span> <span class="o">=</span> <span class="n">undistorted</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">registered_array</span> <span class="o">=</span> <span class="n">registered</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.bytes_per_pixel">
+<code class="descname">bytes_per_pixel</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.bytes_per_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::bytes_per_pixel</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.exposure">
+<code class="descname">exposure</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::exposure</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.gain">
+<code class="descname">gain</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::gain</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.gamma">
+<code class="descname">gamma</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::gamma</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.height">
+<code class="descname">height</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::height</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.sequence">
+<code class="descname">sequence</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::sequence</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.timestamp">
+<code class="descname">timestamp</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::timestamp</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.Frame.width">
+<code class="descname">width</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Frame.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Frame::width</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="framemap">
+<h3>FrameMap<a class="headerlink" href="#framemap" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.FrameMap">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">FrameMap</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.FrameMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::FrameMap</span></code>.</p>
+<p>The FrameMap is a container of C++ value <code class="docutils literal"><span class="pre">libfreenect2::FrameMap</span></code> (aliased
+to <code class="docutils literal"><span class="pre">std::map&lt;libfreenect2::Frame::Type,libfreenect2::Frame*&gt;</span></code> in C++).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, FrameMap just keeps a reference of <code class="docutils literal"><span class="pre">libfreenect2::FrameMap</span></code>
+that should be allcoated and released by SyncMultiFrameListener (i.e.
+FrameMap itself doesn&#8217;t own the allocated memory) as in C++.</p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>internal_frame_map</td>
+<td>(std::map&lt;libfreenect2::Frame::Type, libfreenect2::Frame*&gt;) Internal FrameMap.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.FrameMap.__getitem__">
+<code class="descname">__getitem__</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.FrameMap.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get access to the internal FrameMap.</p>
+<p>This allows the following dict-like syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameType</span><span class="o">.</span><span class="n">Color</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">frames</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># with IntEnum value</span>
+</pre></div>
+</div>
+<p>The key can be of <code class="docutils literal"><span class="pre">FrameType</span></code> (a subclass of IntEnum), str or int type
+as shown above.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : <code class="docutils literal"><span class="pre">FrameType</span></code>, str or int</p>
+<blockquote>
+<div><p>Key for the internal FrameMap. available str keys are <code class="docutils literal"><span class="pre">color</span></code>,
+<code class="docutils literal"><span class="pre">ir</span></code> and <code class="docutils literal"><span class="pre">depth</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
+<blockquote>
+<div><p>Frame for the specified key.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>KeyError</strong></p>
+<blockquote class="last">
+<div><p>if unknown key is specified</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.FrameType" title="pylibfreenect2.FrameType"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.FrameType</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="syncmultiframelistener">
+<h3>SyncMultiFrameListener<a class="headerlink" href="#syncmultiframelistener" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.SyncMultiFrameListener">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">SyncMultiFrameListener</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener</span></code>.</p>
+<p>The SyncMultiFrameListener is a container of
+C++ pointer <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener*</span></code>. The pointer of
+SyncMultiFrameListener is allocated in <code class="docutils literal"><span class="pre">__cinit__</span></code> and released in
+<code class="docutils literal"><span class="pre">__dealloc__</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame_types</strong> : unsigned int, optional</p>
+<blockquote class="last">
+<div><p>Frame types that we want to listen. It can be logical OR of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">FrameType.Color</span></code></li>
+<li><code class="docutils literal"><span class="pre">FrameType.Ir</span></code></li>
+<li><code class="docutils literal"><span class="pre">FrameType.Depth</span></code></li>
+</ul>
+</div></blockquote>
+<p>Default is <code class="docutils literal"><span class="pre">FrameType.Color</span> <span class="pre">|</span> <span class="pre">FrameType.Ir</span> <span class="pre">|</span> <span class="pre">FrameType.Depth</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.FrameType" title="pylibfreenect2.FrameType"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.FrameType</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(libfreenect2.SyncMultiFrameListener*) Pointer of <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener</span></code></td>
+</tr>
+<tr class="row-even"><td>listener_ptr_alias</td>
+<td>(libfreenect2.FrameListener*) Pointer of <code class="docutils literal"><span class="pre">libfreenect2::FrameListener</span></code>. This is necessary to call methods that operate on <code class="docutils literal"><span class="pre">libfreenect2::FrameListener*</span></code>, not <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener</span></code>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.SyncMultiFrameListener.hasNewFrame">
+<code class="descname">hasNewFrame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener.hasNewFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener::hasNewFrame()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>r</strong> : Bool</p>
+<blockquote class="last">
+<div><p>True if SyncMultiFrameListener has a new frame, False otherwise.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.SyncMultiFrameListener.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener::release(Frame&amp;)</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame_map</strong> : FrameMap</p>
+<blockquote class="last">
+<div><p>FrameMap.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.SyncMultiFrameListener.waitForNewFrame">
+<code class="descname">waitForNewFrame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.SyncMultiFrameListener.waitForNewFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::SyncMultiFrameListener::waitForNewFrame(Frame&amp;)</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Function signature can be different between Python and C++.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame_map</strong> : FrameMap, optional</p>
+<blockquote>
+<div><p>If not None, SyncMultiFrameListener write to it inplace, otherwise
+a new FrameMap is allocated within the function and then returned.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>frame_map</strong> : FrameMap</p>
+<blockquote class="last">
+<div><p>FrameMap.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">FrameMap must be releaseed by call-side by calling <code class="docutils literal"><span class="pre">release</span></code>
+function.</p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Suppose the following C++ code:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">FrameMap</span> <span class="n">frames</span><span class="p">;</span>
+<span class="n">listener</span><span class="o">-&gt;</span><span class="n">waitForNewFrame</span><span class="p">(</span><span class="n">frames</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This can be translated in Python as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">frames</span> <span class="o">=</span> <span class="n">listener</span><span class="o">.</span><span class="n">waitForNewFrame</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or you can write it more similar to C++:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">frames</span> <span class="o">=</span> <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">FrameMap</span><span class="p">()</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">waitForNewFrame</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="initialization-and-device-control">
+<h2>Initialization and Device Control<a class="headerlink" href="#initialization-and-device-control" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="freenect2device">
+<h3>Freenect2Device<a class="headerlink" href="#freenect2device" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">Freenect2Device</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device</span></code>.</p>
+<p>The Freenect2Device is a container of C++ pointer
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device*</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Freenect2Device just keeps a pointer of
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device</span></code> that should be allocated and released
+by Freenect2. Freenect2Device itself doesn&#8217;t own the memory.</p>
+</div>
+<p>A valid device can be created by <code class="docutils literal"><span class="pre">openDefaultDevice</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">Freenect2</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">fn</span><span class="o">.</span><span class="n">enumerateDevices</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">openDefaultDevice</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or  by <code class="docutils literal"><span class="pre">openDevice</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">Freenect2</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">fn</span><span class="o">.</span><span class="n">enumerateDevices</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">serial</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">getDeviceSerialNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">openDevice</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2" title="pylibfreenect2.libfreenect2.Freenect2"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice" title="pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2.openDevice" title="pylibfreenect2.libfreenect2.Freenect2.openDevice"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2.openDevice</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device*</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::close()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams">
+<code class="descname">getColorCameraParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::getColorCameraParams()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.getFirmwareVersion">
+<code class="descname">getFirmwareVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.getFirmwareVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::getFirmwareVersion()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams">
+<code class="descname">getIrCameraParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::getIrCameraParams()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.getSerialNumber">
+<code class="descname">getSerialNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.getSerialNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::getSerialNumber()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.setColorFrameListener">
+<code class="descname">setColorFrameListener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.setColorFrameListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::setColorFrameListener(FrameListener*)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.setIrAndDepthFrameListener">
+<code class="descname">setIrAndDepthFrameListener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.setIrAndDepthFrameListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::setIrAndDepthFrameListener(FrameListener*)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::start()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::stop()</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="freenect2">
+<h3>Freenect2<a class="headerlink" href="#freenect2" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.Freenect2">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">Freenect2</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Freenect2</span></code>.</p>
+<p>The Freenect2 is a container of C++ pointer
+<code class="docutils literal"><span class="pre">libfreenect2::Freenect2*</span></code>. The pointer of Freenect2 is allocated
+in <code class="docutils literal"><span class="pre">__cinit__</span></code> and released in <code class="docutils literal"><span class="pre">__dealloc__</span></code> method.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device" title="pylibfreenect2.libfreenect2.Freenect2Device"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::Freenect2*</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2.enumerateDevices">
+<code class="descname">enumerateDevices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2.enumerateDevices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2::enumerateDevices()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2.getDefaultDeviceSerialNumber">
+<code class="descname">getDefaultDeviceSerialNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2.getDefaultDeviceSerialNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2::getDefaultDeviceSerialNumber()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2.getDeviceSerialNumber">
+<code class="descname">getDeviceSerialNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2.getDeviceSerialNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2::getDeviceSerialNumber(int)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice">
+<code class="descname">openDefaultDevice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2.openDefaultDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the first device</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pipeline</strong> : PacketPipeline, optional</p>
+<blockquote>
+<div><p>Pipeline. Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>device</strong> : Freenect2Device</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2.openDevice">
+<code class="descname">openDevice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2.openDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open device by serial number or index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : int or str</p>
+<blockquote>
+<div><p>Serial number (str) or device index (int)</p>
+</div></blockquote>
+<p><strong>pipeline</strong> : PacketPipeline, optional</p>
+<blockquote>
+<div><p>Pipeline. Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If invalid name is specified.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="colorcameraparams">
+<h3>ColorCameraParams<a class="headerlink" href="#colorcameraparams" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.ColorCameraParams">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">ColorCameraParams</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>params</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.ColorCameraParams.cx">
+<code class="descname">cx</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams.cx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams::cx</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.ColorCameraParams.cy">
+<code class="descname">cy</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams.cy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams::cy</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.ColorCameraParams.fx">
+<code class="descname">fx</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams.fx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams::fx</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.ColorCameraParams.fy">
+<code class="descname">fy</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.ColorCameraParams.fy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::ColorCameraParams::fy</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ircameraparams">
+<h3>IrCameraParams<a class="headerlink" href="#ircameraparams" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.IrCameraParams">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">IrCameraParams</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::IrCameraParams</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>params</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::IrCameraParams</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.IrCameraParams.cx">
+<code class="descname">cx</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams.cx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::IrCameraParams::cx</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.IrCameraParams.cy">
+<code class="descname">cy</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams.cy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::IrCameraParams::cy</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.IrCameraParams.fx">
+<code class="descname">fx</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams.fx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::IrCameraParams::fx</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylibfreenect2.libfreenect2.IrCameraParams.fy">
+<code class="descname">fy</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.IrCameraParams.fy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::IrCameraParams::fy</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="logging-utilities">
+<h2>Logging utilities<a class="headerlink" href="#logging-utilities" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="loggerlevel">
+<h3>LoggerLevel<a class="headerlink" href="#loggerlevel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.LoggerLevel">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.</code><code class="descname">LoggerLevel</code><a class="reference internal" href="_modules/pylibfreenect2.html#LoggerLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylibfreenect2.LoggerLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python-side enum for <code class="docutils literal"><span class="pre">libfreenect::Logger::Level</span></code> in C++.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The name is slightly different between Python and C++ (
+<code class="docutils literal"><span class="pre">Logger::Level</span></code> -&gt; <code class="docutils literal"><span class="pre">LoggerLevel</span></code>).</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html#pylibfreenect2.libfreenect2.createConsoleLogger" title="pylibfreenect2.libfreenect2.createConsoleLogger"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.createConsoleLogger</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<p>Suppose the following C++ code:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">libfreenect2</span><span class="o">::</span><span class="n">Logger</span><span class="o">*</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">libfreenect2</span><span class="o">::</span><span class="n">createConsoleLogger</span><span class="p">(</span>
+    <span class="n">libfreenect2</span><span class="o">::</span><span class="n">Logger</span><span class="o">::</span><span class="n">Level</span><span class="o">::</span><span class="n">Debug</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This can be translated in Python like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">createConsoleLogger</span><span class="p">(</span>
+    <span class="n">pylibfreenect2</span><span class="o">.</span><span class="n">LoggerLevel</span><span class="o">.</span><span class="n">Debug</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="logger">
+<h3>Logger<a class="headerlink" href="#logger" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.Logger">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">Logger</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for libfreenect2::Logger</p>
+<p>The Logger is a container of C++ pointer <code class="docutils literal"><span class="pre">libfreenect2::Logger*</span></code>.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(libfreenect2::Logger*) C++ pointer of Logger</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Logger.level">
+<code class="descname">level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Logger.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">Level</span> <span class="pre">level()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Logger.log">
+<code class="descname">log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Logger.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">void</span> <span class="pre">log(Level</span> <span class="pre">level,</span> <span class="pre">const</span> <span class="pre">std::string</span> <span class="pre">&amp;messagge)</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html#pylibfreenect2.libfreenect2.createConsoleLogger" title="pylibfreenect2.libfreenect2.createConsoleLogger"><code class="xref py py-obj docutils literal"><span class="pre">createConsoleLogger</span></code></a></td>
+<td>Same as <code class="docutils literal"><span class="pre">Logger*</span> <span class="pre">libfreenect2::createConsoleLogger(Level</span> <span class="pre">level)</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html#pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel" title="pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel"><code class="xref py py-obj docutils literal"><span class="pre">createConsoleLoggerWithDefaultLevel</span></code></a></td>
+<td>Same as <code class="docutils literal"><span class="pre">Logger*</span> <span class="pre">libfreenect2::createConsoleLoggerWithDefaultLevel()</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.getGlobalLogger.html#pylibfreenect2.libfreenect2.getGlobalLogger" title="pylibfreenect2.libfreenect2.getGlobalLogger"><code class="xref py py-obj docutils literal"><span class="pre">getGlobalLogger</span></code></a></td>
+<td>Same as <code class="docutils literal"><span class="pre">Logger*</span> <span class="pre">libfreenect2::getGlobalLogger()</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.setGlobalLogger.html#pylibfreenect2.libfreenect2.setGlobalLogger" title="pylibfreenect2.libfreenect2.setGlobalLogger"><code class="xref py py-obj docutils literal"><span class="pre">setGlobalLogger</span></code></a></td>
+<td>Same as <code class="docutils literal"><span class="pre">void</span> <span class="pre">libfreenect2::getGlobalLogger(Logger*)</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="packet-pipelines">
+<h2>Packet Pipelines<a class="headerlink" href="#packet-pipelines" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="packetpipeline">
+<h3>PacketPipeline<a class="headerlink" href="#packetpipeline" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.PacketPipeline">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">PacketPipeline</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.PacketPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for other pipeline classes.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.CpuPacketPipeline" title="pylibfreenect2.libfreenect2.CpuPacketPipeline"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.CpuPacketPipeline</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.OpenCLPacketPipeline" title="pylibfreenect2.libfreenect2.OpenCLPacketPipeline"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.OpenCLPacketPipeline</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.OpenGLPacketPipeline" title="pylibfreenect2.libfreenect2.OpenGLPacketPipeline"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.OpenGLPacketPipeline</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>pipeline_ptr_alias</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::PacketPipeline*</span></code>)</td>
+</tr>
+<tr class="row-even"><td>owened_by_device</td>
+<td>(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="cpupacketpipeline">
+<h3>CpuPacketPipeline<a class="headerlink" href="#cpupacketpipeline" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.CpuPacketPipeline">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">CpuPacketPipeline</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.CpuPacketPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pipeline with CPU depth processing.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>pipeline</td>
+<td>(<cite>libfreenect2::CpuPacketPipeline*</cite>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="openclpacketpipeline">
+<h3>OpenCLPacketPipeline<a class="headerlink" href="#openclpacketpipeline" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.OpenCLPacketPipeline">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">OpenCLPacketPipeline</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.OpenCLPacketPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pipeline with OpenCL depth processing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>device_id</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Device id. Default is -1.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>pipeline</td>
+<td>(<cite>libfreenect2::OpenCLPacketPipeline*</cite>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="openglpacketpipeline">
+<h3>OpenGLPacketPipeline<a class="headerlink" href="#openglpacketpipeline" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.OpenGLPacketPipeline">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">OpenGLPacketPipeline</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.OpenGLPacketPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pipeline with OpenGL depth processing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>debug</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Debugging mode. Default is False.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>pipeline</td>
+<td>(<cite>libfreenect2::OpenGLPacketPipeline*</cite>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="registration-and-geometry">
+<h2>Registration and Geometry<a class="headerlink" href="#registration-and-geometry" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="registration">
+<h3>Registration<a class="headerlink" href="#registration" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylibfreenect2.libfreenect2.Registration">
+<em class="property">class </em><code class="descclassname">pylibfreenect2.libfreenect2.</code><code class="descname">Registration</code><a class="headerlink" href="#pylibfreenect2.libfreenect2.Registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for <code class="docutils literal"><span class="pre">libfreenect2::Registration</span></code>.</p>
+<p>The Registration is a container of C++ pointer
+<code class="docutils literal"><span class="pre">libfreenect2::Registration*</span></code>. The pointer of Registration is allocated
+in <code class="docutils literal"><span class="pre">__cinit__</span></code> and released in <code class="docutils literal"><span class="pre">__dealloc__</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>irparams</strong> : IrCameraParams</p>
+<blockquote>
+<div><p>IR camera parameters.</p>
+</div></blockquote>
+<p><strong>cparams</strong> : ColorCameraParams</p>
+<blockquote class="last">
+<div><p>Color camera parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylibfreenect2.libfreenect2.IrCameraParams" title="pylibfreenect2.libfreenect2.IrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.IrCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.ColorCameraParams" title="pylibfreenect2.libfreenect2.ColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.ColorCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getIrCameraParams</span></code></a>, <a class="reference internal" href="#pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams" title="pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams"><code class="xref py py-obj docutils literal"><span class="pre">pylibfreenect2.libfreenect2.Freenect2Device.getColorCameraParams</span></code></a></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ptr</td>
+<td>(<code class="docutils literal"><span class="pre">libfreenect2::Registration*</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Registration.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Registration.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Registration::apply</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rgb</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(1920,</span> <span class="pre">1080)</span></code> color frame</p>
+</div></blockquote>
+<p><strong>depth</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> depth frame</p>
+</div></blockquote>
+<p><strong>undistored</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered depth frame</p>
+</div></blockquote>
+<p><strong>registered</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered color frame</p>
+</div></blockquote>
+<p><strong>enable_filter</strong> : Bool, optional</p>
+<p><strong>bigdepth</strong> : Frame, optional</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(1920,</span> <span class="pre">1082)</span></code> bigdepth frame</p>
+</div></blockquote>
+<p><strong>color_depth_map</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, optional</p>
+<blockquote>
+<div><p>Array of shape: <code class="docutils literal"><span class="pre">(424*512,)</span></code>, dtype <code class="docutils literal"><span class="pre">np.int32</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If invalid shape of frame/array is provided</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html" class="btn btn-neutral float-right" title="pylibfreenect2.libfreenect2.createConsoleLogger" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryuichi YAMAMOTO.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

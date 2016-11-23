@@ -9,8 +9,8 @@ from pylibfreenect2 import createConsoleLogger, setGlobalLogger
 from pylibfreenect2 import LoggerLevel
 
 try:
-    from pylibfreenect2 import OpenCLKdePacketPipeline
-    pipeline = OpenCLKdePacketPipeline()
+    from pylibfreenect2 import OpenCLPacketPipeline
+    pipeline = OpenCLPacketPipeline()
 except:
     from pylibfreenect2 import CpuPacketPipeline
     pipeline = CpuPacketPipeline()

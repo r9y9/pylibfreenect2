@@ -718,7 +718,7 @@ cdef class Registration:
         if self.ptr is not NULL:
             del self.ptr
 
-    def apply(self, Frame rgb, Frame depth, Frame undistored,
+    def apply(self, Frame rgb, Frame depth, Frame undistorted,
             Frame registered, enable_filter=True, Frame bigdepth=None,
             np.ndarray[np.int32_t, ndim=1, mode="c"] color_depth_map=None):
         """Same as ``libfreenect2::Registration::apply``.
@@ -731,7 +731,7 @@ cdef class Registration:
         depth : Frame
             ``(512, 424)`` depth frame
 
-        undistored : Frame
+        undistorted : Frame
             ``(512, 424)`` registered depth frame
 
         registered : Frame
@@ -759,10 +759,10 @@ cdef class Registration:
             raise ValueError(
                 "Shape of depth frame {}x{} is invalid. Expected 512x424.".format(
                 depth.width, depth.height))
-        if undistored.width != 512 or undistored.height != 424:
+        if undistorted.width != 512 or undistorted.height != 424:
             raise ValueError(
-                "Shape of undistored frame {}x{} is invalid. Expected 512x424.".format(
-                undistored.width, undistored.height))
+                "Shape of undistorted frame {}x{} is invalid. Expected 512x424.".format(
+                undistorted.width, undistorted.height))
         if registered.width != 512 or registered.height != 424:
             raise ValueError(
                 "Shape of registered frame {}x{} is invalid. Expected 512x424.".format(
@@ -782,7 +782,7 @@ cdef class Registration:
 
         assert rgb.take_ownership == False
         assert depth.take_ownership == False
-        assert undistored.take_ownership == True
+        assert undistorted.take_ownership == True
         assert registered.take_ownership == True
         assert bigdepth is None or bigdepth.take_ownership == True
 
@@ -791,15 +791,42 @@ cdef class Registration:
         cdef int* color_depth_map_ptr = <int*>(NULL) if color_depth_map is None \
             else <int*>(&color_depth_map[0])
 
-        self.ptr.apply(rgb.ptr, depth.ptr, undistored.ptr, registered.ptr,
+        self.ptr.apply(rgb.ptr, depth.ptr, undistorted.ptr, registered.ptr,
             enable_filter, bigdepth_ptr, color_depth_map_ptr)
 
-    def getPointXYZRGB(self, Frame undistored, Frame registered, r, c):
+    def undistortDepth(self, Frame depth, Frame undistorted):
+        """Same as ``libfreenect2::Registration::undistortDepth(bool, bool)``.
+
+        Parameters
+        ----------
+        depth : Frame
+            ``(512, 424)`` depth frame
+
+        undistorted : Frame
+            ``(512, 424)`` registered depth frame
+
+        Raises
+        ------
+        ValueError
+            If invalid shape of frame/array is provided
+        """
+
+        if depth.width != 512 or depth.height != 424:
+            raise ValueError(
+                "Shape of depth frame {}x{} is invalid. Expected 512x424.".format(
+                depth.width, depth.height))
+        if undistorted.width != 512 or undistorted.height != 424:
+            raise ValueError(
+                "Shape of undistorted frame {}x{} is invalid. Expected 512x424.".format(
+                undistorted.width, undistorted.height))
+        self.ptr.undistortDepth(depth.ptr, undistorted.ptr)
+
+    def getPointXYZRGB(self, Frame undistorted, Frame registered, r, c):
         """Same as ``libfreenect2::Registration::getPointXYZRGB``.
 
         Parameters
         ----------
-        undistored : Frame
+        undistorted : Frame
             ``(512, 424)`` Undistorted depth frame
 
         registered : Frame
@@ -822,16 +849,16 @@ cdef class Registration:
 
         """
         cdef float x = 0, y = 0, z = 0, rgb = 0
-        self.ptr.getPointXYZRGB(undistored.ptr, registered.ptr, r, c, x, y, z, rgb)
+        self.ptr.getPointXYZRGB(undistorted.ptr, registered.ptr, r, c, x, y, z, rgb)
         cdef uint8_t* bgrptr = reinterpret_cast[uint8_pt](&rgb);
         return (x, y, z, bgrptr[0], bgrptr[1], bgrptr[2])
 
-    def getPointXYZ(self, Frame undistored, r, c):
+    def getPointXYZ(self, Frame undistorted, r, c):
         """Same as ``libfreenect2::Registration::getPointXYZ``.
 
         Parameters
         ----------
-        undistored : Frame
+        undistorted : Frame
             ``(512, 424)`` Undistorted depth frame
 
         r : int
@@ -848,7 +875,7 @@ cdef class Registration:
 
         """
         cdef float x = 0, y = 0, z = 0
-        self.ptr.getPointXYZ(undistored.ptr, r, c, x, y, z)
+        self.ptr.getPointXYZ(undistorted.ptr, r, c, x, y, z)
         return (x, y, z)
 
 
@@ -1080,6 +1107,10 @@ cdef class Freenect2Device:
     def start(self):
         """Same as ``libfreenect2::Freenect2Device::start()``"""
         self.ptr.start()
+
+    def startStreams(self, rgb, depth):
+        """Same as ``libfreenect2::Freenect2Device::startStreams(bool, bool)``"""
+        self.ptr.startStreams(rgb, depth)
 
     def stop(self):
         """Same as ``libfreenect2::Freenect2Device::stop()``"""

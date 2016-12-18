@@ -70,6 +70,36 @@ def test_openDefaultDevice():
 
 
 @attr('require_device')
+def test_startStreams():
+    def __test(enable_rgb, enable_depth):
+        fn = Freenect2()
+        num_devices = fn.enumerateDevices()
+        assert num_devices > 0
+        device = fn.openDefaultDevice()
+
+        types = 0
+        if enable_rgb:
+            types |= FrameType.Color
+        if enable_depth:
+            types |= (FrameType.Ir | FrameType.Depth)
+        listener = SyncMultiFrameListener(types)
+
+        device.setColorFrameListener(listener)
+        device.setIrAndDepthFrameListener(listener)
+
+        device.startStreams(rgb=enable_rgb, depth=enable_depth)
+        # test if we can get one frame at least
+        frames = listener.waitForNewFrame()
+        listener.release(frames)
+
+        device.stop()
+        device.close()
+
+    __test(True, False)
+    __test(False, True)
+
+
+@attr('require_device')
 def test_sync_multi_frame():
     fn = Freenect2()
 
@@ -131,6 +161,8 @@ def test_sync_multi_frame():
     registration.apply(color, depth, undistorted, registered,
                        bigdepth=bigdepth,
                        color_depth_map=color_depth_map.ravel())
+
+    registration.undistortDepth(depth, undistorted)
 
     assert color.width == 1920
     assert color.height == 1080

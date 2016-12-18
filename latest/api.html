@@ -5,7 +5,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>API &mdash; pylibfreenect2 0.1.2.dev0 documentation</title>
@@ -15,6 +14,7 @@
   
 
   
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -35,7 +35,7 @@
         <link rel="prev" title="Getting started" href="getstarted.html"/> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
 </head>
 
@@ -45,27 +45,11 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="index.html" class="icon icon-home"> pylibfreenect2
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.1.2.dev0
-              </div>
-            
-          
-
-          
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> pylibfreenect2</a>
+        
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,71 +57,44 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+      </div>
 
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-            
-            
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#supported-platforms">Supported platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#build-requirements">Build requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#building-pylibfreenect2">Building pylibfreenect2</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting started</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#frame-listeners">Frame Listeners</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#frametype">FrameType</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#frame">Frame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#framemap">FrameMap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#syncmultiframelistener">SyncMultiFrameListener</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#initialization-and-device-control">Initialization and Device Control</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#freenect2device">Freenect2Device</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#freenect2">Freenect2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#colorcameraparams">ColorCameraParams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ircameraparams">IrCameraParams</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#logging-utilities">Logging utilities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#loggerlevel">LoggerLevel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#logger">Logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html">pylibfreenect2.libfreenect2.createConsoleLogger</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel.html">pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.getGlobalLogger.html">pylibfreenect2.libfreenect2.getGlobalLogger</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pylibfreenect2.libfreenect2.setGlobalLogger.html">pylibfreenect2.libfreenect2.setGlobalLogger</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#packet-pipelines">Packet Pipelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#packetpipeline">PacketPipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cpupacketpipeline">CpuPacketPipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#openclpacketpipeline">OpenCLPacketPipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#openclkdepacketpipeline">OpenCLKdePacketPipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#openglpacketpipeline">OpenGLPacketPipeline</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#registration-and-geometry">Registration and Geometry</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#registration">Registration</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#frame-listeners">Frame Listeners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialization-and-device-control">Initialization and Device Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-utilities">Logging utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#packet-pipelines">Packet Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registration-and-geometry">Registration and Geometry</a></li>
 </ul>
 </li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev.html#run-tests">Run tests</a></li>
+</ul>
+</li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -152,29 +109,20 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
     <li>API</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/api.txt" rel="nofollow"> View page source</a>
-          
+          <a href="_sources/api.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
   <span class="target" id="module-pylibfreenect2.libfreenect2"></span><div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
@@ -703,6 +651,12 @@ by Freenect2. Freenect2Device itself doesn&#8217;t own the memory.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Freenect2Device.startStreams">
+<code class="descname">startStreams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.startStreams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::startStreams(bool,</span> <span class="pre">bool)</span></code></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylibfreenect2.libfreenect2.Freenect2Device.stop">
 <code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Freenect2Device.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Freenect2Device::stop()</span></code></p>
@@ -1206,7 +1160,7 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 <blockquote>
 <div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> depth frame</p>
 </div></blockquote>
-<p><strong>undistored</strong> : Frame</p>
+<p><strong>undistorted</strong> : Frame</p>
 <blockquote>
 <div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered depth frame</p>
 </div></blockquote>
@@ -1243,7 +1197,7 @@ in <code class="docutils literal"><span class="pre">__cinit__</span></code> and 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>undistored</strong> : Frame</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>undistorted</strong> : Frame</p>
 <blockquote>
 <div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> Undistorted depth frame</p>
 </div></blockquote>
@@ -1276,7 +1230,7 @@ Z coordinate of the 3-D point (meter))</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>undistored</strong> : Frame</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>undistorted</strong> : Frame</p>
 <blockquote>
 <div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> Undistorted depth frame</p>
 </div></blockquote>
@@ -1308,6 +1262,34 @@ R)</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="pylibfreenect2.libfreenect2.Registration.undistortDepth">
+<code class="descname">undistortDepth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pylibfreenect2.libfreenect2.Registration.undistortDepth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <code class="docutils literal"><span class="pre">libfreenect2::Registration::undistortDepth(bool,</span> <span class="pre">bool)</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>depth</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> depth frame</p>
+</div></blockquote>
+<p><strong>undistorted</strong> : Frame</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(512,</span> <span class="pre">424)</span></code> registered depth frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If invalid shape of frame/array is provided</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -1315,16 +1297,15 @@ R)</p>
 </div>
 
 
-           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html" class="btn btn-neutral float-right" title="pylibfreenect2.libfreenect2.createConsoleLogger" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="generated/pylibfreenect2.libfreenect2.createConsoleLogger.html" class="btn btn-neutral float-right" title="pylibfreenect2.libfreenect2.createConsoleLogger">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="getstarted.html" class="btn btn-neutral" title="Getting started" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="getstarted.html" class="btn btn-neutral" title="Getting started"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1334,13 +1315,12 @@ R)</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Ryuichi YAMAMOTO.
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
 </footer>
-
         </div>
       </div>
 

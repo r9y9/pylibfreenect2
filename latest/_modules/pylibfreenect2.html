@@ -5,7 +5,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>pylibfreenect2 &mdash; pylibfreenect2 0.1.2.dev0 documentation</title>
@@ -15,6 +14,7 @@
   
 
   
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -34,7 +34,7 @@
         <link rel="up" title="Module code" href="index.html"/> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
 </head>
 
@@ -44,27 +44,11 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> pylibfreenect2
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.1.2.dev0
-              </div>
-            
-          
-
-          
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> pylibfreenect2</a>
+        
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,31 +56,44 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+      </div>
 
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-            
-            
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#supported-platforms">Supported platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#build-requirements">Build requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#building-pylibfreenect2">Building pylibfreenect2</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../getstarted.html">Getting started</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#frame-listeners">Frame Listeners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#initialization-and-device-control">Initialization and Device Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#logging-utilities">Logging utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#packet-pipelines">Packet Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#registration-and-geometry">Registration and Geometry</a></li>
+</ul>
+</li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developer Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev.html#run-tests">Run tests</a></li>
+</ul>
+</li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -111,13 +108,7 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
@@ -126,14 +117,11 @@
     <li>pylibfreenect2</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
   <h1>Source code for pylibfreenect2</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
@@ -202,9 +190,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Color</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">Ir</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">Depth</span> <span class="o">=</span> <span class="mi">4</span></div>
+    <span class="n">Depth</span> <span class="o">=</span> <span class="mi">4</span>
 
-
+</div>
 <div class="viewcode-block" id="LoggerLevel"><a class="viewcode-back" href="../api.html#pylibfreenect2.LoggerLevel">[docs]</a><span class="k">class</span> <span class="nc">LoggerLevel</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Python-side enum for ``libfreenect::Logger::Level`` in C++.</span>
 
@@ -241,12 +229,11 @@
     <span class="n">Error</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="ne">Warning</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">Info</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">Debug</span> <span class="o">=</span> <span class="mi">4</span></div>
-
+    <span class="n">Debug</span> <span class="o">=</span> <span class="mi">4</span>
+</div>
 <span class="kn">from</span> <span class="nn">.libfreenect2</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 
-           </div>
           </div>
           <footer>
   
@@ -256,13 +243,12 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Ryuichi YAMAMOTO.
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
 </footer>
-
         </div>
       </div>
 

@@ -5,7 +5,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Installation &mdash; pylibfreenect2 0.1.2.dev0 documentation</title>
@@ -15,6 +14,7 @@
   
 
   
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -35,7 +35,7 @@
         <link rel="prev" title="pylibfreenect2" href="index.html"/> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
 </head>
 
@@ -45,27 +45,11 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="index.html" class="icon icon-home"> pylibfreenect2
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.1.2.dev0
-              </div>
-            
-          
-
-          
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> pylibfreenect2</a>
+        
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,15 +57,13 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+      </div>
 
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-            
-            
-                <ul class="current">
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#supported-platforms">Supported platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-requirements">Build requirements</a></li>
@@ -93,16 +75,26 @@
 <li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting started</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#frame-listeners">Frame Listeners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#initialization-and-device-control">Initialization and Device Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#logging-utilities">Logging utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#packet-pipelines">Packet Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#registration-and-geometry">Registration and Geometry</a></li>
+</ul>
+</li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev.html#run-tests">Run tests</a></li>
+</ul>
+</li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -117,29 +109,20 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
     <li>Installation</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
-          
+          <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -193,16 +176,15 @@ path (<code class="docutils literal"><span class="pre">DYLD_LIBRARY_PATH</span><
 </div>
 
 
-           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getstarted.html" class="btn btn-neutral float-right" title="Getting started" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="getstarted.html" class="btn btn-neutral float-right" title="Getting started">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="pylibfreenect2" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="pylibfreenect2"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -212,13 +194,12 @@ path (<code class="docutils literal"><span class="pre">DYLD_LIBRARY_PATH</span><
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Ryuichi YAMAMOTO.
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
 </footer>
-
         </div>
       </div>
 

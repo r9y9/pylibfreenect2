@@ -85,6 +85,7 @@ def has_define_in_config(key, close_fds=None):
     else:
         return len(lines) == 1 and lines[0].startswith("#define")
 
+
 if platform.system() == "Darwin":
     extra_compile_args = ["-std=c++11", "-stdlib=libc++",
                           "-mmacosx-version-min=10.8"]
@@ -119,7 +120,7 @@ if sys.version_info < (3, 4):
 
 setup(
     name='pylibfreenect2',
-    version='0.1.2-dev',
+    version='0.1.2',
     description='A python interface for libfreenect2',
     author='Ryuichi Yamamoto',
     author_email='zryuichi@gmail.com',

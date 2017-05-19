@@ -1,1 +1,1 @@
-recursive-include pylibfreenect2 *.cpp *.pxd
+recursive-include pylibfreenect2 *.cpp *.pxd *.pyx *.pxi

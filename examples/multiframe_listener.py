@@ -9,12 +9,12 @@ from pylibfreenect2 import createConsoleLogger, setGlobalLogger
 from pylibfreenect2 import LoggerLevel
 
 try:
-    from pylibfreenect2 import OpenCLPacketPipeline
-    pipeline = OpenCLPacketPipeline()
+    from pylibfreenect2 import OpenGLPacketPipeline
+    pipeline = OpenGLPacketPipeline()
 except:
     try:
-        from pylibfreenect2 import OpenGLPacketPipeline
-        pipeline = OpenGLPacketPipeline()
+        from pylibfreenect2 import OpenCLPacketPipeline
+        pipeline = OpenCLPacketPipeline()
     except:
         from pylibfreenect2 import CpuPacketPipeline
         pipeline = CpuPacketPipeline()

@@ -641,21 +641,40 @@ cdef class ColorCameraParams:
         """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::fx``"""
         return self.params.fx
 
+    @fx.setter
+    def fx(self, value):
+        """Sets fx parameter"""
+        self.params.fx = value
+
     @property
     def fy(self):
         """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::fy``"""
         return self.params.fy
+
+    @fy.setter
+    def fy(self, value):
+        """Sets fy parameter"""
+        self.params.fy = value
 
     @property
     def cx(self):
         """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::cx``"""
         return self.params.cx
 
+    @cx.setter
+    def cx(self, value):
+        """Sets cx parameter"""
+        self.params.cx = value
+
     @property
     def cy(self):
         """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::cy``"""
         return self.params.cy
 
+    @cy.setter
+    def cy(self, value):
+        """Sets cx parameter"""
+        self.params.cy = value
 
 cdef class IrCameraParams:
     """Python interface for ``libfreenect2::IrCameraParams``.
@@ -675,20 +694,90 @@ cdef class IrCameraParams:
         """Same as ``libfreenect2::Freenect2Device::IrCameraParams::fx``"""
         return self.params.fx
 
+    @fx.setter
+    def fx(self, value):
+        """Sets fx parameter"""
+        self.params.fx = value
+
     @property
     def fy(self):
         """Same as ``libfreenect2::Freenect2Device::IrCameraParams::fy``"""
         return self.params.fy
+
+    @fy.setter
+    def fy(self, value):
+        """Sets fy parameter"""
+        self.params.fy = value
 
     @property
     def cx(self):
         """Same as ``libfreenect2::Freenect2Device::IrCameraParams::cx``"""
         return self.params.cx
 
+    @cx.setter
+    def cx(self, value):
+        """Sets cx parameter"""
+        self.params.cx = value
+
     @property
     def cy(self):
         """Same as ``libfreenect2::Freenect2Device::IrCameraParams::cy``"""
         return self.params.cy
+
+    @cy.setter
+    def cy(self, value):
+        """Sets cx parameter"""
+        self.params.cy = value
+
+    @property
+    def k1(self):
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::k1``"""
+        return self.params.k1
+
+    @k1.setter
+    def k1(self, value):
+        """Sets k1 parameter"""
+        self.params.k1 = value
+
+    @property
+    def k2(self):
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::k2``"""
+        return self.params.k2
+
+    @k2.setter
+    def k2(self, value):
+        """Sets k2 parameter"""
+        self.params.k2 = value
+
+    @property
+    def k3(self):
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::k3``"""
+        return self.params.k3
+
+    @k3.setter
+    def k3(self, value):
+        """Sets k3 parameter"""
+        self.params.k3 = value
+
+    @property
+    def p1(self):
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::p1``"""
+        return self.params.p1
+
+    @p1.setter
+    def p1(self, value):
+        """Sets p1 parameter"""
+        self.params.p1 = value
+
+    @property
+    def p2(self):
+        """Same as ``libfreenect2::Freenect2Device::IrCameraParams::p2``"""
+        return self.params.p2
+
+    @p2.setter
+    def p2(self, value):
+        """Sets p2 parameter"""
+        self.params.p2 = value
 
 cdef class Registration:
     """Python interface for ``libfreenect2::Registration``.

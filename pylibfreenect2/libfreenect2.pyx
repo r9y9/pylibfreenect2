@@ -217,6 +217,11 @@ cdef class Frame:
     frame_type : int, optional
         Underlying frame type. Default is -1. Used by ``asarray`` method.
 
+    byte_data : byte_data, optional
+        Numpy array of depth or ir data in byte format,
+        that will be converted to a frame class.
+        Use byte_data = numpy_array.tobytes('C') for conversion to bytes.
+        Default is None.
     See also
     --------
 
@@ -228,7 +233,7 @@ cdef class Frame:
     cdef int frame_type
 
     def __cinit__(self, width=None, height=None, bytes_per_pixel=None,
-            int frame_type=-1):
+            int frame_type=-1, byte_data=None):
         w,h,b = width, height, bytes_per_pixel
         all_none = (w is None) and (h is None) and (b is None)
         all_not_none = (w is not None) and (h is not None) and (b is not None)
@@ -238,7 +243,11 @@ cdef class Frame:
 
         if all_not_none:
             self.take_ownership = True
-            self.ptr = new libfreenect2.Frame(
+            if byte_data is not None:
+                self.ptr = new libfreenect2.Frame(
+                width, height, bytes_per_pixel, byte_data)
+            else:
+                self.ptr = new libfreenect2.Frame(
                 width, height, bytes_per_pixel, NULL)
         else:
             self.take_ownership = False

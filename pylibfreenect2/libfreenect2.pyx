@@ -221,6 +221,7 @@ cdef class Frame:
         Numpy array of depth or ir data with ndim=2,
         that will be converted to a frame class.
         Default is None.
+
     See also
     --------
 

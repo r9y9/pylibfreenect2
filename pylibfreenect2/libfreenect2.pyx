@@ -217,10 +217,9 @@ cdef class Frame:
     frame_type : int, optional
         Underlying frame type. Default is -1. Used by ``asarray`` method.
 
-    byte_data : byte_data, optional
-        Numpy array of depth or ir data in byte format,
+    numpy_array : numpy.ndarray, optional
+        Numpy array of depth or ir data with ndim=2,
         that will be converted to a frame class.
-        Use byte_data = numpy_array.tobytes('C') for conversion to bytes.
         Default is None.
     See also
     --------
@@ -233,7 +232,7 @@ cdef class Frame:
     cdef int frame_type
 
     def __cinit__(self, width=None, height=None, bytes_per_pixel=None,
-            int frame_type=-1, byte_data=None):
+            int frame_type=-1, np.ndarray[np.float32_t, ndim=2, mode="c"] numpy_array=None):
         w,h,b = width, height, bytes_per_pixel
         all_none = (w is None) and (h is None) and (b is None)
         all_not_none = (w is not None) and (h is not None) and (b is not None)
@@ -243,14 +242,20 @@ cdef class Frame:
 
         if all_not_none:
             self.take_ownership = True
-            if byte_data is not None:
+            if numpy_array is None:
                 self.ptr = new libfreenect2.Frame(
-                width, height, bytes_per_pixel, byte_data)
+                    width, height, bytes_per_pixel, NULL)
             else:
-                self.ptr = new libfreenect2.Frame(
-                width, height, bytes_per_pixel, NULL)
+                self.__instantiate_frame_with_bytes(
+                    width, height, bytes_per_pixel, numpy_array.reshape(-1))
         else:
             self.take_ownership = False
+
+    cdef __instantiate_frame_with_bytes(self, int width, int height,
+        int bytes_per_pixel, np.ndarray[np.float32_t, ndim=1, mode="c"] numpy_array):
+        cdef uint8_t* bytes_ptr = reinterpret_cast[uint8_pt](&numpy_array[0])
+        self.ptr = new libfreenect2.Frame(
+            width, height, bytes_per_pixel, bytes_ptr)
 
     def __dealloc__(self):
         if self.take_ownership and self.ptr is not NULL:

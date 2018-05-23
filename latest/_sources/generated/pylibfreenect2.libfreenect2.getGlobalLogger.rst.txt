@@ -1,0 +1,6 @@
+pylibfreenect2.libfreenect2.getGlobalLogger
+===========================================
+
+.. currentmodule:: pylibfreenect2.libfreenect2
+
+.. autofunction:: getGlobalLogger

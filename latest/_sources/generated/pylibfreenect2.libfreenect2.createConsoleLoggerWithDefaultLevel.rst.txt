@@ -1,0 +1,6 @@
+pylibfreenect2.libfreenect2.createConsoleLoggerWithDefaultLevel
+===============================================================
+
+.. currentmodule:: pylibfreenect2.libfreenect2
+
+.. autofunction:: createConsoleLoggerWithDefaultLevel

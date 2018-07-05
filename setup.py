@@ -13,8 +13,7 @@ from os.path import join, exists
 from subprocess import Popen, PIPE
 import sys
 
-libfreenect2_install_prefix = os.environ.get(
-    "LIBFREENECT2_INSTALL_PREFIX", "/usr/local/")
+libfreenect2_install_prefix = os.environ.get("LIBFREENECT2_INSTALL_PREFIX", "/usr/local/freenect2/")
 
 libfreenect2_include_top = join(libfreenect2_install_prefix, "include")
 libfreenect2_library_path = join(libfreenect2_install_prefix, "lib")

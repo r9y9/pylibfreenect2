@@ -613,7 +613,8 @@ cdef class SyncMultiFrameListener(FrameListener):
         """
         if frame_map is None:
             frame_map = FrameMap(take_ownership=False)
-        self.ptr.waitForNewFrame(frame_map.internal_frame_map)
+        with nogil:
+            self.ptr.waitForNewFrame(frame_map.internal_frame_map)
         return frame_map
 
 

@@ -683,6 +683,249 @@ cdef class ColorCameraParams:
         """Sets cx parameter"""
         self.params.cy = value
 
+    @property
+    def shift_d(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::shift_d``"""
+        return self.params.shift_d
+
+    @shift_d.setter
+    def shift_d(self, value):
+        """Sets shift_d parameter"""
+        self.params.shift_d = value
+
+
+    @property
+    def shift_m(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::shift_m``"""
+        return self.params.shift_m
+
+    @shift_m.setter
+    def shift_m(self, value):
+        """Sets shift_m parameter"""
+        self.params.shift_m = value
+
+
+    @property
+    def mx_x3y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x3y0``"""
+        return self.params.mx_x3y0
+
+    @mx_x3y0.setter
+    def mx_x3y0(self, value):
+        """Sets mx_x3y0 parameter"""
+        self.params.mx_x3y0 = value
+
+
+    @property
+    def mx_x0y3(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x0y3``"""
+        return self.params.mx_x0y3
+
+    @mx_x0y3.setter
+    def mx_x0y3(self, value):
+        """Sets mx_x0y3 parameter"""
+        self.params.mx_x0y3 = value
+
+
+    @property
+    def mx_x2y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x2y1``"""
+        return self.params.mx_x2y1
+
+    @mx_x2y1.setter
+    def mx_x2y1(self, value):
+        """Sets mx_x2y1 parameter"""
+        self.params.mx_x2y1 = value
+
+
+    @property
+    def mx_x1y2(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x1y2``"""
+        return self.params.mx_x1y2
+
+    @mx_x1y2.setter
+    def mx_x1y2(self, value):
+        """Sets mx_x1y2 parameter"""
+        self.params.mx_x1y2 = value
+
+
+    @property
+    def mx_x2y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x2y0``"""
+        return self.params.mx_x2y0
+
+    @mx_x2y0.setter
+    def mx_x2y0(self, value):
+        """Sets mx_x2y0 parameter"""
+        self.params.mx_x2y0 = value
+
+
+    @property
+    def mx_x0y2(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x0y2``"""
+        return self.params.mx_x0y2
+
+    @mx_x0y2.setter
+    def mx_x0y2(self, value):
+        """Sets mx_x0y2 parameter"""
+        self.params.mx_x0y2 = value
+
+
+    @property
+    def mx_x1y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x1y1``"""
+        return self.params.mx_x1y1
+
+    @mx_x1y1.setter
+    def mx_x1y1(self, value):
+        """Sets mx_x1y1 parameter"""
+        self.params.mx_x1y1 = value
+
+
+    @property
+    def mx_x1y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x1y0``"""
+        return self.params.mx_x1y0
+
+    @mx_x1y0.setter
+    def mx_x1y0(self, value):
+        """Sets mx_x1y0 parameter"""
+        self.params.mx_x1y0 = value
+
+
+    @property
+    def mx_x0y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x0y1``"""
+        return self.params.mx_x0y1
+
+    @mx_x0y1.setter
+    def mx_x0y1(self, value):
+        """Sets mx_x0y1 parameter"""
+        self.params.mx_x0y1 = value
+
+
+    @property
+    def mx_x0y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::mx_x0y0``"""
+        return self.params.mx_x0y0
+
+    @mx_x0y0.setter
+    def mx_x0y0(self, value):
+        """Sets mx_x0y0 parameter"""
+        self.params.mx_x0y0 = value
+
+
+    @property
+    def my_x3y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x3y0``"""
+        return self.params.my_x3y0
+
+    @my_x3y0.setter
+    def my_x3y0(self, value):
+        """Sets my_x3y0 parameter"""
+        self.params.my_x3y0 = value
+
+
+    @property
+    def my_x0y3(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x0y3``"""
+        return self.params.my_x0y3
+
+    @my_x0y3.setter
+    def my_x0y3(self, value):
+        """Sets my_x0y3 parameter"""
+        self.params.my_x0y3 = value
+
+
+    @property
+    def my_x2y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x2y1``"""
+        return self.params.my_x2y1
+
+    @my_x2y1.setter
+    def my_x2y1(self, value):
+        """Sets my_x2y1 parameter"""
+        self.params.my_x2y1 = value
+
+
+    @property
+    def my_x1y2(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x1y2``"""
+        return self.params.my_x1y2
+
+    @my_x1y2.setter
+    def my_x1y2(self, value):
+        """Sets my_x1y2 parameter"""
+        self.params.my_x1y2 = value
+
+
+    @property
+    def my_x2y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x2y0``"""
+        return self.params.my_x2y0
+
+    @my_x2y0.setter
+    def my_x2y0(self, value):
+        """Sets my_x2y0 parameter"""
+        self.params.my_x2y0 = value
+
+
+    @property
+    def my_x0y2(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x0y2``"""
+        return self.params.my_x0y2
+
+    @my_x0y2.setter
+    def my_x0y2(self, value):
+        """Sets my_x0y2 parameter"""
+        self.params.my_x0y2 = value
+
+
+    @property
+    def my_x1y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x1y1``"""
+        return self.params.my_x1y1
+
+    @my_x1y1.setter
+    def my_x1y1(self, value):
+        """Sets my_x1y1 parameter"""
+        self.params.my_x1y1 = value
+
+
+    @property
+    def my_x1y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x1y0``"""
+        return self.params.my_x1y0
+
+    @my_x1y0.setter
+    def my_x1y0(self, value):
+        """Sets my_x1y0 parameter"""
+        self.params.my_x1y0 = value
+
+
+    @property
+    def my_x0y1(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x0y1``"""
+        return self.params.my_x0y1
+
+    @my_x0y1.setter
+    def my_x0y1(self, value):
+        """Sets my_x0y1 parameter"""
+        self.params.my_x0y1 = value
+
+
+    @property
+    def my_x0y0(self):
+        """Same as ``libfreenect2::Freenect2Device::ColorCameraParams::my_x0y0``"""
+        return self.params.my_x0y0
+
+    @my_x0y0.setter
+    def my_x0y0(self, value):
+        """Sets my_x0y0 parameter"""
+        self.params.my_x0y0 = value
+
+
+
 cdef class IrCameraParams:
     """Python interface for ``libfreenect2::IrCameraParams``.
 

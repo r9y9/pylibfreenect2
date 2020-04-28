@@ -39,6 +39,7 @@ cdef extern from "libfreenect2/frame_listener_impl.h" namespace "libfreenect2":
 
         bool hasNewFrame()
         void waitForNewFrame(map[LibFreenect2FrameType, Frame*]&) nogil
+        bool waitForNewFrame(map[LibFreenect2FrameType, Frame*]&, int milliseconds) nogil
         void release(map[LibFreenect2FrameType, Frame*]&)
 
 cdef extern from "libfreenect2/libfreenect2.hpp" namespace "libfreenect2":

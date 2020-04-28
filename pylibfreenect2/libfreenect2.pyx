@@ -565,7 +565,7 @@ cdef class SyncMultiFrameListener(FrameListener):
         """
         return self.ptr.hasNewFrame()
 
-    def waitForNewFrame(self, FrameMap frame_map=None):
+    def waitForNewFrame(self, FrameMap frame_map=None, int milliseconds=-1):
         """Same as ``libfreenect2::SyncMultiFrameListener::waitForNewFrame(Frame&)``.
 
         .. warning::
@@ -578,10 +578,14 @@ cdef class SyncMultiFrameListener(FrameListener):
             If not None, SyncMultiFrameListener write to it inplace, otherwise
             a new FrameMap is allocated within the function and then returned.
 
+        milliseconds : int, optional
+            If >= 0, a timeout is set for getting the new frame. In case the
+            new frame did not arrive beore the timeout, None will be returned.
+
         Returns
         -------
         frame_map : FrameMap
-            FrameMap.
+            FrameMap, or None if timeout exceeded.
 
             .. note::
                 FrameMap must be releaseed by call-side by calling ``release``
@@ -609,14 +613,39 @@ cdef class SyncMultiFrameListener(FrameListener):
 
             frames = pylibfreenect2.FrameMap()
             listener.waitForNewFrame(frames)
+        
+        Example with millisecond timeout:
+
+        .. code-block:: python
+
+            frames = listener.waitForNewFrame(milliseconds=50)
+            if frames:
+                # frames should be set to a value.
+            else:
+                # Timeout happened.
 
         """
+        frame_map_owned = False
         if frame_map is None:
+            frame_map_owned = True
             frame_map = FrameMap(take_ownership=False)
-        with nogil:
-            self.ptr.waitForNewFrame(frame_map.internal_frame_map)
-        return frame_map
 
+        cdef bool frame_map_set = True
+        with nogil:
+            if milliseconds >= 0:
+                frame_map_set = self.ptr.waitForNewFrame(
+                        frame_map.internal_frame_map, milliseconds)
+            else:
+                self.ptr.waitForNewFrame(frame_map.internal_frame_map)
+
+        if frame_map_set:
+            return frame_map
+
+        # The timeout happened. We should clean up if we allocated frame_map and
+        # return None.
+        if frame_map_owned:
+            self.release(frame_map)
+        return None
 
     def release(self, FrameMap frame_map):
         """Same as ``libfreenect2::SyncMultiFrameListener::release(Frame&)``.

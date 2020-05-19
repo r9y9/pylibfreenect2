@@ -111,6 +111,8 @@ ext_modules = cythonize(
         has_define_in_config("LIBFREENECT2_WITH_OPENGL_SUPPORT"),
         "LIBFREENECT2_WITH_OPENCL_SUPPORT":
         has_define_in_config("LIBFREENECT2_WITH_OPENCL_SUPPORT"),
+        "LIBFREENECT2_WITH_CUDA_SUPPORT":
+        has_define_in_config("LIBFREENECT2_WITH_CUDA_SUPPORT"),
     }
 )
 

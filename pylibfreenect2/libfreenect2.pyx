@@ -619,7 +619,7 @@ cdef class SyncMultiFrameListener(FrameListener):
 
             frames = pylibfreenect2.FrameMap()
             listener.waitForNewFrame(frames)
-        
+
         Example with millisecond timeout:
 
         .. code-block:: python
@@ -1407,7 +1407,7 @@ IF LIBFREENECT2_WITH_OPENGL_SUPPORT == True:
 
 IF LIBFREENECT2_WITH_OPENCL_SUPPORT == True:
     include "opencl_packet_pipeline.pxi"
-    # include "opencl_kde_packet_pipeline.pxi"
+    include "opencl_kde_packet_pipeline.pxi"
 
 IF LIBFREENECT2_WITH_CUDA_SUPPORT == True:
     include "cuda_packet_pipeline.pxi"

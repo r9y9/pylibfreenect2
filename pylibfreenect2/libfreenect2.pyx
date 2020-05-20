@@ -132,6 +132,12 @@ OpenGLPacketPipeline
 .. autoclass:: OpenGLPacketPipeline
     :members:
 
+CudaPacketPipeline
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: CudaPacketPipeline
+    :members:
+
 Registration and Geometry
 -------------------------
 
@@ -1368,6 +1374,7 @@ cdef class PacketPipeline:
     pylibfreenect2.libfreenect2.OpenCLPacketPipeline
     pylibfreenect2.libfreenect2.OpenCLKdePacketPipeline
     pylibfreenect2.libfreenect2.OpenGLPacketPipeline
+    pylibfreenect2.libfreenect2.CudaPacketPipeline
     """
     cdef libfreenect2.PacketPipeline* pipeline_ptr_alias
 
@@ -1401,6 +1408,9 @@ IF LIBFREENECT2_WITH_OPENGL_SUPPORT == True:
 IF LIBFREENECT2_WITH_OPENCL_SUPPORT == True:
     include "opencl_packet_pipeline.pxi"
     # include "opencl_kde_packet_pipeline.pxi"
+
+IF LIBFREENECT2_WITH_CUDA_SUPPORT == True:
+    include "cuda_packet_pipeline.pxi"
 
 cdef class Freenect2Device:
     """Python interface for ``libfreenect2::Freenect2Device``.

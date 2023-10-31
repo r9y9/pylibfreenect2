@@ -168,7 +168,7 @@ from libc.stdint cimport uint8_t
 ctypedef uint8_t* uint8_pt
 
 # Import libfreenect2 definitions
-from libfreenect2 cimport libfreenect2
+from .libfreenect2 cimport libfreenect2
 
 # A workaround to access nested cppclass that externed in a separate namespace.
 # Nested cppclass Freenect2Device::ColorCameraParams cannot be accesed
@@ -177,7 +177,7 @@ from libfreenect2 cimport libfreenect2
 #  Freenect2Device as _Freenect2Device (to avoid name conflict) and use
 # `_Freenect2Device.ColorCameraParams` to access nested cppclass
 # ColorCameraParams.
-from libfreenect2.libfreenect2 cimport Freenect2Device as _Freenect2Device
+from .libfreenect2.libfreenect2 cimport Freenect2Device as _Freenect2Device
 
 from pylibfreenect2 import FrameType
 

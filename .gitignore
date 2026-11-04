@@ -43,7 +43,7 @@ htmlcov/
 .tox/
 .coverage
 .cache
-nosetests.xml
+.pytest_cache/
 coverage.xml
 
 # Translations

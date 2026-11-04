@@ -32,7 +32,7 @@ classifiers = [
 
 [project.optional-dependencies]
 docs = ["numpydoc", "sphinx_rtd_theme", "seaborn"]
-test = ["nose"]
+test = ["pytest"]
 
 [project.urls]
 Homepage = "https://github.com/r9y9/pylibfreenect2"
@@ -45,3 +45,9 @@ pylibfreenect2 = ["*.pyx", "*.pxi", "*.pxd", "libfreenect2/*.pxd"]
 
 [tool.setuptools.exclude-package-data]
 pylibfreenect2 = ["*.cpp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "require_device: needs a Kinect v2 connected (deselect with -m 'not require_device')",
+]

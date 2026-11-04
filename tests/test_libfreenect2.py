@@ -1,10 +1,5 @@
-# coding: utf-8
-
 import numpy as np
-import sys
-
-from nose.tools import raises
-from nose.plugins.attrib import attr
+import pytest
 
 from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame, FrameMap
@@ -44,11 +39,7 @@ def test_logger():
     setGlobalLogger(logger_default)
 
     logger = getGlobalLogger()
-    if sys.version_info.major >= 3:
-        message = b"test debugging message"
-    else:
-        message = "test debugging message"
-    logger.log(LoggerLevel.Debug, message)
+    logger.log(LoggerLevel.Debug, b"test debugging message")
 
 
 def test_enumerateDevices():
@@ -56,7 +47,7 @@ def test_enumerateDevices():
     fn.enumerateDevices()
 
 
-@attr('require_device')
+@pytest.mark.require_device
 def test_openDefaultDevice():
     fn = Freenect2()
 
@@ -69,7 +60,7 @@ def test_openDefaultDevice():
     device.close()
 
 
-@attr('require_device')
+@pytest.mark.require_device
 def test_startStreams():
     def __test(enable_rgb, enable_depth):
         fn = Freenect2()
@@ -99,7 +90,7 @@ def test_startStreams():
     __test(False, True)
 
 
-@attr('require_device')
+@pytest.mark.require_device
 def test_sync_multi_frame():
     fn = Freenect2()
 
@@ -182,11 +173,10 @@ def test_sync_multi_frame():
 
     listener.release(frames)
 
-    def __test_cannot_determine_type_of_frame(frame):
-        frame.asarray()
-
+    # frame type cannot be determined for frames we allocated ourselves
     for frame in [registered, undistorted]:
-        yield raises(ValueError)(__test_cannot_determine_type_of_frame), frame
+        with pytest.raises(ValueError):
+            frame.asarray()
 
     # getPointXYZ
     x, y, z = registration.getPointXYZ(undistorted, 512 // 2, 424 // 2)

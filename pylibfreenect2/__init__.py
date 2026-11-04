@@ -11,9 +11,12 @@ The package is compatible with python 2.7, 3.4 and 3.5.
 
 from __future__ import division, print_function, absolute_import
 
-import pkg_resources
+from importlib.metadata import PackageNotFoundError, version
 
-__version__ = pkg_resources.get_distribution('pylibfreenect2').version
+try:
+    __version__ = version('pylibfreenect2')
+except PackageNotFoundError:  # running from a source tree without metadata
+    __version__ = 'unknown'
 
 from enum import IntEnum
 

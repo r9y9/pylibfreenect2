@@ -28,6 +28,7 @@ classifiers = [
     "Topic :: Software Development",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
+    "Typing :: Typed",
 ]
 
 [project.optional-dependencies]
@@ -41,7 +42,7 @@ Homepage = "https://github.com/r9y9/pylibfreenect2"
 packages = ["pylibfreenect2"]
 
 [tool.setuptools.package-data]
-pylibfreenect2 = ["*.pyx", "*.pxi", "*.pxd", "libfreenect2/*.pxd"]
+pylibfreenect2 = ["*.pyx", "*.pxi", "*.pxd", "libfreenect2/*.pxd", "*.pyi", "py.typed"]
 
 [tool.setuptools.exclude-package-data]
 pylibfreenect2 = ["*.cpp"]

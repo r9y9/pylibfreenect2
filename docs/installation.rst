@@ -45,7 +45,12 @@ or, for development, an editable install:
 
 .. code::
 
-    LIBFREENECT2_BUILD_DIR=/path/to/libfreenect2/build pip install -e .
+    LIBFREENECT2_BUILD_DIR=/path/to/libfreenect2/build pip install -e . --config-settings editable_mode=compat
+
+``editable_mode=compat`` puts the source tree on ``sys.path`` directly instead
+of using an import hook, so static type checkers (Pylance, pyright, mypy) can
+find the bundled type stubs. Without it the install still works at runtime,
+but editors won't see the types.
 
 The development version can also be installed straight from git:
 

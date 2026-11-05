@@ -1,5 +1,3 @@
-# coding: utf-8
-
 # An example using startStreams
 
 import numpy as np

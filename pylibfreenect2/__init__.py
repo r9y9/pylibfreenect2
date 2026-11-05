@@ -1,19 +1,18 @@
-# coding: utf-8
-
 """
 A python interface for `libfreenect2 <https://github.com/OpenKinect/libfreenect2>`_.
 
 https://github.com/r9y9/pylibfreenect2
 
-The package is compatible with python 2.7, 3.4 and 3.5.
+Requires Python 3.10 or later.
 
 """
 
-from __future__ import division, print_function, absolute_import
+from importlib.metadata import PackageNotFoundError, version
 
-import pkg_resources
-
-__version__ = pkg_resources.get_distribution('pylibfreenect2').version
+try:
+    __version__ = version('pylibfreenect2')
+except PackageNotFoundError:  # running from a source tree without metadata
+    __version__ = 'unknown'
 
 from enum import IntEnum
 

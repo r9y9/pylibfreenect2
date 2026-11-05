@@ -4,17 +4,16 @@ Developer Documentation
 Run tests
 ---------
 
-Assuming that you have installed ``nose``, you can run unittests by:
+Install the test dependencies and run the unit tests with ``pytest``:
 
 .. code::
 
-    nosetests -v -w tests/
+    pip install -e '.[test]'
+    pytest -v
 
 
-If you don't have kinect v2 connected, you can run unittests that doesn't require devices by:
+If you don't have a Kinect v2 connected, skip the tests that need a device:
 
 .. code::
 
-    nosetests -v -w tests/ -a '!require_device'
-
-This is exactly what CI does for automatic testing.
+    pytest -v -m 'not require_device'

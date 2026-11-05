@@ -34,12 +34,16 @@ classifiers = [
 [project.optional-dependencies]
 docs = ["numpydoc", "sphinx_rtd_theme", "seaborn"]
 test = ["pytest"]
+# opencv-python 4.10 is the first release built against numpy 2.
+examples = ["opencv-python>=4.10"]
+# Keep in sync with the extras above.
+all = ["pylibfreenect2[docs,test,examples]"]
 
 [project.urls]
 Homepage = "https://github.com/r9y9/pylibfreenect2"
 
 [tool.setuptools]
-packages = ["pylibfreenect2"]
+packages = ["pylibfreenect2", "pylibfreenect2.libfreenect2"]
 
 [tool.setuptools.package-data]
 pylibfreenect2 = ["*.pyx", "*.pxi", "*.pxd", "libfreenect2/*.pxd", "*.pyi", "py.typed"]

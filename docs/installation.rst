@@ -58,6 +58,24 @@ The development version can also be installed straight from git:
 
     pip install git+https://github.com/r9y9/pylibfreenect2
 
+Optional dependencies
+---------------------
+
+The scripts in ``examples/`` use OpenCV for display, which pylibfreenect2
+itself does not depend on. To run them you'll need ``opencv-python``; install
+it with the ``examples`` extra:
+
+.. code::
+
+    LIBFREENECT2_BUILD_DIR=/path/to/libfreenect2/build pip install '.[examples]'
+
+The other extras are ``test`` (pytest) and ``docs`` (Sphinx theme and
+helpers). To install all of them at once:
+
+.. code::
+
+    LIBFREENECT2_BUILD_DIR=/path/to/libfreenect2/build pip install '.[all]'
+
 .. note::
     On Linux and macOS the libfreenect2 library directory is embedded in the
     extension as an RPATH, so ``LD_LIBRARY_PATH`` / ``DYLD_LIBRARY_PATH`` is not

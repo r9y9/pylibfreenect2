@@ -1,159 +1,131 @@
-# coding: utf-8
+"""Build the pylibfreenect2 Cython extension.
 
-from __future__ import with_statement, print_function, absolute_import
+Package metadata lives in pyproject.toml; this file only locates libfreenect2
+and configures the extension. libfreenect2 is located, in order, from:
 
-from setuptools import setup, find_packages, Extension
-from distutils.version import LooseVersion
+1. ``LIBFREENECT2_BUILD_DIR`` -- an uninstalled CMake build tree (e.g.
+   ``libfreenect2/build``). Public headers are taken from
+   ``LIBFREENECT2_SOURCE_DIR``/include (default: the build dir's parent),
+   generated headers (config.h, export.h) and the library from the build dir.
+2. ``LIBFREENECT2_INSTALL_PREFIX`` -- an installed prefix with include/ and lib/.
+3. ``pkg-config freenect2``.
+4. ``/usr/local``.
 
+On non-Windows platforms the library directory is embedded as an RPATH, so no
+``LD_LIBRARY_PATH`` is needed at runtime.
+"""
+
+import os
 import platform
+import re
+import shlex
+import shutil
+import subprocess
+from pathlib import Path
 
 import numpy as np
-import os
-from os.path import join, exists
-from subprocess import Popen, PIPE
-import sys
+from Cython.Build import cythonize
+from setuptools import Extension, setup
 
-libfreenect2_install_prefix = os.environ.get(
-    "LIBFREENECT2_INSTALL_PREFIX", "/usr/local/")
-
-libfreenect2_include_top = join(libfreenect2_install_prefix, "include")
-libfreenect2_library_path = join(libfreenect2_install_prefix, "lib")
-libfreenect2_configh_path = join(
-    libfreenect2_include_top, "libfreenect2", "config.h")
-
-if not exists(libfreenect2_configh_path):
-    raise OSError("{}: is not found".format(libfreenect2_configh_path))
-
-if platform.system() == "Windows":
-    lib_candidates = list(filter(lambda l: l.startswith("freenect2."),
-                                 os.listdir(join(libfreenect2_library_path))))
-else:
-    lib_candidates = list(filter(lambda l: l.startswith("libfreenect2."),
-                                 os.listdir(join(libfreenect2_library_path))))
-
-if len(lib_candidates) == 0:
-    raise OSError("libfreenect2 library cannot be found")
-
-min_cython_ver = '0.21.0'
-try:
-    import Cython
-    ver = Cython.__version__
-    _CYTHON_INSTALLED = ver >= LooseVersion(min_cython_ver)
-except ImportError:
-    _CYTHON_INSTALLED = False
-
-try:
-    if not _CYTHON_INSTALLED:
-        raise ImportError('No supported version of Cython installed.')
-    from Cython.Distutils import build_ext
-    from Cython.Build import cythonize
-    cython = True
-except ImportError:
-    cython = False
-
-if cython:
-    ext = '.pyx'
-    cmdclass = {'build_ext': build_ext}
-else:
-    ext = '.cpp'
-    cmdclass = {}
-    if not os.path.exists(join("pylibfreenect2", "libfreenect2" + ext)):
-        raise RuntimeError("Cython is required to generate C++ codes.")
+IS_WINDOWS = platform.system() == "Windows"
+LIB_PREFIX = "freenect2." if IS_WINDOWS else "libfreenect2."
 
 
-def has_define_in_config(key, close_fds=None):
-    if close_fds is None:
-        if platform.system() == "Windows":
-            close_fds = False
-        else:
-            close_fds = True
+def _from_build_dir(build_dir):
+    build_dir = Path(build_dir).expanduser().resolve()
+    source_dir = Path(
+        os.environ.get("LIBFREENECT2_SOURCE_DIR", build_dir.parent)
+    ).expanduser().resolve()
+    include_dirs = [source_dir / "include", build_dir]
+    if not (source_dir / "include" / "libfreenect2" / "libfreenect2.hpp").exists():
+        raise OSError(
+            f"libfreenect2 headers not found under {source_dir / 'include'}; "
+            "set LIBFREENECT2_SOURCE_DIR to the libfreenect2 source checkout"
+        )
+    return include_dirs, [build_dir / "lib"], "LIBFREENECT2_BUILD_DIR"
 
-    if platform.system() == "Windows":
-        lines = []
-        with open(libfreenect2_configh_path, 'r') as f:
-            for line in f:
-                if key in line:
-                    lines.append(line)
+
+def _from_prefix(prefix, origin):
+    prefix = Path(prefix).expanduser().resolve()
+    return [prefix / "include"], [prefix / "lib"], origin
+
+
+def _from_pkg_config():
+    if shutil.which("pkg-config") is None:
+        return None
+    try:
+        cflags = subprocess.run(
+            ["pkg-config", "--cflags-only-I", "freenect2"],
+            check=True, capture_output=True, text=True).stdout
+        libs = subprocess.run(
+            ["pkg-config", "--libs-only-L", "freenect2"],
+            check=True, capture_output=True, text=True).stdout
+    except subprocess.CalledProcessError:
+        return None
+    include_dirs = [Path(f[2:]) for f in shlex.split(cflags) if f.startswith("-I")]
+    library_dirs = [Path(f[2:]) for f in shlex.split(libs) if f.startswith("-L")]
+    if not include_dirs or not library_dirs:
+        return None
+    return include_dirs, library_dirs, "pkg-config"
+
+
+def find_libfreenect2():
+    if "LIBFREENECT2_BUILD_DIR" in os.environ:
+        found = _from_build_dir(os.environ["LIBFREENECT2_BUILD_DIR"])
+    elif "LIBFREENECT2_INSTALL_PREFIX" in os.environ:
+        found = _from_prefix(os.environ["LIBFREENECT2_INSTALL_PREFIX"],
+                             "LIBFREENECT2_INSTALL_PREFIX")
     else:
-        p = Popen("cat {0} | grep {1}".format(libfreenect2_configh_path, key),
-                  stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=close_fds, shell=True)
-        p.wait()
-        lines = p.stdout.readlines()
+        found = _from_pkg_config() or _from_prefix("/usr/local", "default prefix")
+    include_dirs, library_dirs, origin = found
 
-    if sys.version_info.major >= 3 and not platform.system() == "Windows":
-        return len(lines) == 1 and lines[0].startswith(b"#define")
-    else:
-        return len(lines) == 1 and lines[0].startswith("#define")
+    config_h = next((d / "libfreenect2" / "config.h" for d in include_dirs
+                     if (d / "libfreenect2" / "config.h").exists()), None)
+    if config_h is None:
+        raise OSError(
+            f"libfreenect2/config.h not found in {[str(d) for d in include_dirs]} "
+            f"(from {origin}). Set LIBFREENECT2_BUILD_DIR to a libfreenect2 build "
+            "tree or LIBFREENECT2_INSTALL_PREFIX to an install prefix."
+        )
+    if not any(p.name.startswith(LIB_PREFIX)
+               for d in library_dirs if d.is_dir() for p in d.iterdir()):
+        raise OSError(
+            f"libfreenect2 library not found in {[str(d) for d in library_dirs]} "
+            f"(from {origin}). Has libfreenect2 been built?"
+        )
+    return include_dirs, library_dirs, config_h
 
+
+def has_define(config_h, key):
+    pattern = re.compile(r"^\s*#\s*define\s+" + re.escape(key) + r"\b", re.M)
+    return bool(pattern.search(config_h.read_text()))
+
+
+include_dirs, library_dirs, config_h = find_libfreenect2()
 
 if platform.system() == "Darwin":
-    extra_compile_args = ["-std=c++11", "-stdlib=libc++",
-                          "-mmacosx-version-min=10.8"]
+    extra_compile_args = ["-std=c++11", "-stdlib=libc++"]
+elif IS_WINDOWS:
+    extra_compile_args = []
 else:
-    # should work with Ubuntu 14.04 with anaconda python3 instaleld
     extra_compile_args = ["-std=c++11"]
 
 ext_modules = cythonize(
     [Extension(
         name="pylibfreenect2.libfreenect2",
-        sources=[
-            join("pylibfreenect2", "libfreenect2" + ext),
-        ],
-        include_dirs=[np.get_include(),
-                      join(libfreenect2_include_top)],
-        library_dirs=[libfreenect2_library_path],
+        sources=[os.path.join("pylibfreenect2", "libfreenect2.pyx")],
+        include_dirs=[np.get_include()] + [str(d) for d in include_dirs],
+        library_dirs=[str(d) for d in library_dirs],
+        runtime_library_dirs=[] if IS_WINDOWS else [str(d) for d in library_dirs],
         libraries=["freenect2"],
         extra_compile_args=extra_compile_args,
-        extra_link_args=[],
         language="c++")],
     compile_time_env={
-        "LIBFREENECT2_WITH_OPENGL_SUPPORT":
-        has_define_in_config("LIBFREENECT2_WITH_OPENGL_SUPPORT"),
-        "LIBFREENECT2_WITH_OPENCL_SUPPORT":
-        has_define_in_config("LIBFREENECT2_WITH_OPENCL_SUPPORT"),
-        "LIBFREENECT2_WITH_CUDA_SUPPORT":
-        has_define_in_config("LIBFREENECT2_WITH_CUDA_SUPPORT"),
-    }
-)
-
-install_requires = ['numpy >= 1.7.0']
-if sys.version_info < (3, 4):
-    install_requires.append('enum34')
-
-setup(
-    name='pylibfreenect2',
-    version='0.1.5-dev',
-    description='A python interface for libfreenect2',
-    author='Ryuichi Yamamoto',
-    author_email='zryuichi@gmail.com',
-    url='https://github.com/r9y9/pylibfreenect2',
-    license='MIT',
-    packages=find_packages(),
-    ext_modules=ext_modules,
-    cmdclass=cmdclass,
-    install_requires=install_requires,
-    tests_require=['nose', 'coverage'],
-    extras_require={
-        'docs': ['numpydoc', 'sphinx_rtd_theme', 'seaborn'],
-        'test': ['nose'],
-        'develop': ['cython >= ' + min_cython_ver],
+        key: has_define(config_h, key)
+        for key in ("LIBFREENECT2_WITH_OPENGL_SUPPORT",
+                    "LIBFREENECT2_WITH_OPENCL_SUPPORT",
+                    "LIBFREENECT2_WITH_CUDA_SUPPORT")
     },
-    classifiers=[
-        "Operating System :: POSIX",
-        "Operating System :: Unix",
-        "Operating System :: MacOS",
-        "Programming Language :: Cython",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "License :: OSI Approved :: MIT License",
-        "Topic :: Scientific/Engineering",
-        "Topic :: Software Development",
-        "Intended Audience :: Science/Research",
-        "Intended Audience :: Developers",
-    ],
-    keywords=["pylibfreenect2", "libfreenect2", "freenect2"]
 )
+
+setup(ext_modules=ext_modules)

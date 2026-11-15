@@ -1,0 +1,58 @@
+[build-system]
+requires = [
+    "setuptools>=77",
+    "Cython>=3.0",
+    # Building against numpy 2 produces extensions that also run on numpy>=1.25.
+    "numpy>=2.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylibfreenect2"
+version = "0.1.5.dev0"
+description = "A python interface for libfreenect2"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.md"]
+authors = [{ name = "Ryuichi Yamamoto", email = "zryuichi@gmail.com" }]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.25"]
+keywords = ["pylibfreenect2", "libfreenect2", "freenect2"]
+classifiers = [
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+docs = ["numpydoc", "sphinx_rtd_theme", "seaborn"]
+test = ["pytest"]
+# opencv-python 4.10 is the first release built against numpy 2.
+examples = ["opencv-python>=4.10"]
+# Keep in sync with the extras above.
+all = ["pylibfreenect2[docs,test,examples]"]
+
+[project.urls]
+Homepage = "https://github.com/r9y9/pylibfreenect2"
+
+[tool.setuptools]
+packages = ["pylibfreenect2", "pylibfreenect2.libfreenect2"]
+
+[tool.setuptools.package-data]
+pylibfreenect2 = ["*.pyx", "*.pxi", "*.pxd", "libfreenect2/*.pxd", "*.pyi", "py.typed"]
+
+[tool.setuptools.exclude-package-data]
+pylibfreenect2 = ["*.cpp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "require_device: needs a Kinect v2 connected (deselect with -m 'not require_device')",
+]

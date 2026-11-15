@@ -1,0 +1,105 @@
+# Replaces the old .travis.yml (Linux) and appveyor.yml (Windows).
+# Tests that need a Kinect are skipped: CI runners have no device.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux / Python ${{ matrix.python-version }}
+    # Pinned: ubuntu-latest moves to 26.04 from 2026-10-19; bump deliberately.
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    env:
+      LIBFREENECT2_VERSION: v0.2.1
+      LIBFREENECT2_BUILD_DIR: ${{ github.workspace }}/../libfreenect2/build
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install libfreenect2 build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build pkg-config \
+            libusb-1.0-0-dev libturbojpeg0-dev libglfw3-dev
+
+      # Built but not installed: exercises the LIBFREENECT2_BUILD_DIR path.
+      - name: Build libfreenect2 ${{ env.LIBFREENECT2_VERSION }}
+        run: |
+          git clone --depth 1 --branch "$LIBFREENECT2_VERSION" \
+            https://github.com/OpenKinect/libfreenect2.git ../libfreenect2
+          cmake -S ../libfreenect2 -B "$LIBFREENECT2_BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+            -DENABLE_CXX11=ON \
+            -DENABLE_CUDA=OFF -DENABLE_OPENCL=OFF \
+            -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI2_DRIVER=OFF
+          cmake --build "$LIBFREENECT2_BUILD_DIR"
+
+      - name: Install pylibfreenect2
+        run: pip install -e '.[test]'
+
+      - name: Test
+        run: pytest -v -m 'not require_device'
+
+  windows:
+    name: Windows / Python ${{ matrix.python-version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    defaults:
+      run:
+        shell: bash
+    env:
+      # v0.2.0 is the last libfreenect2 release with prebuilt Windows binaries.
+      LIBFREENECT2_ARCHIVE: libfreenect2-0.2.0-libusbk-vs2015-x64
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download prebuilt libfreenect2
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -sSfLO "https://github.com/OpenKinect/libfreenect2/releases/download/v0.2.0/$LIBFREENECT2_ARCHIVE.zip"
+          7z x -bso0 "$LIBFREENECT2_ARCHIVE.zip"
+          echo "LIBFREENECT2_INSTALL_PREFIX=$RUNNER_TEMP\\$LIBFREENECT2_ARCHIVE" >> "$GITHUB_ENV"
+
+      # Windows has no RPATH, so delvewheel copies freenect2.dll and its
+      # dependencies (libusb, turbojpeg, glfw) into the wheel.
+      - name: Build and repair wheel
+        run: |
+          pip install delvewheel
+          pip wheel . --no-deps -w dist
+          delvewheel repair --add-path "$LIBFREENECT2_INSTALL_PREFIX\\bin" -w wheelhouse dist/*.whl
+
+      - name: Install wheel
+        run: pip install wheelhouse/*.whl pytest
+
+      # importlib mode keeps the source tree's pylibfreenect2/ (which has no
+      # compiled extension) from shadowing the installed wheel.
+      - name: Test
+        run: pytest -v -m 'not require_device' --import-mode=importlib
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheel-windows-py${{ matrix.python-version }}
+          path: wheelhouse/*.whl
